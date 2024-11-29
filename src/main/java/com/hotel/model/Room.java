@@ -35,10 +35,6 @@ public class Room {
         return price;
     }
 
-    public boolean getIsAvailable() {
-        return isAvailable;
-    }
-
     public void setPrice(double price) {
         this.price = price;
     }
@@ -49,6 +45,10 @@ public class Room {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    public boolean getIsAvailable() {
+        return isAvailable;
     }
 
     public void setIsAvailable(boolean isAvailable) {
