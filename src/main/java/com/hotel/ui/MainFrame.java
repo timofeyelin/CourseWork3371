@@ -10,19 +10,19 @@ public class MainFrame extends JFrame {
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLocationRelativeTo(null);
 
-        // Adding components to the window
+        // Добавление компонентов в окно
         initUI();
     }
 
     public void initUI() {
-        // Create tabbed pane
+        // Создание панели с вкладками
         JTabbedPane tabbedPane = new JTabbedPane();
 
-        // Add tabs
+        // Добавление вкладок
         tabbedPane.addTab("Login", new LoginPanel());
         tabbedPane.addTab("Register", new RegisterPanel());
 
-        // Add tabbed pane to the window
+        // Добавить панель с вкладками в окно
         add(tabbedPane, BorderLayout.CENTER);
     }
 

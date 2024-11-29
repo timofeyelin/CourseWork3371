@@ -1,5 +1,7 @@
 package main.java.com.hotel.ui;
 
+import main.java.com.hotel.service.ManagerKeyService;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -69,17 +71,31 @@ public class RegisterPanel extends JPanel {
         registerButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                if ("Manager".equals(roleComboBox.getSelectedItem())) {
-                    String managerKey = new String(managerKeyField.getPassword());
-                    if (!"secret_key".equals(managerKey)) {
-                        JOptionPane.showMessageDialog(RegisterPanel.this, "Invalid Manager Key", "Error", JOptionPane.ERROR_MESSAGE);
-                        return;
-                    }
-                }
-                // Proceed with registration
+                handleRegistration();
             }
         });
         add(registerButton, gbc);
+    }
+
+    private void handleRegistration() {
+        String username = getUsername();
+        String password = getPassword();
+        String role = getRole();
+
+        if (username.isEmpty() || password.isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Username and password cannot be empty", "Error", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+
+        if ("Manager".equals(role)) {
+            String managerKey = getManagerKey();
+            if (!ManagerKeyService.validateManagerKey(managerKey)) {
+                JOptionPane.showMessageDialog(this, "Invalid manager key", "Error", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+        }
+
+        JOptionPane.showMessageDialog(this, "Registration successful", "Success", JOptionPane.INFORMATION_MESSAGE);
     }
 
     public String getUsername() {
