@@ -1,11 +1,12 @@
 package main.java.com.hotel.ui;
 
+import main.java.com.hotel.controller.AuthController;
 import main.java.com.hotel.service.ManagerKeyService;
-
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.sql.SQLException;
 
 public class RegisterPanel extends JPanel {
     private final JTextField usernameField;
@@ -14,6 +15,8 @@ public class RegisterPanel extends JPanel {
     private final JLabel managerKeyLabel;
     private final JPasswordField managerKeyField;
     private final JButton registerButton;
+
+    private AuthController authController = new AuthController();
 
     public RegisterPanel() {
         setLayout(new GridBagLayout());
@@ -75,42 +78,35 @@ public class RegisterPanel extends JPanel {
             }
         });
         add(registerButton, gbc);
+
     }
 
     private void handleRegistration() {
-        String username = getUsername();
-        String password = getPassword();
-        String role = getRole();
+        String username = usernameField.getText();
+        String password = new String(passwordField.getPassword());
+        String role = (String) roleComboBox.getSelectedItem();
 
         if (username.isEmpty() || password.isEmpty()) {
-            JOptionPane.showMessageDialog(this, "Username and password cannot be empty", "Error", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(this, "Имя пользователя и пароль не должны быть пустыми", "Ошибка", JOptionPane.ERROR_MESSAGE);
             return;
         }
 
         if ("Manager".equals(role)) {
-            String managerKey = getManagerKey();
+            String managerKey = managerKeyField.getText();
             if (!ManagerKeyService.validateManagerKey(managerKey)) {
-                JOptionPane.showMessageDialog(this, "Invalid manager key", "Error", JOptionPane.ERROR_MESSAGE);
+                JOptionPane.showMessageDialog(this, "Неверный ключ менеджера", "Ошибка", JOptionPane.ERROR_MESSAGE);
                 return;
             }
         }
 
-        JOptionPane.showMessageDialog(this, "Registration successful", "Success", JOptionPane.INFORMATION_MESSAGE);
-    }
-
-    public String getUsername() {
-        return usernameField.getText();
-    }
-
-    public String getPassword() {
-        return new String(passwordField.getPassword());
-    }
-
-    public String getRole() {
-        return (String) roleComboBox.getSelectedItem();
-    }
-
-    public String getManagerKey() {
-        return new String(managerKeyField.getPassword());
+        try {
+            authController.register(username, password, role);
+            JOptionPane.showMessageDialog(this, "Регистрация успешна", "Успех", JOptionPane.INFORMATION_MESSAGE);
+        } catch (IllegalArgumentException ex) {
+            JOptionPane.showMessageDialog(this, ex.getMessage(), "Ошибка", JOptionPane.ERROR_MESSAGE);
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+            JOptionPane.showMessageDialog(this, "Ошибка базы данных", "Ошибка", JOptionPane.ERROR_MESSAGE);
+        }
     }
 }

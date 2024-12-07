@@ -5,13 +5,20 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="8f42d084-e3d3-48e2-884d-62bd374969ec" name="Changes" comment="Добавлена панель авторизации и регистрации">
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/hotel/service/ManagerKeyService.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/libraries/postgresql_42_7_4__1_.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/uiDesigner.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/libs/postgresql-42.7.4 (1).jar" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/hotel/controller/AuthController.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/hotel/dao/UserDAO.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/hotel/model/User.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/hotel/service/UserService.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/dataSources.local.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dataSources.local.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/hotel/ui/MainFrame.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/hotel/ui/MainFrame.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/CourseWork3371.iml" beforeDir="false" afterPath="$PROJECT_DIR$/CourseWork3371.iml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/hotel/controller/ClientController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/hotel/controller/ClientController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/hotel/controller/ManagerController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/hotel/controller/ManagerController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/hotel/ui/LoginPanel.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/hotel/ui/LoginPanel.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/hotel/ui/RegisterPanel.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/hotel/ui/RegisterPanel.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/hotel/util/DatabaseConnection.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/hotel/util/DatabaseConnection.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -37,7 +44,7 @@
   <component name="GithubPullRequestsUISettings">{
   &quot;selectedUrlAndAccountId&quot;: {
     &quot;url&quot;: &quot;https://github.com/timofeyelin/CourseWork3371.git&quot;,
-    &quot;accountId&quot;: &quot;5cb99e3a-d8f7-4cd4-a96d-22f3fd5719a2&quot;
+    &quot;accountId&quot;: &quot;7ca78e43-92a7-4752-a541-02c4d8c7bdd2&quot;
   }
 }</component>
   <component name="ProjectColorInfo">{
@@ -51,10 +58,12 @@
   </component>
   <component name="PropertiesComponent">{
   &quot;keyToString&quot;: {
+    &quot;Application.DatabaseConnection.executor&quot;: &quot;Run&quot;,
     &quot;Application.Main.executor&quot;: &quot;Run&quot;,
     &quot;Application.MainFrame.executor&quot;: &quot;Run&quot;,
     &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
     &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
+    &quot;SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
     &quot;git-widget-placeholder&quot;: &quot;master&quot;,
     &quot;ignore.virus.scanning.warn.message&quot;: &quot;true&quot;,
     &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
@@ -78,6 +87,11 @@
     ]
   }
 }</component>
+  <component name="RecentsManager">
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="C:\Users\Tim\IdeaProjects\CourseWork3371\libs" />
+    </key>
+  </component>
   <component name="RunManager">
     <configuration name="MainFrame" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
       <option name="MAIN_CLASS_NAME" value="main.java.com.hotel.ui.MainFrame" />
@@ -101,8 +115,8 @@
   <component name="SharedIndexes">
     <attachedChunks>
       <set>
-        <option value="bundled-jdk-9823dce3aa75-fdfe4dae3a2d-intellij.indexing.shared.core-IU-243.21565.193" />
-        <option value="bundled-js-predefined-d6986cc7102b-e768b9ed790e-JavaScript-IU-243.21565.193" />
+        <option value="bundled-jdk-9823dce3aa75-b114ca120d71-intellij.indexing.shared.core-IU-242.21829.142" />
+        <option value="bundled-js-predefined-d6986cc7102b-7c0b70fcd90d-JavaScript-IU-242.21829.142" />
       </set>
     </attachedChunks>
   </component>
@@ -131,6 +145,11 @@
       <workItem from="1732898378158" duration="4657000" />
       <workItem from="1732904389506" duration="455000" />
       <workItem from="1732904867282" duration="2000" />
+      <workItem from="1733488949404" duration="10000" />
+      <workItem from="1733489004200" duration="1289000" />
+      <workItem from="1733490870096" duration="846000" />
+      <workItem from="1733573127045" duration="4293000" />
+      <workItem from="1733577482913" duration="81000" />
     </task>
     <servers />
   </component>
