@@ -4,6 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
+
     <list default="true" id="8f42d084-e3d3-48e2-884d-62bd374969ec" name="Changes" comment="Добавлена панель авторизации и регистрации">
       <change afterPath="$PROJECT_DIR$/.idea/libraries/postgresql_42_7_4__1_.xml" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/.idea/uiDesigner.xml" afterDir="false" />
@@ -18,7 +19,11 @@
       <change beforePath="$PROJECT_DIR$/src/main/java/com/hotel/controller/ClientController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/hotel/controller/ClientController.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/hotel/controller/ManagerController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/hotel/controller/ManagerController.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/hotel/ui/LoginPanel.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/hotel/ui/LoginPanel.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/hotel/model/Booking.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/hotel/model/Booking.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/hotel/model/Client.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/hotel/model/Client.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/hotel/ui/RegisterPanel.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/hotel/ui/RegisterPanel.java" afterDir="false" />
+      
+
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -43,8 +48,10 @@
 }</component>
   <component name="GithubPullRequestsUISettings">{
   &quot;selectedUrlAndAccountId&quot;: {
+
     &quot;url&quot;: &quot;https://github.com/timofeyelin/CourseWork3371.git&quot;,
     &quot;accountId&quot;: &quot;7ca78e43-92a7-4752-a541-02c4d8c7bdd2&quot;
+
   }
 }</component>
   <component name="ProjectColorInfo">{
@@ -77,7 +84,7 @@
     &quot;project.structure.last.edited&quot;: &quot;Project&quot;,
     &quot;project.structure.proportion&quot;: &quot;0.0&quot;,
     &quot;project.structure.side.proportion&quot;: &quot;0.0&quot;,
-    &quot;settings.editor.selected.configurable&quot;: &quot;database.query.execution&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;preferences.pluginManager&quot;,
     &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   },
   &quot;keyToStringList&quot;: {
@@ -144,13 +151,24 @@
       <workItem from="1732895512983" duration="106000" />
       <workItem from="1732898378158" duration="4657000" />
       <workItem from="1732904389506" duration="455000" />
+
       <workItem from="1732904867282" duration="2000" />
       <workItem from="1733488949404" duration="10000" />
       <workItem from="1733489004200" duration="1289000" />
       <workItem from="1733490870096" duration="846000" />
       <workItem from="1733573127045" duration="4293000" />
       <workItem from="1733577482913" duration="81000" />
+
     </task>
+    <task id="LOCAL-00001" summary="Добавлен функционал проверки и генерации уникального ключа менеджера">
+      <option name="closed" value="true" />
+      <created>1732904963617</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1732904963617</updated>
+    </task>
+    <option name="localTasksCounter" value="2" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -159,7 +177,8 @@
   <component name="VcsManagerConfiguration">
     <MESSAGE value="Добавление базы данных&#10;&#10;Postgresql" />
     <MESSAGE value="Добавлена панель авторизации и регистрации" />
-    <option name="LAST_COMMIT_MESSAGE" value="Добавлена панель авторизации и регистрации" />
+    <MESSAGE value="Добавлен функционал проверки и генерации уникального ключа менеджера" />
+    <option name="LAST_COMMIT_MESSAGE" value="Добавлен функционал проверки и генерации уникального ключа менеджера" />
   </component>
   <component name="XSLT-Support.FileAssociations.UIState">
     <expand />
