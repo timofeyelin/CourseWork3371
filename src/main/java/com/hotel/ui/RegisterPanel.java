@@ -25,7 +25,7 @@ public class RegisterPanel extends JPanel {
 
         gbc.gridx = 0;
         gbc.gridy = 0;
-        add(new JLabel("Username:"), gbc);
+        add(new JLabel("Имя пользователя:"), gbc);
 
         gbc.gridx = 1;
         usernameField = new JTextField(15);
@@ -33,7 +33,7 @@ public class RegisterPanel extends JPanel {
 
         gbc.gridx = 0;
         gbc.gridy = 1;
-        add(new JLabel("Password:"), gbc);
+        add(new JLabel("Пароль:"), gbc);
 
         gbc.gridx = 1;
         passwordField = new JPasswordField(15);
@@ -41,14 +41,14 @@ public class RegisterPanel extends JPanel {
 
         gbc.gridx = 0;
         gbc.gridy = 2;
-        add(new JLabel("Role:"), gbc);
+        add(new JLabel("Роль:"), gbc);
 
         gbc.gridx = 1;
-        roleComboBox = new JComboBox<>(new String[]{"Client", "Manager"});
+        roleComboBox = new JComboBox<>(new String[]{"Клиент", "Менеджер"});
         roleComboBox.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                boolean isManager = "Manager".equals(roleComboBox.getSelectedItem());
+                boolean isManager = "Менеджер".equals(roleComboBox.getSelectedItem());
                 managerKeyLabel.setVisible(isManager);
                 managerKeyField.setVisible(isManager);
                 revalidate();
@@ -59,7 +59,7 @@ public class RegisterPanel extends JPanel {
 
         gbc.gridx = 0;
         gbc.gridy = 3;
-        managerKeyLabel = new JLabel("Manager Key:");
+        managerKeyLabel = new JLabel("Личный ключ менеджера:");
         managerKeyLabel.setVisible(false);
         add(managerKeyLabel, gbc);
 
@@ -70,7 +70,7 @@ public class RegisterPanel extends JPanel {
 
         gbc.gridx = 1;
         gbc.gridy = 4;
-        registerButton = new JButton("Register");
+        registerButton = new JButton("Зарегистрироваться");
         registerButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {

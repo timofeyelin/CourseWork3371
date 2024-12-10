@@ -25,7 +25,7 @@ public class LoginPanel extends JPanel {
 
         gbc.gridx = 0;
         gbc.gridy = 0;
-        add(new JLabel("Username:"), gbc);
+        add(new JLabel("Имя пользователя:"), gbc);
 
         gbc.gridx = 1;
         usernameField = new JTextField(15);
@@ -33,7 +33,7 @@ public class LoginPanel extends JPanel {
 
         gbc.gridx = 0;
         gbc.gridy = 1;
-        add(new JLabel("Password:"), gbc);
+        add(new JLabel("Пароль:"), gbc);
 
         gbc.gridx = 1;
         passwordField = new JPasswordField(15);
@@ -41,7 +41,7 @@ public class LoginPanel extends JPanel {
 
         gbc.gridx = 1;
         gbc.gridy = 2;
-        JButton loginButton = new JButton("Login");
+        JButton loginButton = new JButton("Войти");
         loginButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {

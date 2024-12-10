@@ -4,26 +4,10 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-
     <list default="true" id="8f42d084-e3d3-48e2-884d-62bd374969ec" name="Changes" comment="Добавлена панель авторизации и регистрации">
-      <change afterPath="$PROJECT_DIR$/.idea/libraries/postgresql_42_7_4__1_.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/uiDesigner.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/libs/postgresql-42.7.4 (1).jar" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/hotel/controller/AuthController.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/hotel/dao/UserDAO.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/hotel/model/User.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/hotel/service/UserService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/dataSources.local.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dataSources.local.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/CourseWork3371.iml" beforeDir="false" afterPath="$PROJECT_DIR$/CourseWork3371.iml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/hotel/controller/ClientController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/hotel/controller/ClientController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/hotel/controller/ManagerController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/hotel/controller/ManagerController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/hotel/ui/LoginPanel.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/hotel/ui/LoginPanel.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/hotel/model/Booking.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/hotel/model/Booking.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/hotel/model/Client.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/hotel/model/Client.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/hotel/ui/MainFrame.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/hotel/ui/MainFrame.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/hotel/ui/RegisterPanel.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/hotel/ui/RegisterPanel.java" afterDir="false" />
-      
-
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -48,10 +32,8 @@
 }</component>
   <component name="GithubPullRequestsUISettings">{
   &quot;selectedUrlAndAccountId&quot;: {
-
     &quot;url&quot;: &quot;https://github.com/timofeyelin/CourseWork3371.git&quot;,
     &quot;accountId&quot;: &quot;7ca78e43-92a7-4752-a541-02c4d8c7bdd2&quot;
-
   }
 }</component>
   <component name="ProjectColorInfo">{
@@ -151,14 +133,14 @@
       <workItem from="1732895512983" duration="106000" />
       <workItem from="1732898378158" duration="4657000" />
       <workItem from="1732904389506" duration="455000" />
-
       <workItem from="1732904867282" duration="2000" />
       <workItem from="1733488949404" duration="10000" />
       <workItem from="1733489004200" duration="1289000" />
       <workItem from="1733490870096" duration="846000" />
       <workItem from="1733573127045" duration="4293000" />
       <workItem from="1733577482913" duration="81000" />
-
+      <workItem from="1733577825865" duration="19000" />
+      <workItem from="1733839756284" duration="699000" />
     </task>
     <task id="LOCAL-00001" summary="Добавлен функционал проверки и генерации уникального ключа менеджера">
       <option name="closed" value="true" />

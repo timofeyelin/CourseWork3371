@@ -19,8 +19,8 @@ public class MainFrame extends JFrame {
         JTabbedPane tabbedPane = new JTabbedPane();
 
         // Добавление вкладок
-        tabbedPane.addTab("Login", new LoginPanel());
-        tabbedPane.addTab("Register", new RegisterPanel());
+        tabbedPane.addTab("Авторизация", new LoginPanel());
+        tabbedPane.addTab("Регистрация", new RegisterPanel());
 
         // Добавить панель с вкладками в окно
         add(tabbedPane, BorderLayout.CENTER);
