@@ -1,6 +1,8 @@
 package main.java.com.hotel.dao;
 
 import main.java.com.hotel.model.User;
+import main.java.com.hotel.util.DatabaseConnection;
+
 import java.sql.*;
 
 public class UserDAO {
@@ -10,7 +12,7 @@ public class UserDAO {
 
     public void addUser(User user) throws SQLException {
         String sql = "INSERT INTO users (username, password, role) VALUES (?, ?, ?)";
-        try (Connection conn = DriverManager.getConnection(url, this.user, password);
+        try (Connection conn = DatabaseConnection.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
             pstmt.setString(1, user.getUsername());
             pstmt.setString(2, user.getPasswordHash());
