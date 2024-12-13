@@ -4,26 +4,44 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="8f42d084-e3d3-48e2-884d-62bd374969ec" name="Changes" comment="Добавлена панель авторизации и регистрации">
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/hotel/util/DatabaseInitializer.java" afterDir="false" />
+    <list default="true" id="4e743a9c-2186-4672-8b53-7f7b8f71cf75" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/.idea/compiler.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/encodings.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/jarRepositories.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/dataSources.local.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/dataSources.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/libraries/postgresql_42_7_4__1_.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/modules.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/uiDesigner.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/vcs.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/CourseWork3371.iml" beforeDir="false" afterPath="$PROJECT_DIR$/CourseWork3371.iml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/hotel/dao/UserDAO.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/hotel/dao/UserDAO.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/hotel/ui/MainFrame.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/hotel/ui/MainFrame.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/hotel/util/DatabaseConnection.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/hotel/util/DatabaseConnection.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/database/DatabaseConnection.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/libs/postgresql-42.7.4 (1).jar" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/hotel/Main.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/hotel/controller/AuthController.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/hotel/controller/ClientController.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/hotel/controller/ManagerController.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/hotel/dao/UserDAO.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/hotel/model/Booking.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/hotel/model/Client.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/hotel/model/Room.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/hotel/model/User.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/hotel/service/BookingService.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/hotel/service/ClientService.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/hotel/service/ManagerKeyService.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/hotel/service/RoomService.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/hotel/service/UserService.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/hotel/ui/LoginPanel.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/hotel/ui/MainFrame.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/hotel/ui/RegisterPanel.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/hotel/util/DatabaseConnection.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/hotel/util/DatabaseInitializer.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/config.properties" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
-  </component>
-  <component name="FileTemplateManagerImpl">
-    <option name="RECENT_TEMPLATES">
-      <list>
-        <option value="Class" />
-      </list>
-    </option>
   </component>
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
@@ -37,65 +55,59 @@
   <component name="GithubPullRequestsUISettings">{
   &quot;selectedUrlAndAccountId&quot;: {
     &quot;url&quot;: &quot;https://github.com/timofeyelin/CourseWork3371.git&quot;,
-    &quot;accountId&quot;: &quot;7ca78e43-92a7-4752-a541-02c4d8c7bdd2&quot;
+    &quot;accountId&quot;: &quot;3e68228f-3b5f-40e5-a7f2-3356893b4ccd&quot;
   }
 }</component>
   <component name="ProjectColorInfo">{
-  &quot;associatedIndex&quot;: 2
+  &quot;associatedIndex&quot;: 7
 }</component>
-  <component name="ProjectId" id="2opxGHQiH7DDjMc0vwuMvEJXnR6" />
-  <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
+  <component name="ProjectId" id="2q8Nwc8yBfuLF9Tl8Ke7MJ7jGAD" />
   <component name="ProjectViewState">
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "Application.DatabaseConnection.executor": "Run",
-    "Application.Main.executor": "Run",
-    "Application.MainFrame.executor": "Run",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "RunOnceActivity.git.unshallow": "true",
-    "SHARE_PROJECT_CONFIGURATION_FILES": "true",
-    "git-widget-placeholder": "master",
-    "ignore.virus.scanning.warn.message": "true",
-    "kotlin-language-version-configured": "true",
-    "last_opened_file_path": "C:/Users/manes/Downloads/ij-language-pack-ru-2024.2.2.zip",
-    "node.js.detected.package.eslint": "true",
-    "node.js.detected.package.tslint": "true",
-    "node.js.selected.package.eslint": "(autodetect)",
-    "node.js.selected.package.tslint": "(autodetect)",
-    "nodejs_package_manager_path": "npm",
-    "onboarding.tips.debug.path": "C:/Users/Tim/IdeaProjects/CourseWork3371/src/Main.java",
-    "project.structure.last.edited": "Modules",
-    "project.structure.proportion": "0.0",
-    "project.structure.side.proportion": "0.2",
-    "settings.editor.selected.configurable": "preferences.pluginManager",
-    "vue.rearranger.settings.migration": "true"
-  },
-  "keyToStringList": {
-    "DatabaseDriversLRU": [
-      "mysql_aurora",
-      "postgresql"
-    ]
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;Application.MainFrame.executor&quot;: &quot;Run&quot;,
+    &quot;RequestMappingsPanelOrder0&quot;: &quot;0&quot;,
+    &quot;RequestMappingsPanelOrder1&quot;: &quot;1&quot;,
+    &quot;RequestMappingsPanelWidth0&quot;: &quot;75&quot;,
+    &quot;RequestMappingsPanelWidth1&quot;: &quot;75&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
+    &quot;Spring Boot.HotelServerApplication.executor&quot;: &quot;Run&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;master&quot;,
+    &quot;ignore.virus.scanning.warn.message&quot;: &quot;true&quot;,
+    &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
+    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
+    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
+    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
+    &quot;project.structure.last.edited&quot;: &quot;Modules&quot;,
+    &quot;project.structure.proportion&quot;: &quot;0.0&quot;,
+    &quot;project.structure.side.proportion&quot;: &quot;0.0&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;application.passwordSafe&quot;,
+    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   }
-}]]></component>
-  <component name="RecentsManager">
-    <key name="MoveFile.RECENT_KEYS">
-      <recent name="C:\Users\Tim\IdeaProjects\CourseWork3371\src\main\java\com\hotel\resources" />
-      <recent name="C:\Users\Tim\IdeaProjects\CourseWork3371\libs" />
-    </key>
-  </component>
-  <component name="RunManager">
+}</component>
+  <component name="RunManager" selected="Spring Boot.HotelServerApplication">
     <configuration name="MainFrame" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
-      <option name="MAIN_CLASS_NAME" value="main.java.com.hotel.ui.MainFrame" />
-      <module name="CourseWork3371" />
+      <option name="MAIN_CLASS_NAME" value="com.hotel.ui.MainFrame" />
+      <module name="hotel-client" />
       <extension name="coverage">
         <pattern>
-          <option name="PATTERN" value="main.java.com.hotel.ui.*" />
+          <option name="PATTERN" value="com.hotel.ui.*" />
           <option name="ENABLED" value="true" />
         </pattern>
       </extension>
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="HotelServerApplication" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot" nameIsGenerated="true">
+      <module name="hotel-server" />
+      <option name="SPRING_BOOT_MAIN_CLASS" value="com.hotel.HotelServerApplication" />
       <method v="2">
         <option name="Make" enabled="true" />
       </method>
@@ -109,68 +121,26 @@
   <component name="SharedIndexes">
     <attachedChunks>
       <set>
-        <option value="bundled-jdk-9823dce3aa75-b114ca120d71-intellij.indexing.shared.core-IU-242.21829.142" />
-        <option value="bundled-js-predefined-d6986cc7102b-7c0b70fcd90d-JavaScript-IU-242.21829.142" />
+        <option value="bundled-jdk-9823dce3aa75-fdfe4dae3a2d-intellij.indexing.shared.core-IU-243.22562.145" />
+        <option value="bundled-js-predefined-d6986cc7102b-deb605915726-JavaScript-IU-243.22562.145" />
       </set>
     </attachedChunks>
   </component>
   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
   <component name="TaskManager">
     <task active="true" id="Default" summary="Default task">
-      <changelist id="8f42d084-e3d3-48e2-884d-62bd374969ec" name="Changes" comment="" />
-      <created>1731580224759</created>
+      <changelist id="4e743a9c-2186-4672-8b53-7f7b8f71cf75" name="Changes" comment="" />
+      <created>1734040482960</created>
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
-      <updated>1731580224759</updated>
-      <workItem from="1731580225834" duration="2000" />
-      <workItem from="1731583147130" duration="147000" />
-      <workItem from="1731583377610" duration="309000" />
-      <workItem from="1731583703210" duration="407000" />
-      <workItem from="1731584123033" duration="729000" />
-      <workItem from="1731591928222" duration="1095000" />
-      <workItem from="1731593058579" duration="1166000" />
-      <workItem from="1732883353783" duration="54000" />
-      <workItem from="1732883422485" duration="4457000" />
-      <workItem from="1732894629640" duration="65000" />
-      <workItem from="1732894707777" duration="383000" />
-      <workItem from="1732895104654" duration="17000" />
-      <workItem from="1732895129873" duration="216000" />
-      <workItem from="1732895512983" duration="106000" />
-      <workItem from="1732898378158" duration="4657000" />
-      <workItem from="1732904389506" duration="455000" />
-      <workItem from="1732904867282" duration="2000" />
-      <workItem from="1733488949404" duration="10000" />
-      <workItem from="1733489004200" duration="1289000" />
-      <workItem from="1733490870096" duration="846000" />
-      <workItem from="1733573127045" duration="4293000" />
-      <workItem from="1733577482913" duration="81000" />
-      <workItem from="1733577825865" duration="19000" />
-      <workItem from="1733839756284" duration="2047000" />
-      <workItem from="1734028468125" duration="2161000" />
-      <workItem from="1734030656425" duration="269000" />
+      <updated>1734040482960</updated>
+      <workItem from="1734040484114" duration="953000" />
+      <workItem from="1734042075599" duration="3289000" />
+      <workItem from="1734089088518" duration="40000" />
     </task>
-    <task id="LOCAL-00001" summary="Добавлен функционал проверки и генерации уникального ключа менеджера">
-      <option name="closed" value="true" />
-      <created>1732904963617</created>
-      <option name="number" value="00001" />
-      <option name="presentableId" value="LOCAL-00001" />
-      <option name="project" value="LOCAL" />
-      <updated>1732904963617</updated>
-    </task>
-    <option name="localTasksCounter" value="2" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="3" />
-  </component>
-  <component name="VcsManagerConfiguration">
-    <MESSAGE value="Добавление базы данных&#10;&#10;Postgresql" />
-    <MESSAGE value="Добавлена панель авторизации и регистрации" />
-    <MESSAGE value="Добавлен функционал проверки и генерации уникального ключа менеджера" />
-    <option name="LAST_COMMIT_MESSAGE" value="Добавлен функционал проверки и генерации уникального ключа менеджера" />
-  </component>
-  <component name="XSLT-Support.FileAssociations.UIState">
-    <expand />
-    <select />
   </component>
 </project>
