@@ -1,4 +1,4 @@
-package main.java.com.hotel.model;
+package com.hotel.model;
 
 import java.util.List;
 

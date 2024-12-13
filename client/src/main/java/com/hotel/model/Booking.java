@@ -1,4 +1,4 @@
-package main.java.com.hotel.model;
+package com.hotel.model;
 
 public class Booking {
     private int id;

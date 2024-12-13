@@ -102,7 +102,7 @@ public class RegisterPanel extends JPanel {
             registrationData.put("role", role);
 
             // Отправка POST-запроса на сервер
-            URL url = new URL("http://localhost:8080/register");
+            URL url = new URL("http://localhost:5432/register");
             HttpURLConnection conn = (HttpURLConnection) url.openConnection();
             conn.setRequestMethod("POST");
             conn.setRequestProperty("Content-Type", "application/json; utf-8");

@@ -1,4 +1,4 @@
-package main.java.com.hotel.controller;
+package com.hotel.controller;
 
 public class ManagerController {
     public void show() {

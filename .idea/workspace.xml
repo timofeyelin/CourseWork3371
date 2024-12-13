@@ -4,10 +4,21 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="4e743a9c-2186-4672-8b53-7f7b8f71cf75" name="Changes" comment="Реструктуризация 1">
+    <list default="true" id="4e743a9c-2186-4672-8b53-7f7b8f71cf75" name="Changes" comment="Реструктуризация 1.5">
       <change beforePath="$PROJECT_DIR$/.idea/compiler.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/compiler.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/CourseWork3371.iml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/client/src/main/java/com/hotel/Main.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/client/src/main/java/com/hotel/client/HotelApiClient.java" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/main/java/com/hotel/client/HotelApiClient.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/client/src/main/java/com/hotel/controller/ClientController.java" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/main/java/com/hotel/controller/ClientController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/client/src/main/java/com/hotel/controller/ManagerController.java" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/main/java/com/hotel/controller/ManagerController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/client/src/main/java/com/hotel/model/Booking.java" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/main/java/com/hotel/model/Booking.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/client/src/main/java/com/hotel/model/Client.java" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/main/java/com/hotel/model/Client.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/client/src/main/java/com/hotel/model/Room.java" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/main/java/com/hotel/model/Room.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/client/src/main/java/com/hotel/model/User.java" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/main/java/com/hotel/model/User.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/client/src/main/java/com/hotel/ui/MainFrame.java" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/main/java/com/hotel/ui/MainFrame.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/client/src/main/java/com/hotel/ui/RegisterPanel.java" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/main/java/com/hotel/ui/RegisterPanel.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/server/src/main/resources/application.properties" beforeDir="false" afterPath="$PROJECT_DIR$/server/src/main/resources/application.properties" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/server/target/classes/application.properties" beforeDir="false" afterPath="$PROJECT_DIR$/server/target/classes/application.properties" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -37,32 +48,32 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "Application.MainFrame.executor": "Run",
-    "RequestMappingsPanelOrder0": "0",
-    "RequestMappingsPanelOrder1": "1",
-    "RequestMappingsPanelWidth0": "75",
-    "RequestMappingsPanelWidth1": "75",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "RunOnceActivity.git.unshallow": "true",
-    "Spring Boot.HotelServerApplication.executor": "Run",
-    "com.intellij.ide.FileNotInSourceRootChecker.no.check": "true",
-    "git-widget-placeholder": "master",
-    "ignore.virus.scanning.warn.message": "true",
-    "kotlin-language-version-configured": "true",
-    "node.js.detected.package.eslint": "true",
-    "node.js.detected.package.tslint": "true",
-    "node.js.selected.package.eslint": "(autodetect)",
-    "node.js.selected.package.tslint": "(autodetect)",
-    "nodejs_package_manager_path": "npm",
-    "project.structure.last.edited": "Modules",
-    "project.structure.proportion": "0.0",
-    "project.structure.side.proportion": "0.0",
-    "settings.editor.selected.configurable": "ml.llm.LLMConfigurable",
-    "vue.rearranger.settings.migration": "true"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;Application.MainFrame.executor&quot;: &quot;Run&quot;,
+    &quot;RequestMappingsPanelOrder0&quot;: &quot;0&quot;,
+    &quot;RequestMappingsPanelOrder1&quot;: &quot;1&quot;,
+    &quot;RequestMappingsPanelWidth0&quot;: &quot;75&quot;,
+    &quot;RequestMappingsPanelWidth1&quot;: &quot;75&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
+    &quot;Spring Boot.HotelServerApplication.executor&quot;: &quot;Run&quot;,
+    &quot;com.intellij.ide.FileNotInSourceRootChecker.no.check&quot;: &quot;true&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;master&quot;,
+    &quot;ignore.virus.scanning.warn.message&quot;: &quot;true&quot;,
+    &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
+    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
+    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
+    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
+    &quot;project.structure.last.edited&quot;: &quot;Modules&quot;,
+    &quot;project.structure.proportion&quot;: &quot;0.0&quot;,
+    &quot;project.structure.side.proportion&quot;: &quot;0.0&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;ml.llm.LLMConfigurable&quot;,
+    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   }
-}]]></component>
+}</component>
   <component name="RunManager" selected="Spring Boot.HotelServerApplication">
     <configuration name="MainFrame" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
       <option name="MAIN_CLASS_NAME" value="com.hotel.ui.MainFrame" />
@@ -76,6 +87,17 @@
       <method v="2">
         <option name="Make" enabled="true" />
       </method>
+    </configuration>
+    <configuration default="true" type="JetRunConfigurationType">
+      <module name="hotel-client" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration default="true" type="KotlinStandaloneScriptRunConfigurationType">
+      <module name="hotel-client" />
+      <option name="filePath" />
+      <method v="2" />
     </configuration>
     <configuration name="HotelServerApplication" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot" nameIsGenerated="true">
       <module name="hotel-server" />
@@ -112,6 +134,9 @@
       <workItem from="1734089193896" duration="285000" />
       <workItem from="1734108641450" duration="365000" />
       <workItem from="1734109116160" duration="111000" />
+      <workItem from="1734109242949" duration="1182000" />
+      <workItem from="1734120359214" duration="2950000" />
+      <workItem from="1734124495210" duration="1034000" />
     </task>
     <task id="LOCAL-00001" summary="Реструктуризация">
       <option name="closed" value="true" />
@@ -129,7 +154,15 @@
       <option name="project" value="LOCAL" />
       <updated>1734089447156</updated>
     </task>
-    <option name="localTasksCounter" value="3" />
+    <task id="LOCAL-00003" summary="Реструктуризация 1.5">
+      <option name="closed" value="true" />
+      <created>1734109535338</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1734109535338</updated>
+    </task>
+    <option name="localTasksCounter" value="4" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -138,6 +171,7 @@
   <component name="VcsManagerConfiguration">
     <MESSAGE value="Реструктуризация" />
     <MESSAGE value="Реструктуризация 1" />
-    <option name="LAST_COMMIT_MESSAGE" value="Реструктуризация 1" />
+    <MESSAGE value="Реструктуризация 1.5" />
+    <option name="LAST_COMMIT_MESSAGE" value="Реструктуризация 1.5" />
   </component>
 </project>

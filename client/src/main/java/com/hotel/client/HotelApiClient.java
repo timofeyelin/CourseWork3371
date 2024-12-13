@@ -9,7 +9,7 @@ import java.util.Map;
 import com.google.gson.Gson;
 
 public class HotelApiClient {
-    private static final String BASE_URL = "http://localhost:8080/api";
+    private static final String BASE_URL = "http://localhost:5432/api";
     private final HttpClient httpClient;
     private final Gson gson;
 

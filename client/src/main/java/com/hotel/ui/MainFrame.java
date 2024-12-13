@@ -1,7 +1,5 @@
 package com.hotel.ui;
 
-
-
 import javax.swing.*;
 import java.io.InputStream;
 import java.io.IOException;
