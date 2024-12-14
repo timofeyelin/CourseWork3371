@@ -6,31 +6,41 @@ import java.io.IOException;
 import java.util.Properties;
 
 public class MainFrame extends JFrame {
+    private JTabbedPane authPane;
+
     public MainFrame() {
         setTitle("Hotel Booking System");
         setSize(800, 600);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLocationRelativeTo(null);
-
-        // Добавление компонентов в окно
         initUI();
     }
 
     public void initUI() {
-        // Создание панели с вкладками
-        JTabbedPane tabbedPane = new JTabbedPane();
+        authPane = new JTabbedPane();
+        LoginPanel loginPanel = new LoginPanel(MainFrame.this);  // Fix this reference
+        RegisterPanel registerPanel = new RegisterPanel();
 
-        // Добавление вкладок
-        tabbedPane.addTab("Авторизация", new LoginPanel());
-        tabbedPane.addTab("Регистрация", new RegisterPanel());
+        authPane.addTab("Авторизация", loginPanel);
+        authPane.addTab("Регистрация", registerPanel);
 
-        // Добавить панель с вкладками в окно
-        add(tabbedPane);
+        add(authPane);
+    }
+
+    public void switchToUserView(String role) {
+        getContentPane().removeAll();
+
+        if ("MANAGER".equals(role)) {
+            add(new ManagerPanel());
+        } else {
+            add(new ClientPanel());
+        }
+
+        revalidate();
+        repaint();
     }
 
     public static void main(String[] args) {
-
-        // Запуск интерфейса
         SwingUtilities.invokeLater(() -> {
             MainFrame mainFrame = new MainFrame();
             mainFrame.setVisible(true);

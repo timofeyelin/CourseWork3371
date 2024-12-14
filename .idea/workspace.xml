@@ -5,9 +5,15 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="4e743a9c-2186-4672-8b53-7f7b8f71cf75" name="Changes" comment="Реструктуризация 1.5">
-      <change beforePath="$PROJECT_DIR$/.idea/dataSources.local.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dataSources.local.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/client/src/main/java/com/hotel/ui/ClientPanel.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/client/src/main/java/com/hotel/ui/ManagerPanel.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/compiler.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/compiler.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/client/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/client/pom.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/client/src/main/java/com/hotel/client/HotelApiClient.java" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/main/java/com/hotel/client/HotelApiClient.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/client/src/main/java/com/hotel/ui/LoginPanel.java" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/main/java/com/hotel/ui/LoginPanel.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/client/src/main/java/com/hotel/ui/MainFrame.java" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/main/java/com/hotel/ui/MainFrame.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/client/src/main/java/com/hotel/ui/RegisterPanel.java" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/main/java/com/hotel/ui/RegisterPanel.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/client/target/classes/com/hotel/client/HotelApiClient.class" beforeDir="false" afterPath="$PROJECT_DIR$/client/target/classes/com/hotel/client/HotelApiClient.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/client/target/classes/com/hotel/controller/ClientController.class" beforeDir="false" afterPath="$PROJECT_DIR$/client/target/classes/com/hotel/controller/ClientController.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/client/target/classes/com/hotel/controller/ManagerController.class" beforeDir="false" afterPath="$PROJECT_DIR$/client/target/classes/com/hotel/controller/ManagerController.class" afterDir="false" />
@@ -15,13 +21,25 @@
       <change beforePath="$PROJECT_DIR$/client/target/classes/com/hotel/model/Client.class" beforeDir="false" afterPath="$PROJECT_DIR$/client/target/classes/com/hotel/model/Client.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/client/target/classes/com/hotel/model/Room.class" beforeDir="false" afterPath="$PROJECT_DIR$/client/target/classes/com/hotel/model/Room.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/client/target/classes/com/hotel/model/User.class" beforeDir="false" afterPath="$PROJECT_DIR$/client/target/classes/com/hotel/model/User.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/client/target/classes/com/hotel/ui/LoginPanel$1.class" beforeDir="false" afterPath="$PROJECT_DIR$/client/target/classes/com/hotel/ui/LoginPanel$1.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/client/target/classes/com/hotel/ui/LoginPanel$2.class" beforeDir="false" afterPath="$PROJECT_DIR$/client/target/classes/com/hotel/ui/LoginPanel$2.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/client/target/classes/com/hotel/ui/LoginPanel.class" beforeDir="false" afterPath="$PROJECT_DIR$/client/target/classes/com/hotel/ui/LoginPanel.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/client/target/classes/com/hotel/ui/MainFrame.class" beforeDir="false" afterPath="$PROJECT_DIR$/client/target/classes/com/hotel/ui/MainFrame.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/client/target/classes/com/hotel/ui/RegisterPanel$1.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/client/target/classes/com/hotel/ui/RegisterPanel$2.class" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/client/target/classes/com/hotel/ui/RegisterPanel.class" beforeDir="false" afterPath="$PROJECT_DIR$/client/target/classes/com/hotel/ui/RegisterPanel.class" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="Class" />
+      </list>
+    </option>
   </component>
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
@@ -32,12 +50,12 @@
     &quot;assignee&quot;: &quot;Beq4ch&quot;
   }
 }</component>
-  <component name="GithubPullRequestsUISettings"><![CDATA[{
-  "selectedUrlAndAccountId": {
-    "url": "https://github.com/timofeyelin/CourseWork3371.git",
-    "accountId": "7ca78e43-92a7-4752-a541-02c4d8c7bdd2"
+  <component name="GithubPullRequestsUISettings">{
+  &quot;selectedUrlAndAccountId&quot;: {
+    &quot;url&quot;: &quot;https://github.com/timofeyelin/CourseWork3371.git&quot;,
+    &quot;accountId&quot;: &quot;7ca78e43-92a7-4752-a541-02c4d8c7bdd2&quot;
   }
-}]]></component>
+}</component>
   <component name="ProjectColorInfo">{
   &quot;associatedIndex&quot;: 7
 }</component>
@@ -46,34 +64,34 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "Application.MainFrame.executor": "Run",
-    "Application.com.hotel.ui.MainFrame.executor": "Run",
-    "RequestMappingsPanelOrder0": "0",
-    "RequestMappingsPanelOrder1": "1",
-    "RequestMappingsPanelWidth0": "75",
-    "RequestMappingsPanelWidth1": "75",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "RunOnceActivity.git.unshallow": "true",
-    "Spring Boot.HotelServerApplication.executor": "Run",
-    "com.intellij.ide.FileNotInSourceRootChecker.no.check": "true",
-    "git-widget-placeholder": "master",
-    "ignore.virus.scanning.warn.message": "true",
-    "kotlin-language-version-configured": "true",
-    "last_opened_file_path": "C:/Users/Tim/IdeaProjects/CourseWork3371/server",
-    "node.js.detected.package.eslint": "true",
-    "node.js.detected.package.tslint": "true",
-    "node.js.selected.package.eslint": "(autodetect)",
-    "node.js.selected.package.tslint": "(autodetect)",
-    "nodejs_package_manager_path": "npm",
-    "project.structure.last.edited": "Modules",
-    "project.structure.proportion": "0.0",
-    "project.structure.side.proportion": "0.0",
-    "settings.editor.selected.configurable": "ml.llm.LLMConfigurable",
-    "vue.rearranger.settings.migration": "true"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;Application.MainFrame.executor&quot;: &quot;Run&quot;,
+    &quot;Application.com.hotel.ui.MainFrame.executor&quot;: &quot;Run&quot;,
+    &quot;RequestMappingsPanelOrder0&quot;: &quot;0&quot;,
+    &quot;RequestMappingsPanelOrder1&quot;: &quot;1&quot;,
+    &quot;RequestMappingsPanelWidth0&quot;: &quot;75&quot;,
+    &quot;RequestMappingsPanelWidth1&quot;: &quot;75&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
+    &quot;Spring Boot.HotelServerApplication.executor&quot;: &quot;Run&quot;,
+    &quot;com.intellij.ide.FileNotInSourceRootChecker.no.check&quot;: &quot;true&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;master&quot;,
+    &quot;ignore.virus.scanning.warn.message&quot;: &quot;true&quot;,
+    &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
+    &quot;last_opened_file_path&quot;: &quot;C:/Users/Tim/IdeaProjects/CourseWork3371/server&quot;,
+    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
+    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
+    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
+    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
+    &quot;project.structure.last.edited&quot;: &quot;Modules&quot;,
+    &quot;project.structure.proportion&quot;: &quot;0.0&quot;,
+    &quot;project.structure.side.proportion&quot;: &quot;0.0&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;ml.llm.LLMConfigurable&quot;,
+    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   }
-}]]></component>
+}</component>
   <component name="RunManager" selected="Application.com.hotel.ui.MainFrame">
     <configuration name="MainFrame" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
       <option name="MAIN_CLASS_NAME" value="com.hotel.ui.MainFrame.main()" />
@@ -150,7 +168,8 @@
       <workItem from="1734109242949" duration="1182000" />
       <workItem from="1734120359214" duration="2950000" />
       <workItem from="1734124495210" duration="1034000" />
-      <workItem from="1734174447837" duration="1018000" />
+      <workItem from="1734174447837" duration="1624000" />
+      <workItem from="1734176725243" duration="2398000" />
     </task>
     <task id="LOCAL-00001" summary="Реструктуризация">
       <option name="closed" value="true" />

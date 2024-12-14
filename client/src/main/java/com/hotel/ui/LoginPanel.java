@@ -13,13 +13,17 @@ import java.net.URL;
 import java.sql.*;
 
 public class LoginPanel extends JPanel {
-    private JTextField usernameField;
-    private JPasswordField passwordField;
-    private JButton loginButton;
+    private final JTextField usernameField;
+    private final JPasswordField passwordField;
+    private final HotelApiClient apiClient;
+    private MainFrame mainFrame;
 
-    private HotelApiClient apiClient = new HotelApiClient();
 
-    public LoginPanel(){
+    public LoginPanel(MainFrame frame){
+
+        this.mainFrame = frame;
+        this.apiClient = new HotelApiClient();
+
         setLayout(new GridBagLayout());
 
         GridBagConstraints gbc = new GridBagConstraints();
@@ -63,42 +67,22 @@ public class LoginPanel extends JPanel {
         String username = usernameField.getText();
         String password = new String(passwordField.getPassword());
 
-        if (username.isEmpty() || password.isEmpty()) {
-            JOptionPane.showMessageDialog(this, "Имя пользователя и пароль не должны быть пустыми", "Ошибка", JOptionPane.ERROR_MESSAGE);
-            return;
-        }
-
         try {
-            // Создание JSON-объекта с данными пользователя
-            JSONObject loginData = new JSONObject();
-            loginData.put("username", username);
-            loginData.put("password", password);
+            String response = apiClient.login(username, password);
+            JOptionPane.showMessageDialog(this,
+                    "Вход выполнен успешно",
+                    "Успех",
+                    JOptionPane.INFORMATION_MESSAGE);
 
-            // Отправка POST-запроса на сервер
-            URL url = new URL("http://localhost:8080/login");
-            HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-            conn.setRequestMethod("POST");
-            conn.setRequestProperty("Content-Type", "application/json; utf-8");
-            conn.setDoOutput(true);
+            // Получаем роль из ответа и переключаем view
+            String role = response.contains("MANAGER") ? "MANAGER" : "CLIENT";
+            mainFrame.switchToUserView(role);
 
-            // Отправка данных
-            try(OutputStream os = conn.getOutputStream()) {
-                byte[] input = loginData.toString().getBytes("utf-8");
-                os.write(input, 0, input.length);
-            }
-
-            // Чтение ответа
-            int responseCode = conn.getResponseCode();
-            if (responseCode == HttpURLConnection.HTTP_OK) {
-                JOptionPane.showMessageDialog(this, "Вход выполнен успешно", "Успех", JOptionPane.INFORMATION_MESSAGE);
-                // Дополнительные действия после успешного входа
-            } else {
-                JOptionPane.showMessageDialog(this, "Неверное имя пользователя или пароль", "Ошибка", JOptionPane.ERROR_MESSAGE);
-            }
-
-            conn.disconnect();
-        } catch (Exception ex) {
-            JOptionPane.showMessageDialog(this, "Ошибка при авторизации: " + ex.getMessage(), "Ошибка", JOptionPane.ERROR_MESSAGE);
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this,
+                    e.getMessage(),
+                    "Ошибка",
+                    JOptionPane.ERROR_MESSAGE);
         }
     }
 }
