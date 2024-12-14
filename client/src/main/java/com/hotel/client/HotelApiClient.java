@@ -8,7 +8,6 @@ import com.google.gson.Gson;
 import java.util.Map;
 
 public class HotelApiClient {
-    private static final String BASE_URL = "http://localhost:8080/api";
     private final HttpClient httpClient;
     private final Gson gson;
 
@@ -25,7 +24,7 @@ public class HotelApiClient {
         ));
 
         HttpRequest request = HttpRequest.newBuilder()
-                .uri(URI.create(BASE_URL + "/register"))
+                .uri(URI.create("http://localhost:8080/api/register"))
                 .header("Content-Type", "application/json")
                 .POST(HttpRequest.BodyPublishers.ofString(jsonRequest))
                 .build();
@@ -47,7 +46,7 @@ public class HotelApiClient {
         ));
 
         HttpRequest request = HttpRequest.newBuilder()
-                .uri(URI.create(BASE_URL + "/login"))
+                .uri(URI.create("http://localhost:8080/api/login"))
                 .header("Content-Type", "application/json")
                 .POST(HttpRequest.BodyPublishers.ofString(jsonRequest))
                 .build();
