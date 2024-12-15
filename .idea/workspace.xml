@@ -5,29 +5,11 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="4e743a9c-2186-4672-8b53-7f7b8f71cf75" name="Changes" comment="Реструктуризация 1.5">
-      <change afterPath="$PROJECT_DIR$/client/src/main/java/com/hotel/ui/ClientPanel.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/client/src/main/java/com/hotel/ui/ManagerPanel.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/compiler.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/compiler.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_07_12_2024_17_00_[Changes]/shelved.patch" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_07_12_2024_17_00__Changes_.xml" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/client/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/client/pom.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/client/src/main/java/com/hotel/client/HotelApiClient.java" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/main/java/com/hotel/client/HotelApiClient.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/client/src/main/java/com/hotel/ui/LoginPanel.java" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/main/java/com/hotel/ui/LoginPanel.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/client/src/main/java/com/hotel/ui/MainFrame.java" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/main/java/com/hotel/ui/MainFrame.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/client/src/main/java/com/hotel/ui/RegisterPanel.java" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/main/java/com/hotel/ui/RegisterPanel.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/client/target/classes/com/hotel/client/HotelApiClient.class" beforeDir="false" afterPath="$PROJECT_DIR$/client/target/classes/com/hotel/client/HotelApiClient.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/client/target/classes/com/hotel/controller/ClientController.class" beforeDir="false" afterPath="$PROJECT_DIR$/client/target/classes/com/hotel/controller/ClientController.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/client/target/classes/com/hotel/controller/ManagerController.class" beforeDir="false" afterPath="$PROJECT_DIR$/client/target/classes/com/hotel/controller/ManagerController.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/client/target/classes/com/hotel/model/Booking.class" beforeDir="false" afterPath="$PROJECT_DIR$/client/target/classes/com/hotel/model/Booking.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/client/target/classes/com/hotel/model/Client.class" beforeDir="false" afterPath="$PROJECT_DIR$/client/target/classes/com/hotel/model/Client.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/client/target/classes/com/hotel/model/Room.class" beforeDir="false" afterPath="$PROJECT_DIR$/client/target/classes/com/hotel/model/Room.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/client/target/classes/com/hotel/model/User.class" beforeDir="false" afterPath="$PROJECT_DIR$/client/target/classes/com/hotel/model/User.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/client/target/classes/com/hotel/ui/LoginPanel$1.class" beforeDir="false" afterPath="$PROJECT_DIR$/client/target/classes/com/hotel/ui/LoginPanel$1.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/client/target/classes/com/hotel/ui/LoginPanel$2.class" beforeDir="false" afterPath="$PROJECT_DIR$/client/target/classes/com/hotel/ui/LoginPanel$2.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/client/target/classes/com/hotel/ui/LoginPanel.class" beforeDir="false" afterPath="$PROJECT_DIR$/client/target/classes/com/hotel/ui/LoginPanel.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/client/target/classes/com/hotel/ui/MainFrame.class" beforeDir="false" afterPath="$PROJECT_DIR$/client/target/classes/com/hotel/ui/MainFrame.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/client/target/classes/com/hotel/ui/RegisterPanel$1.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/client/target/classes/com/hotel/ui/RegisterPanel$2.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/client/target/classes/com/hotel/ui/RegisterPanel.class" beforeDir="false" afterPath="$PROJECT_DIR$/client/target/classes/com/hotel/ui/RegisterPanel.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/server/src/main/resources/application.properties" beforeDir="false" afterPath="$PROJECT_DIR$/server/src/main/resources/application.properties" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -170,6 +152,8 @@
       <workItem from="1734124495210" duration="1034000" />
       <workItem from="1734174447837" duration="1624000" />
       <workItem from="1734176725243" duration="2398000" />
+      <workItem from="1734198080321" duration="1106000" />
+      <workItem from="1734272684792" duration="695000" />
     </task>
     <task id="LOCAL-00001" summary="Реструктуризация">
       <option name="closed" value="true" />

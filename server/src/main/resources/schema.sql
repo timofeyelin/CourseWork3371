@@ -1,0 +1,1 @@
+CREATE DATABASE hotel_database WITH ENCODING 'UTF8';
