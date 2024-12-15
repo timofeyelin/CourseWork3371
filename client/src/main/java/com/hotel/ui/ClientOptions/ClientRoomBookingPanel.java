@@ -163,8 +163,8 @@ public class ClientRoomBookingPanel extends JPanel {
         // Пример путей к фото номеров
         photoPaths = new ArrayList<>();
         if (roomNumber == 1) {
-            photoPaths.add("client\\images\\i.jpg");
-            photoPaths.add("C:\\Users\\Serge\\Downloads\\i2.jpg");
+            photoPaths.add("client\\images\\img.jpg");
+            photoPaths.add("client\\images\\room1_2.jpg");
         } else {
             for (int i = 1; i <= 3; i++) {
                 photoPaths.add("path/to/photo" + roomNumber + "_" + i + ".jpg");
