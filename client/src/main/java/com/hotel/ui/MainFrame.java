@@ -1,6 +1,12 @@
 package com.hotel.ui;
 
 import javax.swing.*;
+
+import com.hotel.ui.Panels.ClientPanel;
+import com.hotel.ui.Panels.LoginPanel;
+import com.hotel.ui.Panels.ManagerPanel;
+import com.hotel.ui.Panels.RegisterPanel;
+
 import java.io.InputStream;
 import java.io.IOException;
 import java.util.Properties;
