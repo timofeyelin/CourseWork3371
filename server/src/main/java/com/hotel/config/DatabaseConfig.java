@@ -16,7 +16,7 @@ public class DatabaseConfig {
     @PostConstruct
     public void initializeDatabase() {
         try (Connection conn = dataSource.getConnection()) {
-            // Проверка существования БД
+            /*// Проверка существования БД
             String checkDbQuery = "SELECT 1 FROM pg_database WHERE datname = 'hotel_database'";
             boolean dbExists = conn.createStatement()
                     .executeQuery(checkDbQuery)
@@ -44,7 +44,7 @@ public class DatabaseConfig {
                 hotelDbConn.close();
             } else {
                 System.out.println("Database hotel_database already exists");
-            }
+            }*/
         } catch (SQLException e) {
             System.err.println("Database initialization error: " + e.getMessage());
             e.printStackTrace();
