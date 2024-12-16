@@ -1,12 +1,15 @@
 package com.hotel.config;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.context.annotation.Configuration;
-import javax.annotation.PostConstruct;
 import javax.sql.DataSource;
-import java.sql.*;
-
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.boot.jdbc.DataSourceBuilder;
+import javax.annotation.PostConstruct;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.SQLException;
+import java.sql.Statement;
 
 @Configuration
 public class DatabaseConfig {
@@ -22,35 +25,33 @@ public class DatabaseConfig {
 
     @PostConstruct
     public void initializeDatabase() {
-        String postgresUrl = "jdbc:postgresql://localhost:5432/postgres";
+        String url = dbUrl.substring(0, dbUrl.lastIndexOf("/"));
+        String dbName = dbUrl.substring(dbUrl.lastIndexOf("/") + 1);
 
-        try (Connection conn = DriverManager.getConnection(postgresUrl, dbUsername, dbPassword)) {
+        try (Connection conn = DriverManager.getConnection(url + "/postgres", dbUsername, dbPassword);
+             Statement stmt = conn.createStatement()) {
 
-            String checkDbQuery = "SELECT 1 FROM pg_database WHERE datname = 'hotel_database'";
-            ResultSet rs = conn.createStatement().executeQuery(checkDbQuery);
-
+            // Проверка существования базы данных
+            var rs = stmt.executeQuery("SELECT 1 FROM pg_database WHERE datname = '" + dbName + "';");
             if (!rs.next()) {
-
-                conn.createStatement().execute("CREATE DATABASE hotel_database");
-                System.out.println("Database hotel_database created successfully");
-
-                String hotelDbUrl = "jdbc:postgresql://localhost:5432/hotel_database";
-                try (Connection hotelConn = DriverManager.getConnection(hotelDbUrl, dbUsername, dbPassword)) {
-                    String createUsersTable = """
-                        CREATE TABLE IF NOT EXISTS users (
-                            id SERIAL PRIMARY KEY,
-                            username VARCHAR(50) NOT NULL UNIQUE,
-                            password VARCHAR(100) NOT NULL,
-                            role VARCHAR(20) NOT NULL,
-                            created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-                        )""";
-                    hotelConn.createStatement().execute(createUsersTable);
-                    System.out.println("Users table created successfully");
-                }
+                // Создание базы данных, если не существует
+                stmt.executeUpdate("CREATE DATABASE " + dbName + ";");
+                System.out.println("База данных " + dbName + " успешно создана.");
+            } else {
+                System.out.println("База данных " + dbName + " уже существует.");
             }
+
         } catch (SQLException e) {
-            System.err.println("Database initialization error: " + e.getMessage());
-            throw new RuntimeException("Failed to initialize database", e);
+            throw new RuntimeException("Не удалось инициализировать базу данных: " + e.getMessage(), e);
         }
+    }
+
+    @Bean
+    public DataSource dataSource() {
+        return DataSourceBuilder.create()
+                .url(dbUrl)
+                .username(dbUsername)
+                .password(dbPassword)
+                .build();
     }
 }
