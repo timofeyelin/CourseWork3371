@@ -5,10 +5,27 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="4e743a9c-2186-4672-8b53-7f7b8f71cf75" name="Changes" comment="Добавление интерфейса для менеджера и клиента">
-      <change beforePath="$PROJECT_DIR$/server/src/main/java/com/hotel/config/DatabaseConfig.java" beforeDir="false" afterPath="$PROJECT_DIR$/server/src/main/java/com/hotel/config/DatabaseConfig.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/dataSources.local.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dataSources.local.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/dataSources.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dataSources.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/client/images/img.jpg" beforeDir="false" afterPath="$PROJECT_DIR$/server/src/main/resources/images/img.jpg" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/client/images/room1_2.jpg" beforeDir="false" afterPath="$PROJECT_DIR$/server/src/main/resources/images/room1_2.jpg" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/client/src/main/java/com/hotel/ui/ClientOptions/ClientRoomBookingPanel.java" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/main/java/com/hotel/ui/ClientOptions/ClientRoomBookingPanel.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/client/target/classes/com/hotel/ui/ClientOptions/ClientRoomBookingPanel.class" beforeDir="false" afterPath="$PROJECT_DIR$/client/target/classes/com/hotel/ui/ClientOptions/ClientRoomBookingPanel.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/server/src/main/resources/application.properties" beforeDir="false" afterPath="$PROJECT_DIR$/server/src/main/resources/application.properties" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/server/target/classes/application.properties" beforeDir="false" afterPath="$PROJECT_DIR$/server/target/classes/application.properties" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/server/target/classes/com/hotel/config/DatabaseConfig.class" beforeDir="false" afterPath="$PROJECT_DIR$/server/target/classes/com/hotel/config/DatabaseConfig.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/server/target/classes/com/hotel/HotelServerApplication.class" beforeDir="false" afterPath="$PROJECT_DIR$/server/target/classes/com/hotel/HotelServerApplication.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/server/target/classes/com/hotel/controller/BookingController.class" beforeDir="false" afterPath="$PROJECT_DIR$/server/target/classes/com/hotel/controller/BookingController.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/server/target/classes/com/hotel/controller/RoomController.class" beforeDir="false" afterPath="$PROJECT_DIR$/server/target/classes/com/hotel/controller/RoomController.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/server/target/classes/com/hotel/model/Booking.class" beforeDir="false" afterPath="$PROJECT_DIR$/server/target/classes/com/hotel/model/Booking.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/server/target/classes/com/hotel/model/Room.class" beforeDir="false" afterPath="$PROJECT_DIR$/server/target/classes/com/hotel/model/Room.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/server/target/classes/com/hotel/model/User.class" beforeDir="false" afterPath="$PROJECT_DIR$/server/target/classes/com/hotel/model/User.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/server/target/classes/com/hotel/repository/BookingRepository.class" beforeDir="false" afterPath="$PROJECT_DIR$/server/target/classes/com/hotel/repository/BookingRepository.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/server/target/classes/com/hotel/repository/RoomRepository.class" beforeDir="false" afterPath="$PROJECT_DIR$/server/target/classes/com/hotel/repository/RoomRepository.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/server/target/classes/com/hotel/repository/UserRepository.class" beforeDir="false" afterPath="$PROJECT_DIR$/server/target/classes/com/hotel/repository/UserRepository.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/server/target/classes/com/hotel/service/BookingService.class" beforeDir="false" afterPath="$PROJECT_DIR$/server/target/classes/com/hotel/service/BookingService.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/server/target/classes/com/hotel/service/RoomService.class" beforeDir="false" afterPath="$PROJECT_DIR$/server/target/classes/com/hotel/service/RoomService.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/server/target/classes/com/hotel/service/UserService.class" beforeDir="false" afterPath="$PROJECT_DIR$/server/target/classes/com/hotel/service/UserService.class" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -79,6 +96,11 @@
     ]
   }
 }</component>
+  <component name="RecentsManager">
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="C:\Users\manes\IdeaProjects\CourseWork3371\server\src\main\resources" />
+    </key>
+  </component>
   <component name="RunManager" selected="Application.com.hotel.ui.MainFrame">
     <configuration name="MainFrame" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
       <option name="MAIN_CLASS_NAME" value="com.hotel.ui.MainFrame.main()" />
