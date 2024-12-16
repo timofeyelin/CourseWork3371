@@ -2,11 +2,9 @@ package com.hotel.config;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.jdbc.core.JdbcTemplate;
 import javax.annotation.PostConstruct;
 import javax.sql.DataSource;
 import java.sql.Connection;
-import java.sql.ResultSet;
 import java.sql.SQLException;
 
 @Configuration
@@ -18,23 +16,21 @@ public class DatabaseConfig {
     @PostConstruct
     public void initializeDatabase() {
         try (Connection conn = dataSource.getConnection()) {
-            // Проверяем существование БД
-            ResultSet resultSet = conn.getMetaData().getCatalogs();
-            boolean dbExists = false;
-            
-            while (resultSet.next()) {
-                if ("hotel_database".equals(resultSet.getString(1))) {
-                    dbExists = true;
-                    break;
-                }
-            }
 
-            // Создаем БД если не существует
+            String checkDbQuery = "SELECT 1 FROM pg_database WHERE datname = 'hotel_database'";
+            boolean dbExists = conn.createStatement()
+                    .executeQuery(checkDbQuery)
+                    .next();
+
             if (!dbExists) {
                 conn.createStatement().execute("CREATE DATABASE hotel_database");
+                System.out.println("Database hotel_database created successfully");
+            } else {
+                System.out.println("Database hotel_database already exists");
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+
+            System.err.println("Database initialization error: " + e.getMessage());
         }
     }
 }

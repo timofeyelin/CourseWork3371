@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.*;
 import com.hotel.service.UserService;
 import com.hotel.model.User;
 import java.util.Map;
+
 @RestController
 @RequestMapping("/api")
 public class AuthController {

@@ -3,8 +3,6 @@ out/
 !**/src/main/**/out/
 !**/src/test/**/out/
 .idea/
-client/target/*
-server/target/*
 
 ### Eclipse ###
 .apt_generated
@@ -29,4 +27,5 @@ bin/
 .vscode/
 
 ### Mac OS ###
-.DS_Store
+.DS_Store!/client/target/
+
