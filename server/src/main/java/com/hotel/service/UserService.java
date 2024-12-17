@@ -18,7 +18,7 @@ public class UserService {
 
     @PostConstruct
     public void initializeAdmin() {
-        if (!userRepository.existsByUsername("admin")) {
+        if (!userRepository.existsByRole("ADMIN")) {
             User admin = new User();
             admin.setUsername("admin");
             admin.setPassword(passwordEncoder.encode("adminpassword"));

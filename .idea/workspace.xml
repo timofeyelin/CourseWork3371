@@ -6,8 +6,6 @@
   <component name="ChangeListManager">
     <list default="true" id="4e743a9c-2186-4672-8b53-7f7b8f71cf75" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/server/src/main/java/com/hotel/service/UserService.java" beforeDir="false" afterPath="$PROJECT_DIR$/server/src/main/java/com/hotel/service/UserService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/server/target/classes/com/hotel/service/UserService.class" beforeDir="false" afterPath="$PROJECT_DIR$/server/target/classes/com/hotel/service/UserService.class" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -37,6 +35,9 @@
     &quot;accountId&quot;: &quot;3e68228f-3b5f-40e5-a7f2-3356893b4ccd&quot;
   }
 }</component>
+  <component name="ProblemsViewState">
+    <option name="selectedTabId" value="CurrentFile" />
+  </component>
   <component name="ProjectColorInfo">{
   &quot;associatedIndex&quot;: 7
 }</component>
@@ -83,7 +84,7 @@
       <recent name="C:\Users\manes\IdeaProjects\CourseWork3371\server\src\main\resources" />
     </key>
   </component>
-  <component name="RunManager" selected="Application.com.hotel.ui.MainFrame">
+  <component name="RunManager" selected="Spring Boot.HotelServerApplication">
     <configuration name="MainFrame" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
       <option name="MAIN_CLASS_NAME" value="com.hotel.ui.MainFrame.main()" />
       <extension name="coverage">
@@ -162,7 +163,7 @@
       <workItem from="1734174447837" duration="1624000" />
       <workItem from="1734176725243" duration="2398000" />
       <workItem from="1734377389498" duration="2621000" />
-      <workItem from="1734447399738" duration="3294000" />
+      <workItem from="1734447399738" duration="4490000" />
     </task>
     <task id="LOCAL-00001" summary="Реструктуризация">
       <option name="closed" value="true" />
