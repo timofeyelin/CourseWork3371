@@ -7,12 +7,25 @@ import org.springframework.stereotype.Service;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
+import javax.annotation.PostConstruct;
+
 @Service
 public class UserService {
     @Autowired
     private UserRepository userRepository;
 
     private final PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+
+    @PostConstruct
+    public void initializeAdmin() {
+        if (!userRepository.existsByUsername("admin")) {
+            User admin = new User();
+            admin.setUsername("admin");
+            admin.setPassword(passwordEncoder.encode("adminpassword")); // Установите безопасный пароль
+            admin.setRole("ADMIN");
+            userRepository.save(admin);
+        }
+    }
 
     public User register(User user) {
         if (userRepository.findByUsername(user.getUsername()).isPresent()) {

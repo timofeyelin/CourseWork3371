@@ -1,13 +1,12 @@
 package com.hotel.ui;
 
 import javax.swing.*;
-import com.hotel.ui.Panels.*;
-import java.io.InputStream;
-import java.io.IOException;
-import java.util.Properties;
+import com.hotel.ui.Panels.LoginRegisterPanel;
+import com.hotel.ui.Panels.ManagerPanel;
+import com.hotel.ui.Panels.ClientPanel;
+import com.hotel.ui.Panels.AdminPanel;
 
 public class MainFrame extends JFrame {
-    private JTabbedPane authPane;
 
     public MainFrame() {
         setTitle("Hotel Booking System");
@@ -18,25 +17,28 @@ public class MainFrame extends JFrame {
     }
 
     public void initUI() {
-        authPane = new JTabbedPane();
-        LoginPanel loginPanel = new LoginPanel(MainFrame.this);  // Fix this reference
-        RegisterPanel registerPanel = new RegisterPanel();
-
-        authPane.addTab("Авторизация", loginPanel);
-        authPane.addTab("Регистрация", registerPanel);
-
-        add(authPane);
+        LoginRegisterPanel loginRegisterPanel = new LoginRegisterPanel(MainFrame.this);
+        add(loginRegisterPanel);
     }
 
     public void switchToUserView(String role) {
         getContentPane().removeAll();
 
-        if ("MANAGER".equals(role)) {
-            add(new ManagerPanel());
+        if ("ADMIN".equals(role)) {
+            add(new AdminPanel(MainFrame.this));
+        } else if ("MANAGER".equals(role)) {
+            add(new ManagerPanel(MainFrame.this));
         } else {
-            add(new ClientPanel());
+            add(new ClientPanel(MainFrame.this));
         }
 
+        revalidate();
+        repaint();
+    }
+
+    public void switchToLoginRegisterPanel() {
+        getContentPane().removeAll();
+        initUI();
         revalidate();
         repaint();
     }

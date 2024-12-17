@@ -1,27 +1,28 @@
 package com.hotel.ui.Panels;
 
 import com.hotel.client.HotelApiClient;
+import com.hotel.ui.MainFrame;
+
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionListener;
-import java.awt.event.ActionEvent;
 
-public class RegisterPanel extends JPanel {
+public class AdminPanel extends JPanel {
     private final JTextField usernameField;
     private final JPasswordField passwordField;
-    private final JComboBox<String> roleComboBox;
     private final HotelApiClient apiClient;
 
-    public RegisterPanel() {
+    public AdminPanel(MainFrame mainFrame) {
         this.apiClient = new HotelApiClient();
 
         setLayout(new GridBagLayout());
+
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.insets = new Insets(10, 10, 10, 10);
+        gbc.anchor = GridBagConstraints.CENTER;
 
         gbc.gridx = 0;
         gbc.gridy = 0;
-        add(new JLabel("Имя пользователя:"), gbc);
+        add(new JLabel("Имя пользователя менеджера:"), gbc);
 
         gbc.gridx = 1;
         usernameField = new JTextField(15);
@@ -29,31 +30,28 @@ public class RegisterPanel extends JPanel {
 
         gbc.gridx = 0;
         gbc.gridy = 1;
-        add(new JLabel("Пароль:"), gbc);
+        add(new JLabel("Пароль менеджера:"), gbc);
 
         gbc.gridx = 1;
         passwordField = new JPasswordField(15);
         add(passwordField, gbc);
 
-        gbc.gridx = 0;
+        gbc.gridx = 1;
         gbc.gridy = 2;
-        add(new JLabel("Роль:"), gbc);
+        JButton addButton = new JButton("Добавить менеджера");
+        addButton.addActionListener(e -> handleAddManager());
+        add(addButton, gbc);
 
-        gbc.gridx = 1;
-        roleComboBox = new JComboBox<>(new String[]{"CLIENT", "MANAGER"});
-        add(roleComboBox, gbc);
-
-        gbc.gridx = 1;
         gbc.gridy = 3;
-        JButton registerButton = new JButton("Зарегистрироваться");
-        registerButton.addActionListener(e -> handleRegistration());
-        add(registerButton, gbc);
+        JButton logoutButton = new JButton("Выйти");
+        logoutButton.addActionListener(e -> mainFrame.switchToLoginRegisterPanel());
+        add(logoutButton, gbc);
     }
 
-    private void handleRegistration() {
+    private void handleAddManager() {
         String username = usernameField.getText();
         String password = new String(passwordField.getPassword());
-        String role = (String) roleComboBox.getSelectedItem();
+        String role = "MANAGER"; // Устанавливаем роль менеджера
 
         if (username.isEmpty() || password.isEmpty()) {
             JOptionPane.showMessageDialog(this,
@@ -66,7 +64,7 @@ public class RegisterPanel extends JPanel {
         try {
             String response = apiClient.register(username, password, role);
             JOptionPane.showMessageDialog(this,
-                    "Регистрация успешна",
+                    "Менеджер успешно добавлен",
                     "Успех",
                     JOptionPane.INFORMATION_MESSAGE);
             clearFields();
@@ -78,7 +76,7 @@ public class RegisterPanel extends JPanel {
                         JOptionPane.ERROR_MESSAGE);
             } else {
                 JOptionPane.showMessageDialog(this,
-                        "Ошибка при регистрации: " + e.getMessage(),
+                        "Ошибка при добавлении менеджера: " + e.getMessage(),
                         "Ошибка",
                         JOptionPane.ERROR_MESSAGE);
             }
@@ -88,6 +86,5 @@ public class RegisterPanel extends JPanel {
     private void clearFields() {
         usernameField.setText("");
         passwordField.setText("");
-        roleComboBox.setSelectedIndex(0);
     }
 }
