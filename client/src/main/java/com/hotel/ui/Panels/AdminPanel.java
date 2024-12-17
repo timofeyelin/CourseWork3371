@@ -62,7 +62,7 @@ public class AdminPanel extends JPanel {
         }
 
         try {
-            String response = apiClient.register(username, password, role);
+            apiClient.register(username, password, role);
             JOptionPane.showMessageDialog(this,
                     "Менеджер успешно добавлен",
                     "Успех",

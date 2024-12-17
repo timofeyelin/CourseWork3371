@@ -94,7 +94,7 @@ public class LoginRegisterPanel extends JPanel {
         }
 
         try {
-            String response = apiClient.register(username, password, role);
+            apiClient.register(username, password, role);
             JOptionPane.showMessageDialog(this,
                     "Регистрация успешна",
                     "Успех",

@@ -21,7 +21,7 @@ public class UserService {
         if (!userRepository.existsByUsername("admin")) {
             User admin = new User();
             admin.setUsername("admin");
-            admin.setPassword(passwordEncoder.encode("adminpassword")); // Установите безопасный пароль
+            admin.setPassword(passwordEncoder.encode("adminpassword"));
             admin.setRole("ADMIN");
             userRepository.save(admin);
         }
