@@ -45,9 +45,14 @@ public class RoomService {
     }
 
     @Transactional
-    public Room updateRoom(Room room) {
-        if (!roomRepository.existsById(room.getId())) {
-            throw new IllegalArgumentException("Room not found with id: " + room.getId());
+    public Room updateRoom(Long id, Room roomDetails) {
+        Room room = roomRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("Номер не найден"));
+
+        room.setType(roomDetails.getType());
+        room.setPrice(roomDetails.getPrice());
+        if (roomDetails.getDescription() != null) {
+            room.setDescription(roomDetails.getDescription());
         }
         return roomRepository.save(room);
     }
@@ -57,7 +62,7 @@ public class RoomService {
         if (bookingRepository.findByRoomId(id).isEmpty()) {
             roomRepository.deleteById(id);
         } else {
-            throw new IllegalStateException("Cannot delete room with existing bookings");
+            throw new IllegalStateException("Нельзя удалить номер с существующими бронированиями");
         }
     }
 
