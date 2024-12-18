@@ -1,15 +1,14 @@
 package com.hotel.service;
 
 import com.hotel.model.Room;
-import com.hotel.repository.RoomRepository;
 import com.hotel.repository.BookingRepository;
+import com.hotel.repository.RoomRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
-
 @Service
 public class RoomService {
     @Autowired
@@ -26,6 +25,9 @@ public class RoomService {
         return roomRepository.findById(id);
     }
 
+    public Optional<Room> getRoomByNumber(String number) {
+        return roomRepository.findByNumber(number);
+    }
     public List<Room> getAvailableRooms(String type) {
         if (type != null && !type.isEmpty()) {
             return roomRepository.findByTypeAndIsAvailable(type, true);

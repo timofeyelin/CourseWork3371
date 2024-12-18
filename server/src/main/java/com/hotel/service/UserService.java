@@ -8,6 +8,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 import javax.annotation.PostConstruct;
+import java.util.Optional;
 
 @Service
 public class UserService {
@@ -41,4 +42,8 @@ public class UserService {
                 .filter(user -> passwordEncoder.matches(password, user.getPassword()))
                 .orElse(null);
     }
+    public Optional<User> getUserById(Long id) {
+        return userRepository.findById(id);
+    }
+    
 }
