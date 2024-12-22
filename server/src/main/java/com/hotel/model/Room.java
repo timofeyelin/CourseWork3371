@@ -16,7 +16,7 @@ public class Room {
     private BigDecimal price;
     private String description;
     private boolean isAvailable;
-
+    
     @ElementCollection
     @CollectionTable(name = "room_photos", joinColumns = @JoinColumn(name = "room_id"))
     @Column(name = "photo_url")
