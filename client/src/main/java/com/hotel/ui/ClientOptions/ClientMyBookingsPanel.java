@@ -5,6 +5,8 @@ import java.awt.*;
 import java.util.List;
 import com.hotel.client.HotelApiClient;
 import com.hotel.model.Booking;
+import com.hotel.utils.DateUtils;
+
 import java.util.ArrayList;
 import java.awt.image.BufferedImage;
 import java.io.File;
@@ -13,22 +15,32 @@ import javax.imageio.ImageIO;
 
 public class ClientMyBookingsPanel extends JPanel {
     private JPanel roomGridPanel;
+    private JTextField searchField;
     private JButton prevPageButton;
     private JButton nextPageButton;
     private int currentPage = 0;
-    private int roomsPerPage = 9;
+    private int roomsPerPage = 3;
     private List<BookedRoomFrame> roomFrames;
     private HotelApiClient apiClient;
+    private JLabel pageNumberLabel;
 
     public ClientMyBookingsPanel() {
         apiClient = new HotelApiClient();
         setLayout(new BorderLayout());
 
         // Панель сетки номеров
-        roomGridPanel = new JPanel(new GridLayout(0, 3, 10, 10));
+        roomGridPanel = new JPanel(new GridLayout(1, 3, 10, 10));
         JScrollPane scrollPane = new JScrollPane(roomGridPanel);
         JPanel gridPanelContainer = new JPanel(new BorderLayout());
         gridPanelContainer.add(scrollPane, BorderLayout.CENTER);
+
+         // Панель поиска
+         JPanel searchPanel = new JPanel(new BorderLayout());
+         searchField = new JTextField();
+         JButton searchButton = new JButton("Поиск");
+         searchPanel.add(searchField, BorderLayout.CENTER);
+         searchPanel.add(searchButton, BorderLayout.EAST);
+         add(searchPanel, BorderLayout.NORTH);
 
         // Кнопки для листания страниц
         JPanel paginationPanel = new JPanel(new FlowLayout());
@@ -46,7 +58,9 @@ public class ClientMyBookingsPanel extends JPanel {
                 updateRoomGrid();
             }
         });
+        pageNumberLabel = new JLabel("Страница 1");
         paginationPanel.add(prevPageButton);
+        paginationPanel.add(pageNumberLabel);
         paginationPanel.add(nextPageButton);
         gridPanelContainer.add(paginationPanel, BorderLayout.SOUTH);
 
@@ -80,6 +94,11 @@ public class ClientMyBookingsPanel extends JPanel {
         for (int i = start; i < end; i++) {
             roomGridPanel.add(roomFrames.get(i));
         }
+
+        // Update page number label 
+        int totalPages = (int) Math.ceil((double) roomFrames.size() / roomsPerPage);
+        pageNumberLabel.setText(String.format("Страница %d из %d", currentPage + 1, totalPages));
+
         roomGridPanel.revalidate();
         roomGridPanel.repaint();
     }
@@ -123,7 +142,10 @@ public class ClientMyBookingsPanel extends JPanel {
             infoPanel.setLayout(new BoxLayout(infoPanel, BoxLayout.Y_AXIS));
             
             roomNumberLabel = new JLabel("Номер: " + booking.getRoom().getNumber(), SwingConstants.CENTER);
-            bookingDatesLabel = new JLabel("Даты: " + booking.getStartDate() + " - " + booking.getEndDate(), SwingConstants.CENTER);
+            bookingDatesLabel = new JLabel("Даты: " + 
+                DateUtils.convertDateToUI(booking.getStartDate()) + " - " + 
+                DateUtils.convertDateToUI(booking.getEndDate()), 
+                SwingConstants.CENTER);
             roomPriceLabel = new JLabel("Цена: " + booking.getRoom().getPrice() + " руб.", SwingConstants.CENTER);
             roomDescriptionLabel = new JLabel("Описание: " + booking.getRoom().getDescription(), SwingConstants.CENTER);
 
@@ -171,7 +193,8 @@ public class ClientMyBookingsPanel extends JPanel {
             if (roomPhotos != null && !roomPhotos.isEmpty()) {
                 photoPaths.addAll(roomPhotos);
             } else {
-                photoPaths.add(basePath + "default_room.jpg");
+                photoPaths.add(basePath + "room1_1.jpg");
+                photoPaths.add(basePath + "room1_2.jpg");
             }
             updatePhotoButton();
         }
@@ -190,26 +213,47 @@ public class ClientMyBookingsPanel extends JPanel {
 
         private void updatePhotoButton() {
             if (!photoPaths.isEmpty()) {
-                try {
-                    File imageFile = new File(photoPaths.get(currentPhotoIndex));
-                    if (!imageFile.exists()) {
-                        photoLabel.setIcon(null);
-                        photoLabel.setText("Номер " + booking.getRoom().getNumber());
-                        return;
+                photoLabel.setIcon(null);
+                photoLabel.setText("Загрузка...");
+                
+                SwingWorker<ImageIcon, Void> worker = new SwingWorker<ImageIcon, Void>() {
+                    @Override
+                    protected ImageIcon doInBackground() {
+                        try {
+                            File imageFile = new File(photoPaths.get(currentPhotoIndex));
+                            if (!imageFile.exists()) {
+                                return null;
+                            }
+                            BufferedImage img = ImageIO.read(imageFile);
+                            if (img == null) {
+                                return null;
+                            }
+                            Image scaledImg = img.getScaledInstance(200, 150, Image.SCALE_SMOOTH);
+                            return new ImageIcon(scaledImg);
+                        } catch (IOException e) {
+                            return null;
+                        }
                     }
-                    BufferedImage img = ImageIO.read(imageFile);
-                    if (img == null) {
-                        photoLabel.setIcon(null);
-                        photoLabel.setText("Номер " + booking.getRoom().getNumber());
-                        return;
+        
+                    @Override
+                    protected void done() {
+                        try {
+                            ImageIcon icon = get();
+                            if (icon != null) {
+                                photoLabel.setIcon(icon);
+                                photoLabel.setText("");
+                            } else {
+                                photoLabel.setIcon(null);
+                                photoLabel.setText("Номер " + booking.getRoom().getNumber());
+                            }
+                        } catch (Exception e) {
+                            photoLabel.setIcon(null);
+                            photoLabel.setText("Номер " + booking.getRoom().getNumber());
+                        }
                     }
-                    Image scaledImg = img.getScaledInstance(200, 150, Image.SCALE_SMOOTH);
-                    photoLabel.setIcon(new ImageIcon(scaledImg));
-                    photoLabel.setText("");
-                } catch (IOException e) {
-                    photoLabel.setIcon(null);
-                    photoLabel.setText("Номер " + booking.getRoom().getNumber());
-                }
+                };
+                
+                worker.execute();
             }
         }
     }

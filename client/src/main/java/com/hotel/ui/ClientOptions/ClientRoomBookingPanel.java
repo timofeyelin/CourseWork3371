@@ -5,6 +5,7 @@ import javax.swing.*;
 
 import com.hotel.client.HotelApiClient;
 import com.hotel.dto.RoomDTO;
+import com.hotel.utils.DateUtils;
 
 import java.awt.*;
 import java.io.File;
@@ -12,7 +13,6 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.awt.image.BufferedImage;
-import java.time.LocalDate;
 
 public class ClientRoomBookingPanel extends JPanel {
     private JPanel roomGridPanel;
@@ -20,9 +20,10 @@ public class ClientRoomBookingPanel extends JPanel {
     private JButton prevPageButton;
     private JButton nextPageButton;
     private int currentPage = 0;
-    private int roomsPerPage = 9;
+    private int roomsPerPage = 3;
     private List<RoomFrame> roomFrames;
     private HotelApiClient apiClient;
+    private JLabel pageNumberLabel;
 
     public ClientRoomBookingPanel() {
         apiClient = new HotelApiClient();
@@ -37,7 +38,7 @@ public class ClientRoomBookingPanel extends JPanel {
         add(searchPanel, BorderLayout.NORTH);
 
         // Панель сетки номеров
-        roomGridPanel = new JPanel(new GridLayout(0, 3, 10, 10));
+        roomGridPanel = new JPanel(new GridLayout(1, 3, 10, 10));
         JScrollPane scrollPane = new JScrollPane(roomGridPanel);
         JPanel gridPanelContainer = new JPanel(new BorderLayout());
         gridPanelContainer.add(scrollPane, BorderLayout.CENTER);
@@ -58,7 +59,9 @@ public class ClientRoomBookingPanel extends JPanel {
                 updateRoomGrid();
             }
         });
+        pageNumberLabel = new JLabel("Страница 1");
         paginationPanel.add(prevPageButton);
+        paginationPanel.add(pageNumberLabel);
         paginationPanel.add(nextPageButton);
         gridPanelContainer.add(paginationPanel, BorderLayout.SOUTH);
 
@@ -94,6 +97,11 @@ public class ClientRoomBookingPanel extends JPanel {
         for (int i = start; i < end; i++) {
             roomGridPanel.add(roomFrames.get(i));
         }
+        
+        // Update page number label
+        int totalPages = (int) Math.ceil((double) roomFrames.size() / roomsPerPage);
+        pageNumberLabel.setText(String.format("Страница %d из %d", currentPage + 1, totalPages));
+        
         roomGridPanel.revalidate();
         roomGridPanel.repaint();
     }
@@ -187,7 +195,7 @@ public class ClientRoomBookingPanel extends JPanel {
             // Start date
             gbc.gridx = 0;
             gbc.gridy = 0;
-            bookingForm.add(new JLabel("Дата начала (YYYY-MM-DD):"), gbc);
+            bookingForm.add(new JLabel("Дата начала (ДД.ММ.ГГГГ):"), gbc);
 
             gbc.gridx = 1;
             JTextField startDateField = new JTextField(15);
@@ -196,7 +204,7 @@ public class ClientRoomBookingPanel extends JPanel {
             // End date
             gbc.gridx = 0;
             gbc.gridy = 1;
-            bookingForm.add(new JLabel("Дата конца (YYYY-MM-DD):"), gbc);
+            bookingForm.add(new JLabel("Дата конца (ДД.ММ.ГГГГ):"), gbc);
 
             gbc.gridx = 1;
             JTextField endDateField = new JTextField(15);
@@ -214,16 +222,17 @@ public class ClientRoomBookingPanel extends JPanel {
                 try {
                     Long userId = HotelApiClient.getCurrentUserId();
                     if (userId != null) {
-                        apiClient.createBooking(room.getNumber(), userId, 
-                            startDateField.getText(), 
-                            endDateField.getText());
+                        String startDate = DateUtils.convertDateToServer(startDateField.getText());
+                        String endDate = DateUtils.convertDateToServer(endDateField.getText());
+                        
+                        apiClient.createBooking(room.getNumber(), userId, startDate, endDate);
                         JOptionPane.showMessageDialog(bookingDialog, "Номер успешно забронирован");
                         bookingDialog.dispose();
                         loadRoomsFromDatabase();
                     }
                 } catch (Exception ex) {
                     JOptionPane.showMessageDialog(bookingDialog, 
-                        "Ошибка при бронировании: " + ex.getMessage());
+                        "Ошибка при бронировании: Проверьте формат даты (ДД.ММ.ГГГГ)");
                 }
             });
 
@@ -241,45 +250,67 @@ public class ClientRoomBookingPanel extends JPanel {
             if (roomPhotos != null && !roomPhotos.isEmpty()) {
                 photoPaths.addAll(roomPhotos);
             } else {
-                photoPaths.add(basePath + "default_room.jpg");
+                photoPaths.add(basePath + "room1_1.jpg");
+                photoPaths.add(basePath + "room1_2.jpg");
             }
-            updatePhotoButton();
+            updatePhoto();
         }
 
         private void addPhotoNavigationListeners() {
             prevButton.addActionListener(e -> {
                 currentPhotoIndex = (currentPhotoIndex - 1 + photoPaths.size()) % photoPaths.size();
-                updatePhotoButton();
+                updatePhoto();
             });
 
             nextButton.addActionListener(e -> {
                 currentPhotoIndex = (currentPhotoIndex + 1) % photoPaths.size();
-                updatePhotoButton();
+                updatePhoto();
             });
         }
 
-        private void updatePhotoButton() {
+        private void updatePhoto() {
             if (!photoPaths.isEmpty()) {
-                try {
-                    File imageFile = new File(photoPaths.get(currentPhotoIndex));
-                    if (!imageFile.exists()) {
-                        photoLabel.setIcon(null);
-                        photoLabel.setText("Номер " + roomNumber);
-                        return;
+                photoLabel.setIcon(null);
+                photoLabel.setText("Загрузка...");
+                
+                SwingWorker<ImageIcon, Void> worker = new SwingWorker<ImageIcon, Void>() {
+                    @Override
+                    protected ImageIcon doInBackground() {
+                        try {
+                            File imageFile = new File(photoPaths.get(currentPhotoIndex));
+                            if (!imageFile.exists()) {
+                                return null;
+                            }
+                            BufferedImage img = ImageIO.read(imageFile);
+                            if (img == null) {
+                                return null;
+                            }
+                            Image scaledImg = img.getScaledInstance(200, 150, Image.SCALE_SMOOTH);
+                            return new ImageIcon(scaledImg);
+                        } catch (IOException e) {
+                            return null;
+                        }
                     }
-                    BufferedImage img = ImageIO.read(imageFile);
-                    if (img == null) {
-                        photoLabel.setIcon(null);
-                        photoLabel.setText("Номер " + roomNumber);
-                        return;
+        
+                    @Override
+                    protected void done() {
+                        try {
+                            ImageIcon icon = get();
+                            if (icon != null) {
+                                photoLabel.setIcon(icon);
+                                photoLabel.setText("");
+                            } else {
+                                photoLabel.setIcon(null);
+                                photoLabel.setText("Номер " + roomNumber);
+                            }
+                        } catch (Exception e) {
+                            photoLabel.setIcon(null);
+                            photoLabel.setText("Номер " + roomNumber);
+                        }
                     }
-                    Image scaledImg = img.getScaledInstance(200, 150, Image.SCALE_SMOOTH);
-                    photoLabel.setIcon(new ImageIcon(scaledImg));
-                    photoLabel.setText("");
-                } catch (IOException e) {
-                    photoLabel.setIcon(null);
-                    photoLabel.setText("Номер " + roomNumber);
-                }
+                };
+                
+                worker.execute();
             }
         }
     }
