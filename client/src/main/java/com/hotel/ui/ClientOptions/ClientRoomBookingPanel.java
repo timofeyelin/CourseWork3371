@@ -106,6 +106,20 @@ public class ClientRoomBookingPanel extends JPanel {
         roomGridPanel.repaint();
     }
 
+    public void centerDialog(JDialog dialog) {
+        // Get parent window
+        Window parentWindow = SwingUtilities.getWindowAncestor(this);
+        if (parentWindow != null) {
+            // Center relative to parent window
+            int x = parentWindow.getX() + (parentWindow.getWidth() - dialog.getWidth()) / 2;
+            int y = parentWindow.getY() + (parentWindow.getHeight() - dialog.getHeight()) / 2;
+            dialog.setLocation(x, y);
+        } else {
+            // If no parent, center on screen
+            dialog.setLocationRelativeTo(null);
+        }
+    }
+
     private class RoomFrame extends JPanel {
         private final RoomDTO room;
         private final HotelApiClient apiClient;
@@ -238,7 +252,7 @@ public class ClientRoomBookingPanel extends JPanel {
 
             bookingDialog.add(bookingForm, BorderLayout.CENTER);
             bookingDialog.pack();
-            bookingDialog.setLocationRelativeTo(this);
+            centerDialog(bookingDialog);
             bookingDialog.setVisible(true);
         }
 

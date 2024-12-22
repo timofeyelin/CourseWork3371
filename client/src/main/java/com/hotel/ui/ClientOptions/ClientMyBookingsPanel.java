@@ -6,6 +6,7 @@ import java.util.List;
 import com.hotel.client.HotelApiClient;
 import com.hotel.model.Booking;
 import com.hotel.utils.DateUtils;
+import com.hotel.ui.ClientOptions.ClientRoomBookingPanel;
 
 import java.util.ArrayList;
 import java.awt.image.BufferedImage;
@@ -103,6 +104,33 @@ public class ClientMyBookingsPanel extends JPanel {
         roomGridPanel.repaint();
     }
 
+    private void showCenteredMessage(String message, String title, int messageType) {
+        JDialog dialog = new JDialog();
+        dialog.setTitle(title);
+        dialog.setModal(true);
+        
+        JOptionPane optionPane = new JOptionPane(
+            message,
+            messageType,
+            JOptionPane.DEFAULT_OPTION
+        );
+        
+        dialog.setContentPane(optionPane);
+        
+        optionPane.addPropertyChangeListener(e -> {
+            String prop = e.getPropertyName();
+            if (dialog.isVisible() && (e.getSource() == optionPane) && 
+                (prop.equals(JOptionPane.VALUE_PROPERTY))) {
+                dialog.dispose();
+            }
+        });
+        
+        dialog.pack();
+        ClientRoomBookingPanel clientRoomBookingPanel = new ClientRoomBookingPanel();
+        clientRoomBookingPanel.centerDialog(dialog);
+        dialog.setVisible(true);
+    }
+
     private class BookedRoomFrame extends JPanel {
         private final Booking booking;
         private JLabel photoLabel;
@@ -178,10 +206,11 @@ public class ClientMyBookingsPanel extends JPanel {
         private void handleCancelBooking() {
             try {
                 apiClient.cancelBooking(booking.getId());
-                JOptionPane.showMessageDialog(this, "Бронирование успешно отменено");
+                showCenteredMessage("Бронирование успешно отменено", "Уведомление", JOptionPane.INFORMATION_MESSAGE);
                 loadBookings(); // Reload the bookings after cancellation
             } catch (Exception ex) {
-                JOptionPane.showMessageDialog(this, "Ошибка при отмене бронирования: " + ex.getMessage());
+                showCenteredMessage("Ошибка при отмене бронирования: " + ex.getMessage(), 
+                "Ошибка", JOptionPane.ERROR_MESSAGE);
             }
         }
 
