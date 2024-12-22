@@ -1,6 +1,7 @@
 package com.hotel.dto;
 
 import java.math.BigDecimal;
+import java.util.List;
 
 public class RoomDTO {
     private Long id;
@@ -9,6 +10,7 @@ public class RoomDTO {
     private BigDecimal price;
     private String description;
     private boolean isAvailable;
+    private List<String> photos;
 
     public Long getId() { return id; }
     public void setId(Long id) { this.id = id; }
@@ -27,4 +29,7 @@ public class RoomDTO {
 
     public boolean isAvailable() { return isAvailable; }
     public void setAvailable(boolean available) { isAvailable = available; }
+
+    public List<String> getPhotos() { return photos; }
+    public void setPhotos(List<String> photos) { this.photos = photos; }
 }

@@ -2,6 +2,7 @@ package com.hotel.model;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
+import java.util.List;
 
 @Entity
 @Table(name = "rooms")
@@ -15,6 +16,7 @@ public class Room {
     private BigDecimal price;
     private String description;
     private boolean isAvailable;
+    private List<String> photos;
 
     // Геттеры и сеттеры
     public Long getId() { return id; }
@@ -34,4 +36,7 @@ public class Room {
 
     public boolean isAvailable() { return isAvailable; }
     public void setAvailable(boolean available) { isAvailable = available; }
+
+    public List<String> getPhotos() { return photos;}
+    public void setPhotos(List<String> photos) { this.photos = photos; }
 }

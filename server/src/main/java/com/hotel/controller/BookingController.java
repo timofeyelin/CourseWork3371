@@ -7,6 +7,7 @@ import com.hotel.service.BookingService;
 import com.hotel.service.RoomService;
 import com.hotel.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
@@ -58,5 +59,15 @@ public class BookingController {
         booking.setEndDate(endDate);
 
         return bookingService.createBooking(booking);
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<?> cancelBooking(@PathVariable Long id) {
+        try {
+            bookingService.cancelBooking(id);
+            return ResponseEntity.ok().build();
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
     }
 }

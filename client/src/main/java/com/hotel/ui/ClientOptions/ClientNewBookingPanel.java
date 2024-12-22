@@ -57,7 +57,7 @@ public class ClientNewBookingPanel extends JPanel {
             String endDate = endDateField.getText();
     
             try {
-                Long userId = new HotelApiClient().getCurrentUserId();
+                Long userId = HotelApiClient.getCurrentUserId();
                 HotelApiClient apiClient = new HotelApiClient();
                 apiClient.createBooking(roomNumber, userId, startDate, endDate);
                 JOptionPane.showMessageDialog(this, "Бронирование успешно создано");
