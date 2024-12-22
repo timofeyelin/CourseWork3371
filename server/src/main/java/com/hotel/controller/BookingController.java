@@ -52,6 +52,9 @@ public class BookingController {
         User user = userService.getUserById(userId)
                 .orElseThrow(() -> new IllegalArgumentException("Пользователь не найден"));
 
+        room.setAvailable(false);
+        roomService.updateRoomByNumber(roomNumber, room);
+
         Booking booking = new Booking();
         booking.setRoom(room);
         booking.setUser(user);
@@ -64,6 +67,16 @@ public class BookingController {
     @DeleteMapping("/{id}")
     public ResponseEntity<?> cancelBooking(@PathVariable Long id) {
         try {
+            // Get booking before deletion to access room info
+            Booking booking = bookingService.getBookingById(id);
+            if (booking != null) {
+                // Get room and update availability
+                Room room = booking.getRoom();
+                room.setAvailable(true);
+                roomService.updateRoomByNumber(room.getNumber(), room);
+            }
+            
+            // Cancel booking
             bookingService.cancelBooking(id);
             return ResponseEntity.ok().build();
         } catch (Exception e) {

@@ -1,5 +1,6 @@
 package com.hotel.service;
 
+import com.hotel.model.Booking;
 import com.hotel.model.Room;
 import com.hotel.repository.BookingRepository;
 import com.hotel.repository.RoomRepository;
@@ -25,11 +26,18 @@ public class RoomService {
         return roomRepository.findByNumber(number);
     }
     public List<Room> getAvailableRooms(String type) {
+         List<Room> rooms;
         if (type != null && !type.isEmpty()) {
-            return roomRepository.findByTypeAndIsAvailable(type, true);
+            rooms = roomRepository.findByTypeAndIsAvailable(type, true);
+        } else {
+            rooms = roomRepository.findAll();
         }
-        return roomRepository.findAll().stream()
-                .filter(Room::isAvailable)
+
+        return rooms.stream()
+                .filter(room -> {
+                    List<Booking> bookings = bookingRepository.findByRoomId(room.getId());
+                    return bookings.isEmpty() && room.isAvailable();
+                })
                 .toList();
     }
 

@@ -69,6 +69,10 @@ public class ClientMyBookingsPanel extends JPanel {
         }
     }
 
+    public void refreshRoomGrid() {
+        loadBookings();
+    }
+
     private void updateRoomGrid() {
         roomGridPanel.removeAll();
         int start = currentPage * roomsPerPage;
@@ -91,6 +95,7 @@ public class ClientMyBookingsPanel extends JPanel {
         private JLabel roomNumberLabel;
         private JLabel bookingDatesLabel;
         private JLabel roomPriceLabel;
+        private JLabel roomDescriptionLabel;
 
         public BookedRoomFrame(Booking booking) {
             this.booking = booking;
@@ -120,10 +125,12 @@ public class ClientMyBookingsPanel extends JPanel {
             roomNumberLabel = new JLabel("Номер: " + booking.getRoom().getNumber(), SwingConstants.CENTER);
             bookingDatesLabel = new JLabel("Даты: " + booking.getStartDate() + " - " + booking.getEndDate(), SwingConstants.CENTER);
             roomPriceLabel = new JLabel("Цена: " + booking.getRoom().getPrice() + " руб.", SwingConstants.CENTER);
-            
+            roomDescriptionLabel = new JLabel("Описание: " + booking.getRoom().getDescription(), SwingConstants.CENTER);
+
             roomNumberLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
             bookingDatesLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
             roomPriceLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
+            roomDescriptionLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
             
             JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
             prevButton = new JButton("<<");
@@ -138,6 +145,7 @@ public class ClientMyBookingsPanel extends JPanel {
             infoPanel.add(roomNumberLabel);
             infoPanel.add(bookingDatesLabel);
             infoPanel.add(roomPriceLabel);
+            infoPanel.add(roomDescriptionLabel);
             infoPanel.add(buttonPanel);
             
             add(infoPanel, BorderLayout.SOUTH);

@@ -69,17 +69,22 @@ public class ClientRoomBookingPanel extends JPanel {
 
     private void loadRoomsFromDatabase() {
         try {
-            List<RoomDTO> rooms = apiClient.getAvailableRooms(); // This now only gets available rooms
+            List<RoomDTO> rooms = apiClient.getAvailableRooms();
             roomFrames = new ArrayList<>();
-            for (RoomDTO room : rooms) {
-                if (room.isAvailable()) { // Additional check for availability
+            if (rooms != null) {
+                for (RoomDTO room : rooms) {
                     roomFrames.add(new RoomFrame(room));
                 }
             }
             updateRoomGrid();
         } catch (Exception e) {
+            e.printStackTrace(); // Add stack trace for debugging
             JOptionPane.showMessageDialog(this, "Ошибка при загрузке номеров: " + e.getMessage());
         }
+    }
+
+    public void refreshRoomGrid() {
+        loadRoomsFromDatabase();
     }
 
     private void updateRoomGrid() {
@@ -106,6 +111,7 @@ public class ClientRoomBookingPanel extends JPanel {
         private JLabel roomNumberLabel;
         private JLabel roomTypeLabel;
         private JLabel roomPriceLabel;
+        private JLabel roomDescriptionLabel; // Add new field
 
         public RoomFrame(RoomDTO room) {
             this.room = room;
@@ -137,11 +143,13 @@ public class ClientRoomBookingPanel extends JPanel {
             roomNumberLabel = new JLabel("Номер: " + room.getNumber(), SwingConstants.CENTER);
             roomTypeLabel = new JLabel("Тип: " + room.getType(), SwingConstants.CENTER);
             roomPriceLabel = new JLabel("Цена: " + room.getPrice() + " руб.", SwingConstants.CENTER);
+            roomDescriptionLabel = new JLabel("Описание: " + room.getDescription(), SwingConstants.CENTER);
             
             // Center text alignment
             roomNumberLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
             roomTypeLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
             roomPriceLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
+            roomDescriptionLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
             
             // Add navigation and book buttons
             JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
@@ -157,6 +165,7 @@ public class ClientRoomBookingPanel extends JPanel {
             infoPanel.add(roomNumberLabel);
             infoPanel.add(roomTypeLabel);
             infoPanel.add(roomPriceLabel);
+            infoPanel.add(roomDescriptionLabel);
             infoPanel.add(buttonPanel);
             
             add(infoPanel, BorderLayout.SOUTH);
@@ -165,17 +174,63 @@ public class ClientRoomBookingPanel extends JPanel {
         }
 
         private void handleBooking() {
-            try {
-                Long userId = HotelApiClient.getCurrentUserId();
-                if (userId != null) {
-                    apiClient.createBooking(room.getNumber(), userId, 
-                        LocalDate.now().toString(), 
-                        LocalDate.now().plusDays(1).toString());
-                    JOptionPane.showMessageDialog(this, "Номер успешно забронирован");
+            JDialog bookingDialog = new JDialog();
+            bookingDialog.setTitle("Бронирование номера");
+            bookingDialog.setLayout(new BorderLayout());
+            bookingDialog.setModal(true);
+
+            JPanel bookingForm = new JPanel(new GridBagLayout());
+            GridBagConstraints gbc = new GridBagConstraints();
+            gbc.insets = new Insets(5,5,5,5);
+            gbc.anchor = GridBagConstraints.WEST;
+
+            // Start date
+            gbc.gridx = 0;
+            gbc.gridy = 0;
+            bookingForm.add(new JLabel("Дата начала (YYYY-MM-DD):"), gbc);
+
+            gbc.gridx = 1;
+            JTextField startDateField = new JTextField(15);
+            bookingForm.add(startDateField, gbc);
+
+            // End date
+            gbc.gridx = 0;
+            gbc.gridy = 1;
+            bookingForm.add(new JLabel("Дата конца (YYYY-MM-DD):"), gbc);
+
+            gbc.gridx = 1;
+            JTextField endDateField = new JTextField(15);
+            bookingForm.add(endDateField, gbc);
+
+            // Confirm button
+            gbc.gridx = 0;
+            gbc.gridy = 2;
+            gbc.gridwidth = 2;
+            gbc.anchor = GridBagConstraints.CENTER;
+            JButton confirmButton = new JButton("Подтвердить бронирование");
+            bookingForm.add(confirmButton, gbc);
+
+            confirmButton.addActionListener(e -> {
+                try {
+                    Long userId = HotelApiClient.getCurrentUserId();
+                    if (userId != null) {
+                        apiClient.createBooking(room.getNumber(), userId, 
+                            startDateField.getText(), 
+                            endDateField.getText());
+                        JOptionPane.showMessageDialog(bookingDialog, "Номер успешно забронирован");
+                        bookingDialog.dispose();
+                        loadRoomsFromDatabase();
+                    }
+                } catch (Exception ex) {
+                    JOptionPane.showMessageDialog(bookingDialog, 
+                        "Ошибка при бронировании: " + ex.getMessage());
                 }
-            } catch (Exception ex) {
-                JOptionPane.showMessageDialog(this, "Ошибка при бронировании: " + ex.getMessage());
-            }
+            });
+
+            bookingDialog.add(bookingForm, BorderLayout.CENTER);
+            bookingDialog.pack();
+            bookingDialog.setLocationRelativeTo(this);
+            bookingDialog.setVisible(true);
         }
 
         private void initializePhotos() {
