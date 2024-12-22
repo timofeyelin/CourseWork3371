@@ -46,7 +46,7 @@ public class HotelApiClient {
     public static Long getCurrentUserId() {
         return currentUserId;
     }
-    public String register(String username, String password, String role) throws Exception {
+    public void register(String username, String password, String role) throws Exception {
         String jsonRequest = gson.toJson(Map.of(
                 "username", username,
                 "password", password,
@@ -66,7 +66,7 @@ public class HotelApiClient {
             throw new RuntimeException(response.body());
         }
 
-        return response.body();
+        response.body();
     }
 
     public String login(String username, String password) throws Exception {
@@ -162,7 +162,7 @@ public class HotelApiClient {
                 .GET()
                 .build();
 
-        HttpResponse<String> response = httpClient.send(request,
+        HttpResponse<String> response = httpClient.send(request, 
                 HttpResponse.BodyHandlers.ofString());
 
         if (response.statusCode() != 200) {
@@ -205,9 +205,23 @@ public class HotelApiClient {
                 HttpResponse.BodyHandlers.ofString());
 
         if (response.statusCode() != 200) {
-            throw new RuntimeException("Ошибка при получении бронирований: " + response.body());
+            throw new RuntimeException("Ошибка при получении бронирований");
         }
 
         return gson.fromJson(response.body(), new TypeToken<List<Booking>>(){}.getType());
+    }
+
+    public void cancelBooking(Long bookingId) throws Exception {
+        HttpRequest request = HttpRequest.newBuilder()
+                .uri(URI.create("http://localhost:8080/api/bookings/" + bookingId))
+                .DELETE()
+                .build();
+
+        HttpResponse<String> response = httpClient.send(request,
+                HttpResponse.BodyHandlers.ofString());
+
+        if (response.statusCode() != 200) {
+            throw new RuntimeException("Ошибка при отмене бронирования");
+        }
     }
 }
