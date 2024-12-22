@@ -18,13 +18,6 @@ public class RoomController {
         return roomService.getAllRooms();
     }
 
-    @GetMapping("/{id}")
-    public ResponseEntity<Room> getRoomById(@PathVariable Long id) {
-        return roomService.getRoomById(id)
-                .map(ResponseEntity::ok)
-                .orElse(ResponseEntity.notFound().build());
-    }
-
     @GetMapping("/available")
     public List<Room> getAvailableRooms(@RequestParam(required = false) String type) {
         return roomService.getAvailableRooms(type);
@@ -35,15 +28,14 @@ public class RoomController {
         return roomService.createRoom(room);
     }
 
-    @PutMapping("/{id}")
-    public ResponseEntity<Room> updateRoom(@PathVariable Long id, @RequestBody Room roomDetails) {
-        Room updatedRoom = roomService.updateRoom(id, roomDetails);
+    @PutMapping("/number/{roomNumber}")
+    public ResponseEntity<Room> updateRoomByNumber(@PathVariable String roomNumber, @RequestBody Room roomDetails) {
+        Room updatedRoom = roomService.updateRoomByNumber(roomNumber, roomDetails);
         return ResponseEntity.ok(updatedRoom);
     }
-
-    @DeleteMapping("/{id}")
-    public ResponseEntity<?> deleteRoom(@PathVariable Long id) {
-        roomService.deleteRoom(id);
+    @DeleteMapping("/number/{roomNumber}")
+    public ResponseEntity<?> deleteRoomByNumber(@PathVariable String roomNumber) {
+        roomService.deleteRoomByNumber(roomNumber);
         return ResponseEntity.ok().build();
     }
 }

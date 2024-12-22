@@ -19,12 +19,12 @@ public class ManagerEditRoomPanel extends JPanel {
 
         gbc.gridx = 0;
         gbc.gridy = 0;
-        editRoomForm.add(new JLabel("ID Номера:"), gbc);
+        editRoomForm.add(new JLabel("Номер комнаты:"), gbc);
 
         gbc.gridx = 1;
         gbc.gridy = 0;
-        JTextField idField = new JTextField(15);
-        editRoomForm.add(idField, gbc);
+        JTextField roomNumberField = new JTextField(15);
+        editRoomForm.add(roomNumberField, gbc);
 
         gbc.gridx = 0;
         gbc.gridy = 1;
@@ -69,17 +69,16 @@ public class ManagerEditRoomPanel extends JPanel {
         add(editRoomForm, BorderLayout.CENTER);
 
         editButton.addActionListener(e -> {
-            String idText = idField.getText();
+            String roomNumber = roomNumberField.getText();
             String newType = typeField.getText();
             String priceText = priceField.getText();
             String description = descriptionArea.getText();
             boolean keepDescription = keepDescriptionCheckBox.isSelected();
 
             try {
-                Long roomId = Long.parseLong(idText);
                 BigDecimal newPrice = new BigDecimal(priceText);
                 HotelApiClient apiClient = new HotelApiClient();
-                apiClient.editRoom(roomId, newType, newPrice, keepDescription ? null : description);
+                apiClient.editRoomByNumber(roomNumber, newType, newPrice, keepDescription ? null : description);
                 JOptionPane.showMessageDialog(this, "Номер успешно обновлен");
             } catch (Exception ex) {
                 JOptionPane.showMessageDialog(this, "Ошибка при обновлении номера: " + ex.getMessage());

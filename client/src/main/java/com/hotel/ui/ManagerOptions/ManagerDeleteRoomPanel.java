@@ -17,12 +17,12 @@ public class ManagerDeleteRoomPanel extends JPanel {
 
         gbc.gridx = 0;
         gbc.gridy = 0;
-        deleteRoomForm.add(new JLabel("ID Номера:"), gbc);
+        deleteRoomForm.add(new JLabel("Номер комнаты:"), gbc);
 
         gbc.gridx = 1;
         gbc.gridy = 0;
-        JTextField idField = new JTextField(15);
-        deleteRoomForm.add(idField, gbc);
+        JTextField roomNumberField = new JTextField(15);
+        deleteRoomForm.add(roomNumberField, gbc);
 
         gbc.gridx = 0;
         gbc.gridy = 1;
@@ -34,12 +34,11 @@ public class ManagerDeleteRoomPanel extends JPanel {
         add(deleteRoomForm, BorderLayout.CENTER);
 
         deleteButton.addActionListener(e -> {
-            String idText = idField.getText();
+            String roomNumber = roomNumberField.getText();
 
             try {
-                Long roomId = Long.parseLong(idText);
                 HotelApiClient apiClient = new HotelApiClient();
-                apiClient.deleteRoom(roomId);
+                apiClient.deleteRoomByNumber(roomNumber);
                 JOptionPane.showMessageDialog(this, "Номер успешно удален");
             } catch (Exception ex) {
                 JOptionPane.showMessageDialog(this, "Ошибка при удалении номера: " + ex.getMessage());

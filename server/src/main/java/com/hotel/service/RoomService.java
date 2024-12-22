@@ -21,10 +21,6 @@ public class RoomService {
         return roomRepository.findAll();
     }
 
-    public Optional<Room> getRoomById(Long id) {
-        return roomRepository.findById(id);
-    }
-
     public Optional<Room> getRoomByNumber(String number) {
         return roomRepository.findByNumber(number);
     }
@@ -47,8 +43,8 @@ public class RoomService {
     }
 
     @Transactional
-    public Room updateRoom(Long id, Room roomDetails) {
-        Room room = roomRepository.findById(id)
+    public Room updateRoomByNumber(String roomNumber, Room roomDetails) {
+        Room room = roomRepository.findByNumber(roomNumber)
                 .orElseThrow(() -> new IllegalArgumentException("Номер не найден"));
 
         room.setType(roomDetails.getType());
@@ -60,13 +56,16 @@ public class RoomService {
     }
 
     @Transactional
-    public void deleteRoom(Long id) {
-        if (bookingRepository.findByRoomId(id).isEmpty()) {
-            roomRepository.deleteById(id);
+    public void deleteRoomByNumber(String roomNumber) {
+        Room room = roomRepository.findByNumber(roomNumber)
+                .orElseThrow(() -> new IllegalArgumentException("Номер не найден"));
+        if (bookingRepository.findByRoomId(room.getId()).isEmpty()) {
+            roomRepository.delete(room);
         } else {
             throw new IllegalStateException("Нельзя удалить номер с существующими бронированиями");
         }
     }
+    
 
     public List<Room> searchRooms(String type, Double maxPrice, Boolean isAvailable) {
         if (maxPrice != null) {

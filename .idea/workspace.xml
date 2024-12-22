@@ -5,31 +5,36 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="4e743a9c-2186-4672-8b53-7f7b8f71cf75" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/dataSources.local.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dataSources.local.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/dataSources.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dataSources.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_12_12_2024_21_12_[Changes]/shelved.patch" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_12_12_2024_21_12__Changes_.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_12_12_2024_22_41_[Changes]1/shelved.patch" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_12_12_2024_22_41__Changes_1.xml" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/client/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/client/pom.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/client/src/main/java/com/hotel/client/HotelApiClient.java" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/main/java/com/hotel/client/HotelApiClient.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/client/src/main/java/com/hotel/ui/ClientOptions/ClientAvailableRoomsPanel.java" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/main/java/com/hotel/ui/ClientOptions/ClientAvailableRoomsPanel.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/client/src/main/java/com/hotel/ui/ClientOptions/ClientMyBookingsPanel.java" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/main/java/com/hotel/ui/ClientOptions/ClientMyBookingsPanel.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/client/src/main/java/com/hotel/ui/ClientOptions/ClientNewBookingPanel.java" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/main/java/com/hotel/ui/ClientOptions/ClientNewBookingPanel.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/client/src/main/java/com/hotel/ui/ManagerOptions/ManagerDeleteRoomPanel.java" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/main/java/com/hotel/ui/ManagerOptions/ManagerDeleteRoomPanel.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/client/src/main/java/com/hotel/ui/ManagerOptions/ManagerEditRoomPanel.java" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/main/java/com/hotel/ui/ManagerOptions/ManagerEditRoomPanel.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/client/src/main/java/com/hotel/ui/ManagerOptions/RoomsPanel.java" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/main/java/com/hotel/ui/ManagerOptions/RoomsPanel.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/client/src/main/java/com/hotel/ui/Panels/ManagerPanel.java" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/main/java/com/hotel/ui/Panels/ManagerPanel.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/client/target/classes/com/hotel/client/HotelApiClient.class" beforeDir="false" afterPath="$PROJECT_DIR$/client/target/classes/com/hotel/client/HotelApiClient.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/client/target/classes/com/hotel/ui/ClientOptions/ClientAvailableRoomsPanel.class" beforeDir="false" afterPath="$PROJECT_DIR$/client/target/classes/com/hotel/ui/ClientOptions/ClientAvailableRoomsPanel.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/client/target/classes/com/hotel/ui/ClientOptions/ClientMyBookingsPanel.class" beforeDir="false" afterPath="$PROJECT_DIR$/client/target/classes/com/hotel/ui/ClientOptions/ClientMyBookingsPanel.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/client/target/classes/com/hotel/ui/ClientOptions/ClientNewBookingPanel.class" beforeDir="false" afterPath="$PROJECT_DIR$/client/target/classes/com/hotel/ui/ClientOptions/ClientNewBookingPanel.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/client/target/classes/com/hotel/ui/ManagerOptions/RoomsPanel.class" beforeDir="false" afterPath="$PROJECT_DIR$/client/target/classes/com/hotel/ui/ManagerOptions/RoomsPanel.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/server/src/main/java/com/hotel/controller/BookingController.java" beforeDir="false" afterPath="$PROJECT_DIR$/server/src/main/java/com/hotel/controller/BookingController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/server/src/main/java/com/hotel/model/Booking.java" beforeDir="false" afterPath="$PROJECT_DIR$/server/src/main/java/com/hotel/model/Booking.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/server/src/main/java/com/hotel/repository/BookingRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/server/src/main/java/com/hotel/repository/BookingRepository.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/server/src/main/java/com/hotel/repository/RoomRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/server/src/main/java/com/hotel/repository/RoomRepository.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/server/src/main/java/com/hotel/repository/UserRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/server/src/main/java/com/hotel/repository/UserRepository.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/server/src/main/java/com/hotel/service/BookingService.java" beforeDir="false" afterPath="$PROJECT_DIR$/server/src/main/java/com/hotel/service/BookingService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/client/target/classes/com/hotel/ui/ManagerOptions/ManagerAddRoomPanel.class" beforeDir="false" afterPath="$PROJECT_DIR$/client/target/classes/com/hotel/ui/ManagerOptions/ManagerAddRoomPanel.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/client/target/classes/com/hotel/ui/ManagerOptions/ManagerDeleteRoomPanel.class" beforeDir="false" afterPath="$PROJECT_DIR$/client/target/classes/com/hotel/ui/ManagerOptions/ManagerDeleteRoomPanel.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/client/target/classes/com/hotel/ui/ManagerOptions/ManagerEditRoomPanel.class" beforeDir="false" afterPath="$PROJECT_DIR$/client/target/classes/com/hotel/ui/ManagerOptions/ManagerEditRoomPanel.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/client/target/classes/com/hotel/ui/Panels/AdminPanel.class" beforeDir="false" afterPath="$PROJECT_DIR$/client/target/classes/com/hotel/ui/Panels/AdminPanel.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/client/target/classes/com/hotel/ui/Panels/LoginRegisterPanel.class" beforeDir="false" afterPath="$PROJECT_DIR$/client/target/classes/com/hotel/ui/Panels/LoginRegisterPanel.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/server/src/main/java/com/hotel/controller/RoomController.java" beforeDir="false" afterPath="$PROJECT_DIR$/server/src/main/java/com/hotel/controller/RoomController.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/server/src/main/java/com/hotel/service/RoomService.java" beforeDir="false" afterPath="$PROJECT_DIR$/server/src/main/java/com/hotel/service/RoomService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/server/src/main/java/com/hotel/service/UserService.java" beforeDir="false" afterPath="$PROJECT_DIR$/server/src/main/java/com/hotel/service/UserService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/server/target/classes/com/hotel/HotelServerApplication.class" beforeDir="false" afterPath="$PROJECT_DIR$/server/target/classes/com/hotel/HotelServerApplication.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/server/target/classes/com/hotel/controller/BookingController.class" beforeDir="false" afterPath="$PROJECT_DIR$/server/target/classes/com/hotel/controller/BookingController.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/server/target/classes/com/hotel/model/Booking.class" beforeDir="false" afterPath="$PROJECT_DIR$/server/target/classes/com/hotel/model/Booking.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/server/target/classes/com/hotel/repository/BookingRepository.class" beforeDir="false" afterPath="$PROJECT_DIR$/server/target/classes/com/hotel/repository/BookingRepository.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/server/target/classes/com/hotel/repository/UserRepository.class" beforeDir="false" afterPath="$PROJECT_DIR$/server/target/classes/com/hotel/repository/UserRepository.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/server/target/classes/com/hotel/service/BookingService.class" beforeDir="false" afterPath="$PROJECT_DIR$/server/target/classes/com/hotel/service/BookingService.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/server/target/classes/com/hotel/controller/RoomController.class" beforeDir="false" afterPath="$PROJECT_DIR$/server/target/classes/com/hotel/controller/RoomController.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/server/target/classes/com/hotel/model/Room.class" beforeDir="false" afterPath="$PROJECT_DIR$/server/target/classes/com/hotel/model/Room.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/server/target/classes/com/hotel/model/User.class" beforeDir="false" afterPath="$PROJECT_DIR$/server/target/classes/com/hotel/model/User.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/server/target/classes/com/hotel/service/RoomService.class" beforeDir="false" afterPath="$PROJECT_DIR$/server/target/classes/com/hotel/service/RoomService.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/server/target/classes/com/hotel/service/UserService.class" beforeDir="false" afterPath="$PROJECT_DIR$/server/target/classes/com/hotel/service/UserService.class" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -56,7 +61,7 @@
   <component name="GithubPullRequestsUISettings">{
   &quot;selectedUrlAndAccountId&quot;: {
     &quot;url&quot;: &quot;https://github.com/timofeyelin/CourseWork3371.git&quot;,
-    &quot;accountId&quot;: &quot;7ca78e43-92a7-4752-a541-02c4d8c7bdd2&quot;
+    &quot;accountId&quot;: &quot;068ea5e4-1e2e-4a61-91fa-b4d9a2b666d7&quot;
   }
 }</component>
   <component name="ProblemsViewState">
@@ -162,8 +167,8 @@
   <component name="SharedIndexes">
     <attachedChunks>
       <set>
-        <option value="bundled-jdk-9823dce3aa75-b114ca120d71-intellij.indexing.shared.core-IU-242.21829.142" />
-        <option value="bundled-js-predefined-d6986cc7102b-7c0b70fcd90d-JavaScript-IU-242.21829.142" />
+        <option value="bundled-jdk-9823dce3aa75-28b599e66164-intellij.indexing.shared.core-IU-242.24807.4" />
+        <option value="bundled-js-predefined-d6986cc7102b-5c90d61e3bab-JavaScript-IU-242.24807.4" />
       </set>
     </attachedChunks>
   </component>
@@ -190,6 +195,10 @@
       <workItem from="1734447399738" duration="4490000" />
       <workItem from="1734464438245" duration="3030000" />
       <workItem from="1734544312334" duration="4391000" />
+      <workItem from="1734882314135" duration="130000" />
+      <workItem from="1734882664848" duration="2835000" />
+      <workItem from="1734888463633" duration="16000" />
+      <workItem from="1734888966699" duration="3203000" />
     </task>
     <task id="LOCAL-00001" summary="Реструктуризация">
       <option name="closed" value="true" />

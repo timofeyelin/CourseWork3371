@@ -16,10 +16,15 @@ public class ManagerPanel extends JPanel {
         tabbedPane.addTab("Управление бронированиями", new BookingsPanel());
         tabbedPane.addTab("Информация о клиентах", new ClientInfoPanel());
 
-        add(tabbedPane, BorderLayout.CENTER);
+        // Добавляем вкладку "Выйти"
+        tabbedPane.addTab("Выйти", new JPanel());
 
-        JButton logoutButton = new JButton("Выйти");
-        logoutButton.addActionListener(e -> mainFrame.switchToLoginRegisterPanel());
-        add(logoutButton, BorderLayout.SOUTH);
+        tabbedPane.addChangeListener(e -> {
+            if (tabbedPane.getSelectedIndex() == tabbedPane.getTabCount() - 1) {
+                mainFrame.switchToLoginRegisterPanel();
+            }
+        });
+
+        add(tabbedPane, BorderLayout.CENTER);
     }
 }

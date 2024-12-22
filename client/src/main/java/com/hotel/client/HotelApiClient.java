@@ -118,7 +118,7 @@ public class HotelApiClient {
         }
     }
 
-    public void editRoom(Long roomId, String type, BigDecimal price, String description) throws Exception {
+    public void editRoomByNumber(String roomNumber, String type, BigDecimal price, String description) throws Exception {
         Map<String, String> roomData = new HashMap<>();
         roomData.put("type", type);
         roomData.put("price", price.toString());
@@ -127,24 +127,24 @@ public class HotelApiClient {
         }
 
         String jsonRequest = gson.toJson(roomData);
-    
+
         HttpRequest request = HttpRequest.newBuilder()
-                .uri(URI.create("http://localhost:8080/api/rooms/" + roomId))
+                .uri(URI.create("http://localhost:8080/api/rooms/number/" + roomNumber))
                 .header("Content-Type", "application/json")
                 .PUT(HttpRequest.BodyPublishers.ofString(jsonRequest))
                 .build();
-    
+
         HttpResponse<String> response = httpClient.send(request,
                 HttpResponse.BodyHandlers.ofString());
-    
+
         if (response.statusCode() != 200) {
             throw new RuntimeException("Ошибка при обновлении номера");
         }
     }
 
-    public void deleteRoom(Long roomId) throws Exception {
+    public void deleteRoomByNumber(String roomNumber) throws Exception {
         HttpRequest request = HttpRequest.newBuilder()
-                .uri(URI.create("http://localhost:8080/api/rooms/" + roomId))
+                .uri(URI.create("http://localhost:8080/api/rooms/number/" + roomNumber))
                 .DELETE()
                 .build();
     
