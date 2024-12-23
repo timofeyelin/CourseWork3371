@@ -6,13 +6,9 @@
   <component name="ChangeListManager">
     <list default="true" id="4e743a9c-2186-4672-8b53-7f7b8f71cf75" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/client/src/main/java/com/hotel/ui/ClientOptions/ClientMyBookingsPanel.java" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/main/java/com/hotel/ui/ClientOptions/ClientMyBookingsPanel.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/client/src/main/java/com/hotel/ui/ClientOptions/ClientRoomBookingPanel.java" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/main/java/com/hotel/ui/ClientOptions/ClientRoomBookingPanel.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/client/target/classes/com/hotel/ui/ClientOptions/ClientMyBookingsPanel$BookedRoomFrame.class" beforeDir="false" afterPath="$PROJECT_DIR$/client/target/classes/com/hotel/ui/ClientOptions/ClientMyBookingsPanel$BookedRoomFrame.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/client/target/classes/com/hotel/ui/ClientOptions/ClientMyBookingsPanel.class" beforeDir="false" afterPath="$PROJECT_DIR$/client/target/classes/com/hotel/ui/ClientOptions/ClientMyBookingsPanel.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/client/target/classes/com/hotel/ui/ClientOptions/ClientRoomBookingPanel$RoomFrame.class" beforeDir="false" afterPath="$PROJECT_DIR$/client/target/classes/com/hotel/ui/ClientOptions/ClientRoomBookingPanel$RoomFrame.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/client/target/classes/com/hotel/ui/ClientOptions/ClientRoomBookingPanel.class" beforeDir="false" afterPath="$PROJECT_DIR$/client/target/classes/com/hotel/ui/ClientOptions/ClientRoomBookingPanel.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/client/target/classes/com/hotel/ui/MainFrame.class" beforeDir="false" afterPath="$PROJECT_DIR$/client/target/classes/com/hotel/ui/MainFrame.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/client/src/main/java/com/hotel/client/HotelApiClient.java" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/main/java/com/hotel/client/HotelApiClient.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/client/src/main/java/com/hotel/ui/ManagerOptions/ManagerAddRoomPanel.java" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/main/java/com/hotel/ui/ManagerOptions/ManagerAddRoomPanel.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/client/src/main/java/com/hotel/ui/ManagerOptions/ManagerManageRoomsPanel.java" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/main/java/com/hotel/ui/ManagerOptions/ManagerManageRoomsPanel.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -162,7 +158,9 @@
       <workItem from="1734544312334" duration="4391000" />
       <workItem from="1734879470803" duration="694000" />
       <workItem from="1734883158360" duration="21452000" />
-      <workItem from="1734906287725" duration="1151000" />
+      <workItem from="1734906287725" duration="1489000" />
+      <workItem from="1734988149417" duration="157000" />
+      <workItem from="1734988322388" duration="2381000" />
     </task>
     <task id="LOCAL-00001" summary="Реструктуризация">
       <option name="closed" value="true" />

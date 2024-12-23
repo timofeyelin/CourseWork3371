@@ -95,24 +95,25 @@ public class HotelApiClient {
         return response.body();
     }
 
-    public void addRoom(String number, String type, BigDecimal price, String description) throws Exception {
-        Map<String, String> roomData = new HashMap<>();
+    public void addRoom(String number, String type, BigDecimal price, String description, List<String> photos) throws Exception {
+        Map<String, Object> roomData = new HashMap<>();
         roomData.put("number", number);
         roomData.put("type", type);
         roomData.put("price", price.toString());
         roomData.put("description", description);
-
+        roomData.put("photos", photos);
+    
         String jsonRequest = gson.toJson(roomData);
-
+    
         HttpRequest request = HttpRequest.newBuilder()
                 .uri(URI.create("http://localhost:8080/api/rooms"))
                 .header("Content-Type", "application/json")
                 .POST(HttpRequest.BodyPublishers.ofString(jsonRequest))
                 .build();
-
+    
         HttpResponse<String> response = httpClient.send(request,
                 HttpResponse.BodyHandlers.ofString());
-
+    
         if (response.statusCode() != 200) {
             throw new RuntimeException("Ошибка при добавлении номера");
         }

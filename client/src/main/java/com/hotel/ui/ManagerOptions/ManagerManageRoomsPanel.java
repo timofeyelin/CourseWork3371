@@ -3,7 +3,12 @@ package com.hotel.ui.ManagerOptions;
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
+import java.io.File;
+import java.io.IOException;
 import java.math.BigDecimal;
+import java.nio.file.Files;
+import java.nio.file.StandardCopyOption;
+import java.util.ArrayList;
 import java.util.List;
 import com.hotel.client.HotelApiClient;
 import com.hotel.dto.RoomDTO;
@@ -11,14 +16,46 @@ import com.hotel.dto.RoomDTO;
 public class ManagerManageRoomsPanel extends JPanel {
     private JTable roomsTable;
     private DefaultTableModel tableModel;
+    private List<String> selectedPhotoPaths;
+    private JList<String> photoList;
+    private DefaultListModel<String> photoListModel;
 
     public ManagerManageRoomsPanel() {
         setLayout(new BorderLayout());
+        selectedPhotoPaths = new ArrayList<>();
 
+        // Create main panels
+        JPanel operationsPanel = new JPanel(new GridLayout(1, 3, 10, 0));
+        JPanel addRoomPanel = createAddRoomPanel();
+        JPanel editRoomPanel = createEditRoomPanel();
+        JPanel deleteRoomPanel = createDeleteRoomPanel();
+        
+        operationsPanel.add(addRoomPanel);
+        operationsPanel.add(editRoomPanel);
+        operationsPanel.add(deleteRoomPanel);
+
+        // Create table panel
+        String[] columnNames = {"ID", "Номер", "Тип", "Цена", "Описание"};
+        tableModel = new DefaultTableModel(columnNames, 0);
+        roomsTable = new JTable(tableModel);
+        JScrollPane tableScrollPane = new JScrollPane(roomsTable);
+
+        // Create photo panel
+        JPanel photoPanel = createPhotoPanel();
+
+        // Layout assembly
+        JPanel southPanel = new JPanel(new BorderLayout());
+        southPanel.add(photoPanel, BorderLayout.CENTER);
+        southPanel.add(operationsPanel, BorderLayout.SOUTH);
+
+        add(tableScrollPane, BorderLayout.CENTER);
+        add(southPanel, BorderLayout.SOUTH);
+
+        loadAvailableRooms();
+    }
+
+    private JPanel createAddRoomPanel() {
         JPanel addRoomPanel = new JPanel(new GridBagLayout());
-        JPanel editRoomPanel = new JPanel(new GridBagLayout());
-        JPanel deleteRoomPanel = new JPanel(new GridBagLayout());
-
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.insets = new Insets(5, 5, 5, 5);
         gbc.anchor = GridBagConstraints.WEST;
@@ -71,6 +108,33 @@ public class ManagerManageRoomsPanel extends JPanel {
         gbc.anchor = GridBagConstraints.CENTER;
         JButton addButton = new JButton("Добавить номер");
         addRoomPanel.add(addButton, gbc);
+
+        addButton.addActionListener(e -> {
+            String number = addNumberField.getText();
+            String type = addTypeField.getText();
+            String priceText = addPriceField.getText();
+            String description = addDescriptionArea.getText();
+            try {
+                BigDecimal price = new BigDecimal(priceText);
+                HotelApiClient apiClient = new HotelApiClient();
+                apiClient.addRoom(number, type, price, description, selectedPhotoPaths);
+                JOptionPane.showMessageDialog(this, "Номер успешно добавлен");
+                loadAvailableRooms(); // Обновить таблицу после добавления номера
+                clearPhotoList();
+            } catch (Exception ex) {
+                JOptionPane.showMessageDialog(this, "Ошибка при добавлении номера: " + ex.getMessage());
+            }
+        });
+
+        return addRoomPanel;
+    }
+
+    private JPanel createEditRoomPanel() {
+        JPanel editRoomPanel = new JPanel(new GridBagLayout());
+        GridBagConstraints gbc = new GridBagConstraints();
+        gbc.insets = new Insets(5, 5, 5, 5);
+        gbc.anchor = GridBagConstraints.WEST;
+        gbc.fill = GridBagConstraints.HORIZONTAL;
 
         // Отредактировать номер
         gbc.gridx = 0;
@@ -128,6 +192,35 @@ public class ManagerManageRoomsPanel extends JPanel {
         JButton editButton = new JButton("Редактировать номер");
         editRoomPanel.add(editButton, gbc);
 
+        editButton.addActionListener(e -> {
+            String roomNumber = editNumberField.getText();
+            String newType = editTypeField.getText();
+            String priceText = editPriceField.getText();
+            String description = editDescriptionArea.getText();
+            boolean keepDescription = keepDescriptionCheckBox.isSelected();
+
+            try {
+                BigDecimal newPrice = new BigDecimal(priceText);
+                HotelApiClient apiClient = new HotelApiClient();
+                apiClient.editRoomByNumber(roomNumber, newType, newPrice, keepDescription ? null : description);
+                JOptionPane.showMessageDialog(this, "Номер успешно обновлен");
+                loadAvailableRooms(); // Обновить таблицу после редактирования номера
+                clearPhotoList();
+            } catch (Exception ex) {
+                JOptionPane.showMessageDialog(this, "Ошибка при обновлении номера: " + ex.getMessage());
+            }
+        });
+
+        return editRoomPanel;
+    }
+
+    private JPanel createDeleteRoomPanel() {
+        JPanel deleteRoomPanel = new JPanel(new GridBagLayout());
+        GridBagConstraints gbc = new GridBagConstraints();
+        gbc.insets = new Insets(5, 5, 5, 5);
+        gbc.anchor = GridBagConstraints.WEST;
+        gbc.fill = GridBagConstraints.HORIZONTAL;
+
         // Удалить номер
         gbc.gridx = 0;
         gbc.gridy = 0;
@@ -151,56 +244,6 @@ public class ManagerManageRoomsPanel extends JPanel {
         JButton deleteButton = new JButton("Удалить номер");
         deleteRoomPanel.add(deleteButton, gbc);
 
-        // Добавляем панели в основной макет
-        JPanel mainPanel = new JPanel(new BorderLayout());
-        mainPanel.add(addRoomPanel, BorderLayout.WEST);
-        mainPanel.add(editRoomPanel, BorderLayout.CENTER);
-        mainPanel.add(deleteRoomPanel, BorderLayout.EAST);
-
-        add(mainPanel, BorderLayout.CENTER);
-
-        // Таблица с доступными номерами
-        String[] columnNames = {"ID", "Номер", "Тип", "Цена", "Описание"};
-        tableModel = new DefaultTableModel(columnNames, 0);
-        roomsTable = new JTable(tableModel);
-        JScrollPane scrollPane = new JScrollPane(roomsTable);
-        add(scrollPane, BorderLayout.NORTH);
-
-        // Action listeners
-        addButton.addActionListener(e -> {
-            String number = addNumberField.getText();
-            String type = addTypeField.getText();
-            String priceText = addPriceField.getText();
-            String description = addDescriptionArea.getText();
-            try {
-                BigDecimal price = new BigDecimal(priceText);
-                HotelApiClient apiClient = new HotelApiClient();
-                apiClient.addRoom(number, type, price, description);
-                JOptionPane.showMessageDialog(this, "Номер успешно добавлен");
-                loadAvailableRooms(); // Обновить таблицу после добавления номера
-            } catch (Exception ex) {
-                JOptionPane.showMessageDialog(this, "Ошибка при добавлении номера: " + ex.getMessage());
-            }
-        });
-
-        editButton.addActionListener(e -> {
-            String roomNumber = editNumberField.getText();
-            String newType = editTypeField.getText();
-            String priceText = editPriceField.getText();
-            String description = editDescriptionArea.getText();
-            boolean keepDescription = keepDescriptionCheckBox.isSelected();
-
-            try {
-                BigDecimal newPrice = new BigDecimal(priceText);
-                HotelApiClient apiClient = new HotelApiClient();
-                apiClient.editRoomByNumber(roomNumber, newType, newPrice, keepDescription ? null : description);
-                JOptionPane.showMessageDialog(this, "Номер успешно обновлен");
-                loadAvailableRooms(); // Обновить таблицу после редактирования номера
-            } catch (Exception ex) {
-                JOptionPane.showMessageDialog(this, "Ошибка при обновлении номера: " + ex.getMessage());
-            }
-        });
-
         deleteButton.addActionListener(e -> {
             String roomNumber = deleteNumberField.getText();
 
@@ -214,8 +257,65 @@ public class ManagerManageRoomsPanel extends JPanel {
             }
         });
 
-        // Загрузить доступные номера при инициализации
-        loadAvailableRooms();
+        return deleteRoomPanel;
+    }
+
+    private JPanel createPhotoPanel() {
+        JPanel panel = new JPanel(new BorderLayout());
+        panel.setBorder(BorderFactory.createTitledBorder("Фотографии номера"));
+
+        photoListModel = new DefaultListModel<>();
+        photoList = new JList<>(photoListModel);
+        photoList.setPreferredSize(new Dimension(200, 150));
+        
+        JPanel buttonPanel = new JPanel(new FlowLayout());
+        
+        JButton addPhotoButton = new JButton("Добавить фото");
+        JButton removePhotoButton = new JButton("Удалить фото");
+
+        addPhotoButton.addActionListener(e -> {
+            JFileChooser fileChooser = new JFileChooser();
+            fileChooser.setMultiSelectionEnabled(true);
+            int result = fileChooser.showOpenDialog(this);
+            
+            if (result == JFileChooser.APPROVE_OPTION) {
+                File[] files = fileChooser.getSelectedFiles();
+                for (File file : files) {
+                    String targetPath = "server/src/main/resources/images/" + file.getName();
+                    selectedPhotoPaths.add(targetPath);
+                    photoListModel.addElement(file.getName());
+                    try {
+                        File targetFile = new File(targetPath);
+                        targetFile.getParentFile().mkdirs();
+                        Files.copy(file.toPath(), targetFile.toPath(), StandardCopyOption.REPLACE_EXISTING);
+                    } catch (IOException ex) {
+                        JOptionPane.showMessageDialog(this,
+                            "Ошибка при копировании файла: " + ex.getMessage());
+                    }
+                }
+            }
+        });
+
+        removePhotoButton.addActionListener(e -> {
+            int selectedIndex = photoList.getSelectedIndex();
+            if (selectedIndex != -1) {
+                selectedPhotoPaths.remove(selectedIndex);
+                photoListModel.remove(selectedIndex);
+            }
+        });
+
+        buttonPanel.add(addPhotoButton);
+        buttonPanel.add(removePhotoButton);
+
+        panel.add(new JScrollPane(photoList), BorderLayout.CENTER);
+        panel.add(buttonPanel, BorderLayout.SOUTH);
+
+        return panel;
+    }
+
+    private void clearPhotoList() {
+        photoListModel.clear();
+        selectedPhotoPaths.clear();
     }
 
     private void loadAvailableRooms() {
