@@ -60,6 +60,12 @@ public class RoomService {
         if (roomDetails.getDescription() != null) {
             room.setDescription(roomDetails.getDescription());
         }
+        // Обработка пустого или отсутствующего списка фотографий
+        if (roomDetails.getPhotos() != null) {
+            room.setPhotos(roomDetails.getPhotos());
+        } else {
+            room.setPhotos(List.of());
+        }
         return roomRepository.save(room);
     }
 

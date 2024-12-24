@@ -9,6 +9,7 @@ import java.net.http.HttpResponse;
 import com.google.gson.*;
 import com.google.gson.reflect.TypeToken;
 import com.hotel.dto.RoomDTO;
+import com.hotel.dto.BookingDTO;
 import com.hotel.model.Booking;
 import com.hotel.model.User;
 
@@ -22,23 +23,25 @@ public class HotelApiClient {
     private final HttpClient httpClient;
     private final Gson gson;
     private static Long currentUserId;
+
     public HotelApiClient() {
         this.httpClient = HttpClient.newHttpClient();
-    this.gson = new GsonBuilder()
-        .registerTypeAdapter(LocalDate.class, new JsonSerializer<LocalDate>() {
-            @Override
-            public JsonElement serialize(LocalDate src, Type typeOfSrc, JsonSerializationContext context) {
-                return new JsonPrimitive(src.toString());
-            }
-        })
-        .registerTypeAdapter(LocalDate.class, new JsonDeserializer<LocalDate>() {
-            @Override
-            public LocalDate deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) throws JsonParseException {
-                return LocalDate.parse(json.getAsString());
-            }
-        })
-        .create();
+        this.gson = new GsonBuilder()
+            .registerTypeAdapter(LocalDate.class, new JsonSerializer<LocalDate>() {
+                @Override
+                public JsonElement serialize(LocalDate src, Type typeOfSrc, JsonSerializationContext context) {
+                    return new JsonPrimitive(src.toString());
+                }
+            })
+            .registerTypeAdapter(LocalDate.class, new JsonDeserializer<LocalDate>() {
+                @Override
+                public LocalDate deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) throws JsonParseException {
+                    return LocalDate.parse(json.getAsString());
+                }
+            })
+            .create();
     }
+
     public void setCurrentUserId(Long userId) {
         currentUserId = userId;
     }
@@ -46,6 +49,7 @@ public class HotelApiClient {
     public static Long getCurrentUserId() {
         return currentUserId;
     }
+
     public void register(String username, String password, String role) throws Exception {
         String jsonRequest = gson.toJson(Map.of(
                 "username", username,
@@ -119,13 +123,14 @@ public class HotelApiClient {
         }
     }
 
-    public void editRoomByNumber(String roomNumber, String type, BigDecimal price, String description) throws Exception {
-        Map<String, String> roomData = new HashMap<>();
+    public void editRoomByNumber(String roomNumber, String type, BigDecimal price, String description, List<String> photos) throws Exception {
+        Map<String, Object> roomData = new HashMap<>();
         roomData.put("type", type);
         roomData.put("price", price.toString());
         if (description != null) {
             roomData.put("description", description);
         }
+        roomData.put("photos", photos);
 
         String jsonRequest = gson.toJson(roomData);
 
@@ -135,8 +140,7 @@ public class HotelApiClient {
                 .PUT(HttpRequest.BodyPublishers.ofString(jsonRequest))
                 .build();
 
-        HttpResponse<String> response = httpClient.send(request,
-                HttpResponse.BodyHandlers.ofString());
+        HttpResponse<String> response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
 
         if (response.statusCode() != 200) {
             throw new RuntimeException("Ошибка при обновлении номера");
@@ -171,6 +175,21 @@ public class HotelApiClient {
         }
 
         return gson.fromJson(response.body(), new TypeToken<List<RoomDTO>>(){}.getType());
+    }
+
+    public List<RoomDTO> getAllRooms() throws Exception {
+        HttpRequest request = HttpRequest.newBuilder()
+                .uri(URI.create("http://localhost:8080/api/rooms"))
+                .GET()
+                .build();
+
+        HttpResponse<String> response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
+
+        if (response.statusCode() != 200) {
+            throw new RuntimeException("Ошибка при загрузке номеров");
+        }
+
+        return gson.fromJson(response.body(), new TypeToken<List<RoomDTO>>() {}.getType());
     }
 
     public void createBooking(String roomNumber, Long userId, String startDate, String endDate) throws Exception {
@@ -223,6 +242,59 @@ public class HotelApiClient {
 
         if (response.statusCode() != 200) {
             throw new RuntimeException("Ошибка при отмене бронирования");
+        }
+    }
+
+    // New methods for managing bookings
+    public BookingDTO getBookingByRoomNumber(String roomNumber) throws Exception {
+        HttpRequest request = HttpRequest.newBuilder()
+                .uri(URI.create("http://localhost:8080/api/bookings/room/" + roomNumber))
+                .GET()
+                .build();
+    
+        HttpResponse<String> response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
+        
+        if (response.statusCode() == 404) {
+            return null;
+        }
+        if (response.statusCode() != 200) {
+            throw new RuntimeException("Ошибка при получении бронирования: " + response.body());
+        }
+    
+        return gson.fromJson(response.body(), BookingDTO.class);
+    }
+
+    public void updateBooking(Long bookingId, String startDate, String endDate) throws Exception {
+        Map<String, String> bookingData = new HashMap<>();
+        bookingData.put("startDate", startDate);
+        bookingData.put("endDate", endDate);
+
+        String jsonRequest = gson.toJson(bookingData);
+
+        HttpRequest request = HttpRequest.newBuilder()
+                .uri(URI.create("http://localhost:8080/api/bookings/" + bookingId))
+                .header("Content-Type", "application/json")
+                .PUT(HttpRequest.BodyPublishers.ofString(jsonRequest))
+                .build();
+
+        HttpResponse<String> response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
+
+        if (response.statusCode() != 200) {
+            throw new RuntimeException("Ошибка при обновлении бронирования: " + response.body());
+        }
+    }
+
+    public void deleteBooking(Long bookingId) throws Exception {
+        HttpRequest request = HttpRequest.newBuilder()
+                .uri(URI.create("http://localhost:8080/api/bookings/" + bookingId))
+                .DELETE()
+                .build();
+
+        HttpResponse<String> response = httpClient.send(request,
+                HttpResponse.BodyHandlers.ofString());
+
+        if (response.statusCode() != 200) {
+            throw new RuntimeException("Ошибка при удалении бронирования: " + response.body());
         }
     }
 }

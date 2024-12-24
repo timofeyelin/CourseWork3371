@@ -15,7 +15,7 @@ public class BookingService {
     public List<Booking> getAllBookings() {
         return bookingRepository.findAll();
     }
-    
+
     public Booking createBooking(Booking booking) {
         LocalDate today = LocalDate.now();
 
@@ -48,5 +48,23 @@ public class BookingService {
     public Booking getBookingById(Long id) {
         return bookingRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Бронирование не найдено"));
+    }
+
+    public Booking getBookingByRoomNumber(String roomNumber) {
+        return bookingRepository.findByRoomNumber(roomNumber);
+    }
+
+    public Booking updateBooking(Long id, LocalDate startDate, LocalDate endDate) {
+        Booking booking = bookingRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Бронирование не найдено"));
+
+        if (endDate.isBefore(startDate)) {
+            throw new IllegalArgumentException("Дата окончания бронирования не может быть раньше даты начала");
+        }
+
+        booking.setStartDate(startDate);
+        booking.setEndDate(endDate);
+
+        return bookingRepository.save(booking);
     }
 }

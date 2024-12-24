@@ -2,6 +2,7 @@ package com.hotel.utils;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
 
 public class DateUtils {
     private static final DateTimeFormatter UI_FORMATTER = DateTimeFormatter.ofPattern("dd.MM.yyyy");
@@ -12,7 +13,7 @@ public class DateUtils {
         return date.format(UI_FORMATTER);
     }
     
-    public static String convertDateToServer(String uiDate) {
+    public static String convertDateToServer(String uiDate) throws DateTimeParseException {
         if (uiDate == null || uiDate.trim().isEmpty()) return null;
         LocalDate date = LocalDate.parse(uiDate, UI_FORMATTER);
         return date.format(SERVER_FORMATTER);
@@ -22,7 +23,7 @@ public class DateUtils {
         try {
             LocalDate.parse(date, UI_FORMATTER);
             return true;
-        } catch (Exception e) {
+        } catch (DateTimeParseException e) {
             return false;
         }
     }

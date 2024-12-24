@@ -7,8 +7,10 @@ import com.hotel.service.BookingService;
 import com.hotel.service.RoomService;
 import com.hotel.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -34,6 +36,27 @@ public class BookingController {
     @GetMapping("/user/{userId}")
     public List<Booking> getUserBookings(@PathVariable Long userId) {
         return bookingService.getUserBookings(userId);
+    }
+
+    @GetMapping("/room/{roomNumber}")
+    public BookingDTO getBookingByRoomNumber(@PathVariable String roomNumber) {
+        Booking booking = bookingService.getBookingByRoomNumber(roomNumber);
+        if (booking == null) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Бронирование не найдено");
+        }
+        return new BookingDTO(booking);
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<BookingDTO> updateBooking(@PathVariable Long id, @RequestBody Map<String, String> bookingData) {
+        try {
+            LocalDate startDate = LocalDate.parse(bookingData.get("startDate"));
+            LocalDate endDate = LocalDate.parse(bookingData.get("endDate"));
+            Booking updatedBooking = bookingService.updateBooking(id, startDate, endDate);
+            return ResponseEntity.ok(new BookingDTO(updatedBooking));
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
+        }
     }
 
     @PostMapping

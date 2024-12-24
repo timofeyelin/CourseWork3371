@@ -33,6 +33,7 @@ public class RoomController {
         Room updatedRoom = roomService.updateRoomByNumber(roomNumber, roomDetails);
         return ResponseEntity.ok(updatedRoom);
     }
+
     @DeleteMapping("/number/{roomNumber}")
     public ResponseEntity<?> deleteRoomByNumber(@PathVariable String roomNumber) {
         roomService.deleteRoomByNumber(roomNumber);
