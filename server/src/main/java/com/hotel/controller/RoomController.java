@@ -3,8 +3,11 @@ package com.hotel.controller;
 import com.hotel.model.Room;
 import com.hotel.service.RoomService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.time.LocalDate;
 import java.util.List;
 
 @RestController
@@ -38,5 +41,16 @@ public class RoomController {
     public ResponseEntity<?> deleteRoomByNumber(@PathVariable String roomNumber) {
         roomService.deleteRoomByNumber(roomNumber);
         return ResponseEntity.ok().build();
+    }
+
+    @GetMapping("/search")
+    public List<Room> searchRooms(
+            @RequestParam(required = false) String type,
+            @RequestParam(required = false) Double minPrice,
+            @RequestParam(required = false) Double maxPrice,
+            @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate startDate,
+            @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate endDate
+    ) {
+        return roomService.searchRooms(type, minPrice, maxPrice, startDate, endDate);
     }
 }

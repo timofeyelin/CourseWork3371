@@ -5,28 +5,124 @@ import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.math.BigDecimal;
+import java.time.LocalDate;
+import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Properties;
 import javax.imageio.ImageIO;
 import com.hotel.client.HotelApiClient;
 import com.hotel.dto.RoomDTO;
+import com.hotel.utils.DateLabelFormatter;
 import com.hotel.utils.DateUtils;
 import com.hotel.dto.BookingDTO;
+import org.jdatepicker.impl.JDatePanelImpl;
+import org.jdatepicker.impl.JDatePickerImpl;
+import org.jdatepicker.impl.UtilDateModel;
 
 public class ManagerManageRoomsPanel extends JPanel {
     private JPanel roomGridPanel;
     private List<RoomFrame> roomFrames;
     private HotelApiClient apiClient;
+    private JComboBox<String> roomTypeFilterComboBox;
+    private JTextField minPriceFilterField;
+    private JTextField maxPriceFilterField;
+    private JDatePickerImpl filterStartDatePicker;
+    private JDatePickerImpl filterEndDatePicker;
+
+    // Pagination controls
+    private JButton prevPageButton;
+    private JButton nextPageButton;
+    private JLabel pageNumberLabel;
+    private int currentPage = 0;
+    private int roomsPerPage = 2;
 
     public ManagerManageRoomsPanel() {
         apiClient = new HotelApiClient();
         setLayout(new BorderLayout());
 
         // Панель сетки номеров
-        roomGridPanel = new JPanel(new GridLayout(1, 3, 10, 10));
+        roomGridPanel = new JPanel(new GridLayout(1, roomsPerPage, 10, 10));
         JScrollPane scrollPane = new JScrollPane(roomGridPanel);
         JPanel gridPanelContainer = new JPanel(new BorderLayout());
         gridPanelContainer.add(scrollPane, BorderLayout.CENTER);
+
+        // Панель фильтрации
+        JPanel filterPanel = new JPanel(new GridLayout(2, 5, 10, 10));
+
+        // Тип номера
+        JLabel typeLabel = new JLabel("Тип номера:");
+        roomTypeFilterComboBox = new JComboBox<>(new String[]{"Все", "Одноместный", "Двухместный", "Люкс"});
+        filterPanel.add(typeLabel);
+        filterPanel.add(roomTypeFilterComboBox);
+
+        // Цена от
+        JLabel minPriceLabel = new JLabel("Мин. цена:");
+        minPriceFilterField = new JTextField();
+        filterPanel.add(minPriceLabel);
+        filterPanel.add(minPriceFilterField);
+
+        // Цена до
+        JLabel maxPriceLabel = new JLabel("Макс. цена:");
+        maxPriceFilterField = new JTextField();
+        filterPanel.add(maxPriceLabel);
+        filterPanel.add(maxPriceFilterField);
+
+        // Дата начала
+        JLabel startDateLabel = new JLabel("Дата начала:");
+        filterStartDatePicker = createDatePicker();
+        filterPanel.add(startDateLabel);
+        filterPanel.add(filterStartDatePicker);
+
+        // Дата конца
+        JLabel endDateLabel = new JLabel("Дата конца:");
+        filterEndDatePicker = createDatePicker();
+        filterPanel.add(endDateLabel);
+        filterPanel.add(filterEndDatePicker);
+
+        // Кнопка фильтрации
+        JButton filterButton = new JButton("Поиск");
+        filterButton.addActionListener(e -> {
+            String selectedType = (String) roomTypeFilterComboBox.getSelectedItem();
+            String minPriceText = minPriceFilterField.getText().trim();
+            String maxPriceText = maxPriceFilterField.getText().trim();
+            LocalDate startDate = getSelectedDate(filterStartDatePicker);
+            LocalDate endDate = getSelectedDate(filterEndDatePicker);
+
+            BigDecimal minPrice = BigDecimal.ZERO;
+            BigDecimal maxPrice = BigDecimal.valueOf(Double.MAX_VALUE);
+
+            try {
+                if (!minPriceText.isEmpty()) {
+                    minPrice = new BigDecimal(minPriceText);
+                    if (minPrice.compareTo(BigDecimal.ZERO) < 0) {
+                        throw new NumberFormatException("Мин. цена не может быть отрицательной.");
+                    }
+                }
+
+                if (!maxPriceText.isEmpty()) {
+                    maxPrice = new BigDecimal(maxPriceText);
+                    if (maxPrice.compareTo(minPrice) < 0) {
+                        throw new NumberFormatException("Макс. цена не может быть меньше мин. цены.");
+                    }
+                }
+
+                if (startDate != null && endDate != null && endDate.isBefore(startDate)) {
+                    throw new IllegalArgumentException("Дата конца не может быть раньше даты начала.");
+                }
+
+                loadRoomsFromDatabase(selectedType, minPrice, maxPrice, startDate, endDate);
+            } catch (NumberFormatException ex) {
+                JOptionPane.showMessageDialog(this, "Неправильный ввод цены: " + ex.getMessage(), "Ошибка", JOptionPane.ERROR_MESSAGE);
+            } catch (IllegalArgumentException ex) {
+                JOptionPane.showMessageDialog(this, ex.getMessage(), "Ошибка", JOptionPane.ERROR_MESSAGE);
+            }
+        });
+        filterPanel.add(new JLabel()); // Empty cell
+        filterPanel.add(filterButton);
+
+        gridPanelContainer.add(filterPanel, BorderLayout.NORTH);
 
         // Кнопка для добавления номера
         JButton addRoomButton = new JButton("Добавить номер");
@@ -37,7 +133,55 @@ public class ManagerManageRoomsPanel extends JPanel {
 
         add(gridPanelContainer, BorderLayout.CENTER);
 
+        // Добавление панели пагинации
+        JPanel paginationPanel = new JPanel(new FlowLayout());
+        prevPageButton = new JButton("Предыдущая");
+        nextPageButton = new JButton("Следующая");
+        pageNumberLabel = new JLabel("Страница 1 из 1");
+
+        prevPageButton.addActionListener(e -> {
+            if (currentPage > 0) {
+                currentPage--;
+                updateRoomGrid();
+            }
+        });
+
+        nextPageButton.addActionListener(e -> {
+            int totalPages = (int) Math.ceil((double) roomFrames.size() / roomsPerPage);
+            if (currentPage < totalPages - 1) {
+                currentPage++;
+                updateRoomGrid();
+            }
+        });
+
+        paginationPanel.add(prevPageButton);
+        paginationPanel.add(pageNumberLabel);
+        paginationPanel.add(nextPageButton);
+
+        JPanel bottomPanel = new JPanel(new BorderLayout());
+        bottomPanel.add(buttonPanel, BorderLayout.NORTH);
+        bottomPanel.add(paginationPanel, BorderLayout.SOUTH);
+        gridPanelContainer.add(bottomPanel, BorderLayout.SOUTH);
+
         loadRoomsFromDatabase();
+    }
+
+    private JDatePickerImpl createDatePicker() {
+        UtilDateModel model = new UtilDateModel();
+        Properties p = new Properties();
+        p.put("text.today", "Сегодня");
+        p.put("text.month", "Месяц");
+        p.put("text.year", "Год");
+        JDatePanelImpl datePanel = new JDatePanelImpl(model, p);
+        return new JDatePickerImpl(datePanel, new DateLabelFormatter());
+    }
+
+    private LocalDate getSelectedDate(JDatePickerImpl datePicker) {
+        if (datePicker.getModel().getValue() != null) {
+            java.util.Date selectedDate = (java.util.Date) datePicker.getModel().getValue();
+            return selectedDate.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+        }
+        return null;
     }
 
     private void loadRoomsFromDatabase() {
@@ -49,6 +193,23 @@ public class ManagerManageRoomsPanel extends JPanel {
                     roomFrames.add(new RoomFrame(room));
                 }
             }
+            currentPage = 0; // Reset to first page
+            updateRoomGrid();
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this, "Ошибка при загрузке номеров: " + e.getMessage());
+        }
+    }
+
+    private void loadRoomsFromDatabase(String roomType, BigDecimal minPrice, BigDecimal maxPrice, LocalDate startDate, LocalDate endDate) {
+        try {
+            List<RoomDTO> rooms = apiClient.getFilteredRooms(roomType, minPrice, maxPrice, startDate, endDate);
+            roomFrames = new ArrayList<>();
+            if (rooms != null) {
+                for (RoomDTO room : rooms) {
+                    roomFrames.add(new RoomFrame(room));
+                }
+            }
+            currentPage = 0; // Reset to first page
             updateRoomGrid();
         } catch (Exception e) {
             JOptionPane.showMessageDialog(this, "Ошибка при загрузке номеров: " + e.getMessage());
@@ -57,11 +218,21 @@ public class ManagerManageRoomsPanel extends JPanel {
 
     private void updateRoomGrid() {
         roomGridPanel.removeAll();
-        for (RoomFrame roomFrame : roomFrames) {
-            roomGridPanel.add(roomFrame);
+        int start = currentPage * roomsPerPage;
+        int end = Math.min(start + roomsPerPage, roomFrames.size());
+        for (int i = start; i < end; i++) {
+            roomGridPanel.add(roomFrames.get(i));
         }
         roomGridPanel.revalidate();
         roomGridPanel.repaint();
+
+        int totalPages = (int) Math.ceil((double) roomFrames.size() / roomsPerPage);
+        if (totalPages == 0) totalPages = 1; // At least one page
+
+        pageNumberLabel.setText("Страница " + (currentPage + 1) + " из " + totalPages);
+
+        prevPageButton.setEnabled(currentPage > 0);
+        nextPageButton.setEnabled(currentPage < totalPages - 1);
     }
 
     private void showAddRoomDialog() {
@@ -177,6 +348,7 @@ public class ManagerManageRoomsPanel extends JPanel {
         private final RoomDTO room;
         private JLabel photoLabel;
         private int currentPhotoIndex = 0;
+        private JButton manageBookingButton;
 
         public RoomFrame(RoomDTO room) {
             this.room = room;
@@ -203,13 +375,17 @@ public class ManagerManageRoomsPanel extends JPanel {
             JButton nextButton = new JButton(">");
 
             prevButton.addActionListener(e -> {
-                currentPhotoIndex = (currentPhotoIndex - 1 + room.getPhotos().size()) % room.getPhotos().size();
-                updatePhoto();
+                if (!room.getPhotos().isEmpty()) {
+                    currentPhotoIndex = (currentPhotoIndex - 1 + room.getPhotos().size()) % room.getPhotos().size();
+                    updatePhoto();
+                }
             });
 
             nextButton.addActionListener(e -> {
-                currentPhotoIndex = (currentPhotoIndex + 1) % room.getPhotos().size();
-                updatePhoto();
+                if (!room.getPhotos().isEmpty()) {
+                    currentPhotoIndex = (currentPhotoIndex + 1) % room.getPhotos().size();
+                    updatePhoto();
+                }
             });
 
             navPanel.add(prevButton);
@@ -248,7 +424,7 @@ public class ManagerManageRoomsPanel extends JPanel {
             buttonPanel.add(deleteButton);
         
             // Replace multiple booking buttons with a single manage booking button
-            JButton manageBookingButton = new JButton("Управление бронированиями");
+            manageBookingButton = new JButton("Управление бронированиями");
             manageBookingButton.addActionListener(e -> showManageBookingOptions());
 
             buttonPanel.add(manageBookingButton);
@@ -270,24 +446,27 @@ public class ManagerManageRoomsPanel extends JPanel {
             JMenuItem deleteBookingItem = new JMenuItem("Удалить бронирование");
 
             editBookingItem.addActionListener(e -> {
-                // Implement logic to select and edit a booking
                 try {
                     List<BookingDTO> bookings = apiClient.getAllBookingsByRoomNumber(room.getNumber());
                     if (bookings == null || bookings.isEmpty()) {
                         JOptionPane.showMessageDialog(this, "Нет бронирований для редактирования.");
                         return;
                     }
-                    BookingDTO booking = (BookingDTO) JOptionPane.showInputDialog(
+                    BookingDisplay[] bookingArray = bookings.stream()
+                        .map(BookingDisplay::new)
+                        .toArray(BookingDisplay[]::new);
+
+                    BookingDisplay selectedDisplay = (BookingDisplay) JOptionPane.showInputDialog(
                         this,
                         "Выберите бронирование для редактирования:",
                         "Редактировать бронирование",
                         JOptionPane.PLAIN_MESSAGE,
                         null,
-                        bookings.toArray(),
-                        bookings.get(0)
+                        bookingArray,
+                        bookingArray[0]
                     );
-                    if (booking != null) {
-                        showEditBookingDialog(booking);
+                    if (selectedDisplay != null) {
+                        showEditBookingDialog(selectedDisplay.getBooking());
                     }
                 } catch (Exception ex) {
                     JOptionPane.showMessageDialog(this, "Ошибка при получении бронирований: " + ex.getMessage());
@@ -295,35 +474,35 @@ public class ManagerManageRoomsPanel extends JPanel {
             });
 
             deleteBookingItem.addActionListener(e -> {
-                // Implement logic to select and delete a booking
                 try {
                     List<BookingDTO> bookings = apiClient.getAllBookingsByRoomNumber(room.getNumber());
                     if (bookings == null || bookings.isEmpty()) {
                         JOptionPane.showMessageDialog(this, "Нет бронирований для удаления.");
                         return;
                     }
-                    BookingDTO booking = (BookingDTO) JOptionPane.showInputDialog(
+                    BookingDisplay[] bookingArray = bookings.stream()
+                        .map(BookingDisplay::new)
+                        .toArray(BookingDisplay[]::new);
+
+                    BookingDisplay selectedDisplay = (BookingDisplay) JOptionPane.showInputDialog(
                         this,
                         "Выберите бронирование для удаления:",
                         "Удалить бронирование",
                         JOptionPane.PLAIN_MESSAGE,
                         null,
-                        bookings.toArray(),
-                        bookings.get(0)
+                        bookingArray,
+                        bookingArray[0]
                     );
-                    if (booking != null) {
+                    if (selectedDisplay != null) {
                         int confirm = JOptionPane.showConfirmDialog(this,
                             "Вы действительно хотите удалить бронирование?",
                             "Подтверждение удаления",
-                            JOptionPane.YES_NO_OPTION);
+                            JOptionPane.YES_NO_OPTION
+                        );
                         if (confirm == JOptionPane.YES_OPTION) {
-                            try {
-                                apiClient.deleteBooking(booking.getId());
-                                JOptionPane.showMessageDialog(this, "Бронирование успешно удалено.");
-                                loadRoomsFromDatabase();
-                            } catch (Exception ex) {
-                                JOptionPane.showMessageDialog(this, "Ошибка при удалении бронирования: " + ex.getMessage());
-                            }
+                            apiClient.deleteBooking(selectedDisplay.getBooking().getId());
+                            JOptionPane.showMessageDialog(this, "Бронирование успешно удалено.");
+                            loadRoomsFromDatabase();
                         }
                     }
                 } catch (Exception ex) {
@@ -333,7 +512,26 @@ public class ManagerManageRoomsPanel extends JPanel {
 
             popupMenu.add(editBookingItem);
             popupMenu.add(deleteBookingItem);
-            popupMenu.show(this, 0, 0);
+            popupMenu.show(manageBookingButton, manageBookingButton.getWidth(), 0);
+        }
+
+        private class BookingDisplay {
+            private final BookingDTO booking;
+
+            public BookingDisplay(BookingDTO booking) {
+                this.booking = booking;
+            }
+
+            @Override
+            public String toString() {
+                // Отображаем даты в формате ДД.ММ.ГГГГ
+                return "С " + DateUtils.convertDateToUI(booking.getStartDate())
+                    + " по " + DateUtils.convertDateToUI(booking.getEndDate());
+            }
+
+            public BookingDTO getBooking() {
+                return booking;
+            }
         }
 
         private void updatePhoto() {

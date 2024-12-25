@@ -18,11 +18,15 @@ import java.util.Map;
 import java.math.BigDecimal;
 import java.util.List;
 import java.util.HashMap;
+import java.io.IOException;
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 
 public class HotelApiClient {
     private final HttpClient httpClient;
     private final Gson gson;
     private static Long currentUserId;
+    private static final String BASE_URL = "http://localhost:8080/api";
 
     public HotelApiClient() {
         this.httpClient = HttpClient.newHttpClient();
@@ -58,45 +62,47 @@ public class HotelApiClient {
         ));
 
         HttpRequest request = HttpRequest.newBuilder()
-                .uri(URI.create("http://localhost:8080/api/register"))
+                .uri(URI.create(BASE_URL + "/register"))
                 .header("Content-Type", "application/json")
                 .POST(HttpRequest.BodyPublishers.ofString(jsonRequest))
                 .build();
 
-        HttpResponse<String> response = httpClient.send(request,
-                HttpResponse.BodyHandlers.ofString());
+        sendRequest(request);
 
-        if (response.statusCode() != 200) {
-            throw new RuntimeException(response.body());
-        }
-
-        response.body();
     }
 
-    public String login(String username, String password) throws Exception {
+    public User login(String username, String password) throws Exception {
         String jsonRequest = gson.toJson(Map.of(
                 "username", username,
                 "password", password
         ));
     
         HttpRequest request = HttpRequest.newBuilder()
-                .uri(URI.create("http://localhost:8080/api/login"))
+                .uri(URI.create(BASE_URL + "/login"))
                 .header("Content-Type", "application/json")
                 .POST(HttpRequest.BodyPublishers.ofString(jsonRequest))
                 .build();
     
-        HttpResponse<String> response = httpClient.send(request,
-                HttpResponse.BodyHandlers.ofString());
+        HttpResponse<String> response = sendRequest(request);
     
         if (response.statusCode() != 200) {
-            throw new RuntimeException("Неверное имя пользователя или пароль");
+            // Парсинг сообщения об ошибке
+            Type mapType = new TypeToken<Map<String, String>>(){}.getType();
+            Map<String, String> error = gson.fromJson(response.body(), mapType);
+            String errorMessage = error.getOrDefault("error", "Неизвестная ошибка");
+            throw new RuntimeException("Ошибка при входе: " + errorMessage);
         }
     
-        // Парсинг userId из ответа
+        // Парсинг объекта User из успешного ответа
         User user = gson.fromJson(response.body(), User.class);
         setCurrentUserId(user.getId());
     
-        return response.body();
+        return user;
+    }
+
+    // Общий метод для отправки запросов
+    private HttpResponse<String> sendRequest(HttpRequest request) throws IOException, InterruptedException {
+        return httpClient.send(request, HttpResponse.BodyHandlers.ofString());
     }
 
     public void addRoom(String number, String type, BigDecimal price, String description, List<String> photos) throws Exception {
@@ -110,16 +116,15 @@ public class HotelApiClient {
         String jsonRequest = gson.toJson(roomData);
     
         HttpRequest request = HttpRequest.newBuilder()
-                .uri(URI.create("http://localhost:8080/api/rooms"))
+                .uri(URI.create(BASE_URL + "/rooms"))
                 .header("Content-Type", "application/json")
                 .POST(HttpRequest.BodyPublishers.ofString(jsonRequest))
                 .build();
     
-        HttpResponse<String> response = httpClient.send(request,
-                HttpResponse.BodyHandlers.ofString());
+        HttpResponse<String> response = sendRequest(request);
     
         if (response.statusCode() != 200) {
-            throw new RuntimeException("Ошибка при добавлении номера");
+            throw new RuntimeException("Ошибка при добавлении номера: " + response.body());
         }
     }
 
@@ -131,65 +136,67 @@ public class HotelApiClient {
             roomData.put("description", description);
         }
         roomData.put("photos", photos);
-
+    
         String jsonRequest = gson.toJson(roomData);
-
+    
         HttpRequest request = HttpRequest.newBuilder()
-                .uri(URI.create("http://localhost:8080/api/rooms/number/" + roomNumber))
+                .uri(URI.create(BASE_URL + "/rooms/number/" + URLEncoder.encode(roomNumber, StandardCharsets.UTF_8)))
                 .header("Content-Type", "application/json")
                 .PUT(HttpRequest.BodyPublishers.ofString(jsonRequest))
                 .build();
-
-        HttpResponse<String> response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
-
+    
+        HttpResponse<String> response = sendRequest(request);
+    
         if (response.statusCode() != 200) {
-            throw new RuntimeException("Ошибка при обновлении номера");
+            throw new RuntimeException("Ошибка при обновлении номера: " + response.body());
         }
     }
 
     public void deleteRoomByNumber(String roomNumber) throws Exception {
         HttpRequest request = HttpRequest.newBuilder()
-                .uri(URI.create("http://localhost:8080/api/rooms/number/" + roomNumber))
+                .uri(URI.create(BASE_URL + "/rooms/number/" + URLEncoder.encode(roomNumber, StandardCharsets.UTF_8)))
                 .DELETE()
                 .build();
     
-        HttpResponse<String> response = httpClient.send(request,
-                HttpResponse.BodyHandlers.ofString());
+        HttpResponse<String> response = sendRequest(request);
     
         if (response.statusCode() != 200) {
-            throw new RuntimeException("Ошибка при удалении номера");
+            throw new RuntimeException("Ошибка при удалении номера: " + response.body());
         }
     }
 
     public List<RoomDTO> getAvailableRooms() throws Exception {
         HttpRequest request = HttpRequest.newBuilder()
-                .uri(URI.create("http://localhost:8080/api/rooms/available"))
+                .uri(URI.create(BASE_URL + "/rooms/available"))
                 .GET()
                 .build();
-
-        HttpResponse<String> response = httpClient.send(request, 
-                HttpResponse.BodyHandlers.ofString());
-
+    
+        HttpResponse<String> response = sendRequest(request);
+    
         if (response.statusCode() != 200) {
-            throw new RuntimeException("Ошибка при получении доступных номеров");
+            throw new RuntimeException("Ошибка при получении доступных номеров: " + response.body());
         }
-
+    
         return gson.fromJson(response.body(), new TypeToken<List<RoomDTO>>(){}.getType());
     }
 
     public boolean checkRoomAvailability(String roomNumber, String startDate, String endDate) throws Exception {
+        String encodedRoomNumber = URLEncoder.encode(roomNumber, StandardCharsets.UTF_8);
+        String url = String.format("%s/bookings/check-availability?roomNumber=%s&startDate=%s&endDate=%s",
+                BASE_URL,
+                encodedRoomNumber,
+                URLEncoder.encode(startDate, StandardCharsets.UTF_8),
+                URLEncoder.encode(endDate, StandardCharsets.UTF_8));
+        
         HttpRequest request = HttpRequest.newBuilder()
-                .uri(URI.create(String.format(
-                    "http://localhost:8080/api/bookings/check-availability?roomNumber=%s&startDate=%s&endDate=%s",
-                    roomNumber, startDate, endDate)))
+                .uri(URI.create(url))
                 .GET()
                 .build();
     
-        HttpResponse<String> response = httpClient.send(request, 
-                HttpResponse.BodyHandlers.ofString());
+        HttpResponse<String> response = sendRequest(request);
     
         if (response.statusCode() != 200) {
-            throw new RuntimeException("Ошибка при проверке доступности номера");
+            throw new RuntimeException("Ошибка при проверке доступности номера: " + response.body());
         }
     
         return Boolean.parseBoolean(response.body());
@@ -197,16 +204,16 @@ public class HotelApiClient {
 
     public List<RoomDTO> getAllRooms() throws Exception {
         HttpRequest request = HttpRequest.newBuilder()
-                .uri(URI.create("http://localhost:8080/api/rooms"))
+                .uri(URI.create(BASE_URL + "/rooms"))
                 .GET()
                 .build();
-
-        HttpResponse<String> response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
-
+    
+        HttpResponse<String> response = sendRequest(request);
+    
         if (response.statusCode() != 200) {
-            throw new RuntimeException("Ошибка при загрузке номеров");
+            throw new RuntimeException("Ошибка при загрузке номеров: " + response.body());
         }
-
+    
         return gson.fromJson(response.body(), new TypeToken<List<RoomDTO>>() {}.getType());
     }
 
@@ -216,18 +223,17 @@ public class HotelApiClient {
         bookingData.put("userId", userId.toString());
         bookingData.put("startDate", startDate);
         bookingData.put("endDate", endDate);
-
+    
         String jsonRequest = gson.toJson(bookingData);
-
+    
         HttpRequest request = HttpRequest.newBuilder()
-                .uri(URI.create("http://localhost:8080/api/bookings"))
+                .uri(URI.create(BASE_URL + "/bookings"))
                 .header("Content-Type", "application/json")
                 .POST(HttpRequest.BodyPublishers.ofString(jsonRequest))
                 .build();
-
-        HttpResponse<String> response = httpClient.send(request,
-                HttpResponse.BodyHandlers.ofString());
-
+    
+        HttpResponse<String> response = sendRequest(request);
+    
         if (response.statusCode() != 200) {
             throw new RuntimeException("Ошибка при создании бронирования: " + response.body());
         }
@@ -239,11 +245,10 @@ public class HotelApiClient {
                 .GET()
                 .build();
 
-        HttpResponse<String> response = httpClient.send(request,
-                HttpResponse.BodyHandlers.ofString());
+        HttpResponse<String> response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
 
         if (response.statusCode() != 200) {
-            throw new RuntimeException("Ошибка при получении бронирований");
+            throw new RuntimeException("Ошибка при получении бронирований: " + response.body());
         }
 
         return gson.fromJson(response.body(), new TypeToken<List<Booking>>(){}.getType());
@@ -251,28 +256,28 @@ public class HotelApiClient {
 
     public void cancelBooking(Long bookingId) throws Exception {
         HttpRequest request = HttpRequest.newBuilder()
-                .uri(URI.create("http://localhost:8080/api/bookings/" + bookingId))
+                .uri(URI.create(BASE_URL + "/bookings/" + bookingId))
                 .DELETE()
                 .build();
-
-        HttpResponse<String> response = httpClient.send(request,
-                HttpResponse.BodyHandlers.ofString());
-
+    
+        HttpResponse<String> response = sendRequest(request);
+    
         if (response.statusCode() != 200) {
-            throw new RuntimeException("Ошибка при отмене бронирования");
+            throw new RuntimeException("Ошибка при отмене бронирования: " + response.body());
         }
     }
 
     public List<BookingDTO> getBookingByRoomNumber(String roomNumber) throws Exception {
+        String encodedRoomNumber = URLEncoder.encode(roomNumber, StandardCharsets.UTF_8);
         HttpRequest request = HttpRequest.newBuilder()
-                .uri(URI.create("http://localhost:8080/api/bookings/room/" + roomNumber))
+                .uri(URI.create(BASE_URL + "/bookings/room/" + encodedRoomNumber))
                 .GET()
                 .build();
     
-        HttpResponse<String> response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
+        HttpResponse<String> response = sendRequest(request);
     
         if (response.statusCode() != 200) {
-            throw new RuntimeException("Ошибка при получении бронирований");
+            throw new RuntimeException("Ошибка при получении бронирований: " + response.body());
         }
     
         Type listType = new TypeToken<List<BookingDTO>>(){}.getType();
@@ -283,17 +288,17 @@ public class HotelApiClient {
         Map<String, String> bookingData = new HashMap<>();
         bookingData.put("startDate", startDate);
         bookingData.put("endDate", endDate);
-
+    
         String jsonRequest = gson.toJson(bookingData);
-
+    
         HttpRequest request = HttpRequest.newBuilder()
-                .uri(URI.create("http://localhost:8080/api/bookings/" + bookingId))
+                .uri(URI.create(BASE_URL + "/bookings/" + bookingId))
                 .header("Content-Type", "application/json")
                 .PUT(HttpRequest.BodyPublishers.ofString(jsonRequest))
                 .build();
-
-        HttpResponse<String> response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
-
+    
+        HttpResponse<String> response = sendRequest(request);
+    
         if (response.statusCode() != 200) {
             throw new RuntimeException("Ошибка при обновлении бронирования: " + response.body());
         }
@@ -301,32 +306,60 @@ public class HotelApiClient {
 
     public void deleteBooking(Long bookingId) throws Exception {
         HttpRequest request = HttpRequest.newBuilder()
-                .uri(URI.create("http://localhost:8080/api/bookings/" + bookingId))
+                .uri(URI.create(BASE_URL + "/bookings/" + bookingId))
                 .DELETE()
                 .build();
-
-        HttpResponse<String> response = httpClient.send(request,
-                HttpResponse.BodyHandlers.ofString());
-
+    
+        HttpResponse<String> response = sendRequest(request);
+    
         if (response.statusCode() != 200) {
             throw new RuntimeException("Ошибка при удалении бронирования: " + response.body());
         }
     }
 
     public List<BookingDTO> getAllBookingsByRoomNumber(String roomNumber) throws Exception {
+        String encodedRoomNumber = URLEncoder.encode(roomNumber, StandardCharsets.UTF_8);
         HttpRequest request = HttpRequest.newBuilder()
-                .uri(URI.create("http://localhost:8080/api/bookings/room/" + roomNumber + "/all"))
+                .uri(URI.create(BASE_URL + "/bookings/room/" + encodedRoomNumber + "/all"))
                 .GET()
                 .build();
-
-        HttpResponse<String> response = httpClient.send(request, 
-                HttpResponse.BodyHandlers.ofString());
-
+    
+        HttpResponse<String> response = sendRequest(request);
+    
         if (response.statusCode() != 200) {
-            throw new RuntimeException("Ошибка при получении бронирований");
+            throw new RuntimeException("Ошибка при получении бронирований: " + response.body());
         }
-
+    
         Type listType = new TypeToken<List<BookingDTO>>(){}.getType();
         return gson.fromJson(response.body(), listType);
+    }
+
+    public List<RoomDTO> getFilteredRooms(String roomType, BigDecimal minPrice, BigDecimal maxPrice, LocalDate startDate, LocalDate endDate) throws IOException {
+        String encodedRoomType = URLEncoder.encode(roomType, StandardCharsets.UTF_8);
+        String url = String.format("%s/rooms/search?type=%s&minPrice=%s&maxPrice=%s&startDate=%s&endDate=%s",
+                BASE_URL,
+                encodedRoomType,
+                minPrice != null ? URLEncoder.encode(minPrice.toString(), StandardCharsets.UTF_8) : "",
+                maxPrice != null ? URLEncoder.encode(maxPrice.toString(), StandardCharsets.UTF_8) : "",
+                startDate != null ? URLEncoder.encode(startDate.toString(), StandardCharsets.UTF_8) : "",
+                endDate != null ? URLEncoder.encode(endDate.toString(), StandardCharsets.UTF_8) : ""
+        );
+    
+        HttpRequest request = HttpRequest.newBuilder()
+                .uri(URI.create(url))
+                .GET()
+                .build();
+    
+        try {
+            HttpResponse<String> response = sendRequest(request);
+            if (response.statusCode() != 200) {
+                throw new RuntimeException("Ошибка при получении отфильтрованных номеров: " + response.body());
+            }
+    
+            Type listType = new TypeToken<List<RoomDTO>>() {}.getType();
+            return gson.fromJson(response.body(), listType);
+        } catch (InterruptedException e) {
+            throw new IOException("Запрос прерван", e);
+        }
     }
 }

@@ -15,7 +15,7 @@ import com.hotel.client.HotelApiClient;
 import com.hotel.dto.RoomDTO;
 
 public class ManagerEditRoomPanel extends JPanel {
-    private final JTextField typeField;
+    private final JComboBox<String> typeComboBox;
     private final JTextField priceField;
     private final JTextArea descriptionArea;
     private final JCheckBox keepDescriptionCheckBox;
@@ -56,9 +56,9 @@ public class ManagerEditRoomPanel extends JPanel {
 
         gbc.gridx = 1;
         gbc.gridy = 1;
-        typeField = new JTextField(15);
-        typeField.setText(room.getType());
-        editRoomForm.add(typeField, gbc);
+        typeComboBox = new JComboBox<>(new String[]{"Одноместный", "Двухместный", "Люкс"});
+        typeComboBox.setSelectedItem(room.getType());
+        editRoomForm.add(typeComboBox, gbc);
 
         gbc.gridx = 0;
         gbc.gridy = 2;
@@ -201,7 +201,7 @@ public class ManagerEditRoomPanel extends JPanel {
     }
 
     private void handleEditRoom() {
-        String newType = typeField.getText();
+        String newType = (String) typeComboBox.getSelectedItem();
         String priceText = priceField.getText();
         String description = descriptionArea.getText();
         boolean keepDescription = keepDescriptionCheckBox.isSelected();

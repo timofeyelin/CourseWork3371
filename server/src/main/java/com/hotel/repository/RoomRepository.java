@@ -9,8 +9,8 @@ import java.util.Optional;
 
 @Repository
 public interface RoomRepository extends JpaRepository<Room, Long> {
-    List<Room> findByTypeAndIsAvailable(String type, boolean isAvailable);
+    List<Room> findByType(String type);
     Optional<Room> findByNumber(String number);
-    @Query("SELECT r FROM Room r WHERE r.price <= :maxPrice AND r.isAvailable = true")
+    @Query("SELECT r FROM Room r WHERE r.price <= :maxPrice")
     List<Room> findAvailableRoomsByMaxPrice(double maxPrice);
 }

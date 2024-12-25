@@ -11,6 +11,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class RoomService {
@@ -31,32 +32,28 @@ public class RoomService {
     public List<Room> getAvailableRooms(String type) {
         List<Room> rooms;
         LocalDate today = LocalDate.now();
-        
+
         if (type != null && !type.isEmpty()) {
-            rooms = roomRepository.findByTypeAndIsAvailable(type, true);
+            rooms = roomRepository.findByType(type);
         } else {
             rooms = roomRepository.findAll();
         }
 
         return rooms.stream()
                 .filter(room -> {
-                    // Получаем все бронирования для номера
                     List<Booking> bookings = bookingRepository.findByRoomId(room.getId());
-                    
-                    // Если нет бронирований, номер доступен
+
                     if (bookings.isEmpty()) {
                         return true;
                     }
-                    
-                    // Проверяем, есть ли действующие бронирования на текущую дату
-                    return bookings.stream().noneMatch(booking -> 
-                        today.isAfter(booking.getStartDate()) && 
-                        today.isBefore(booking.getEndDate()) || 
-                        today.isEqual(booking.getStartDate()) || 
+
+                    return bookings.stream().noneMatch(booking ->
+                        (today.isAfter(booking.getStartDate()) && today.isBefore(booking.getEndDate())) ||
+                        today.isEqual(booking.getStartDate()) ||
                         today.isEqual(booking.getEndDate())
                     );
                 })
-                .toList();
+                .collect(Collectors.toList());
     }
 
     @Transactional
@@ -64,8 +61,35 @@ public class RoomService {
         if (room.getNumber() == null || room.getNumber().trim().isEmpty()) {
             throw new IllegalArgumentException("Room number cannot be empty");
         }
-        room.setAvailable(true);
         return roomRepository.save(room);
+    }
+
+    public List<Room> searchRooms(String type, Double minPrice, Double maxPrice, LocalDate startDate, LocalDate endDate) {
+        List<Room> rooms = roomRepository.findAll();
+
+        return rooms.stream()
+                .filter(room -> {
+                    boolean matches = true;
+                    if (type != null && !type.equalsIgnoreCase("Все")) {
+                        matches &= room.getType().equalsIgnoreCase(type);
+                    }
+                    if (minPrice != null) {
+                        matches &= room.getPrice().doubleValue() >= minPrice;
+                    }
+                    if (maxPrice != null) {
+                        matches &= room.getPrice().doubleValue() <= maxPrice;
+                    }
+                    if (startDate != null && endDate != null) {
+                        List<Booking> bookings = bookingRepository.findByRoomId(room.getId());
+                        for (Booking booking : bookings) {
+                            if (!(endDate.isBefore(booking.getStartDate()) || startDate.isAfter(booking.getEndDate()))) {
+                                return false;
+                            }
+                        }
+                    }
+                    return matches;
+                })
+                .collect(Collectors.toList());
     }
 
     @Transactional
@@ -99,12 +123,12 @@ public class RoomService {
     }
     
 
-    public List<Room> searchRooms(String type, Double maxPrice, Boolean isAvailable) {
+    public List<Room> searchRooms(String type, Double maxPrice) {
         if (maxPrice != null) {
             return roomRepository.findAvailableRoomsByMaxPrice(maxPrice);
         }
-        if (type != null && isAvailable != null) {
-            return roomRepository.findByTypeAndIsAvailable(type, isAvailable);
+        if (type != null) {
+            return roomRepository.findByType(type);
         }
         return getAllRooms();
     }

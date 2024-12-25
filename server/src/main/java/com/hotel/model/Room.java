@@ -10,12 +10,10 @@ public class Room {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
     private String number;
     private String type;
     private BigDecimal price;
     private String description;
-    private boolean isAvailable;
     
     @ElementCollection
     @CollectionTable(name = "room_photos", joinColumns = @JoinColumn(name = "room_id"))
@@ -37,9 +35,6 @@ public class Room {
 
     public String getDescription() { return description; }
     public void setDescription(String description) { this.description = description; }
-
-    public boolean isAvailable() { return isAvailable; }
-    public void setAvailable(boolean available) { isAvailable = available; }
 
     public List<String> getPhotos() { return photos;}
     public void setPhotos(List<String> photos) { this.photos = photos; }

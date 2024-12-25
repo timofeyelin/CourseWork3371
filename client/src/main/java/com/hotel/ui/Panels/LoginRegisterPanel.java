@@ -2,6 +2,7 @@ package com.hotel.ui.Panels;
 
 import com.hotel.client.HotelApiClient;
 import com.hotel.ui.MainFrame;
+import com.hotel.model.User;
 
 import javax.swing.*;
 import java.awt.*;
@@ -55,21 +56,13 @@ public class LoginRegisterPanel extends JPanel {
         String password = new String(passwordField.getPassword());
 
         try {
-            String response = apiClient.login(username, password);
+            User user = apiClient.login(username, password);
             JOptionPane.showMessageDialog(this,
                     "Вход выполнен успешно",
                     "Успех",
                     JOptionPane.INFORMATION_MESSAGE);
 
-            String role;
-            if (response.contains("ADMIN")) {
-                role = "ADMIN";
-            } else if (response.contains("MANAGER")) {
-                role = "MANAGER";
-            } else {
-                role = "CLIENT";
-            }
-            mainFrame.switchToUserView(role);
+            mainFrame.switchToUserView(user.getRole());
 
         } catch (Exception e) {
             JOptionPane.showMessageDialog(this,

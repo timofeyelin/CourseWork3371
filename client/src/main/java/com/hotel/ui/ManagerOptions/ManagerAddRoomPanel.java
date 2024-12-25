@@ -16,7 +16,7 @@ import com.hotel.client.HotelApiClient;
 
 public class ManagerAddRoomPanel extends JPanel {
     private final JTextField numberField;
-    private final JTextField typeField;
+    private final JComboBox<String> typeComboBox;
     private final JTextField priceField;
     private final JTextArea descriptionArea;
     private final DefaultListModel<String> photoListModel;
@@ -52,8 +52,8 @@ public class ManagerAddRoomPanel extends JPanel {
 
         gbc.gridx = 1;
         gbc.gridy = 1;
-        typeField = new JTextField(15);
-        addRoomForm.add(typeField, gbc);
+        typeComboBox = new JComboBox<>(new String[]{"Одноместный", "Двухместный", "Люкс"});
+        addRoomForm.add(typeComboBox, gbc);
 
         gbc.gridx = 0;
         gbc.gridy = 2;
@@ -185,7 +185,7 @@ public class ManagerAddRoomPanel extends JPanel {
 
     private void handleAddRoom() {
         String number = numberField.getText();
-        String type = typeField.getText();
+        String type = (String) typeComboBox.getSelectedItem();
         String priceText = priceField.getText();
         String description = descriptionArea.getText();
         try {

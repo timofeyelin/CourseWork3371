@@ -6,6 +6,7 @@ import javax.swing.*;
 import com.hotel.client.HotelApiClient;
 import com.hotel.dto.BookingDTO;
 import com.hotel.dto.RoomDTO;
+import com.hotel.utils.DateLabelFormatter;
 import com.hotel.utils.DateUtils;
 
 import java.awt.*;
@@ -14,34 +15,88 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.awt.image.BufferedImage;
+import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.time.ZoneId;
 import java.time.temporal.ChronoUnit;
+import org.jdatepicker.impl.JDatePanelImpl;
+import org.jdatepicker.impl.JDatePickerImpl;
+import org.jdatepicker.impl.UtilDateModel;
+import java.util.Properties;
 
 public class ClientRoomBookingPanel extends JPanel {
     private JPanel roomGridPanel;
-    private JTextField searchField;
     private JButton prevPageButton;
     private JButton nextPageButton;
     private int currentPage = 0;
-    private int roomsPerPage = 3;
+    private int roomsPerPage = 2;
     private List<RoomFrame> roomFrames;
     private HotelApiClient apiClient;
     private JLabel pageNumberLabel;
+    private JComboBox<String> roomTypeComboBox;
+    private JTextField minPriceField;
+    private JTextField maxPriceField;
+    private JDatePickerImpl startDatePicker;
+    private JDatePickerImpl endDatePicker;
 
     public ClientRoomBookingPanel() {
         apiClient = new HotelApiClient();
         setLayout(new BorderLayout());
 
         // Панель поиска
-        JPanel searchPanel = new JPanel(new BorderLayout());
-        searchField = new JTextField();
-        JButton searchButton = new JButton("Поиск");
-        searchPanel.add(searchField, BorderLayout.CENTER);
-        searchPanel.add(searchButton, BorderLayout.EAST);
-        add(searchPanel, BorderLayout.NORTH);
+    JPanel searchPanel = new JPanel(new GridLayout(2, 5, 10, 10));
+
+    // Тип номера
+    JLabel typeLabel = new JLabel("Тип номера:");
+    roomTypeComboBox = new JComboBox<>(new String[]{"Все", "Одноместный", "Двухместный", "Люкс"});
+    searchPanel.add(typeLabel);
+    searchPanel.add(roomTypeComboBox);
+
+    // Цена от
+    JLabel minPriceLabel = new JLabel("Мин. цена:");
+    minPriceField = new JTextField();
+    searchPanel.add(minPriceLabel);
+    searchPanel.add(minPriceField);
+
+    // Цена до
+    JLabel maxPriceLabel = new JLabel("Макс. цена:");
+    maxPriceField = new JTextField();
+    searchPanel.add(maxPriceLabel);
+    searchPanel.add(maxPriceField);
+
+    // Дата начала
+    JLabel startDateLabel = new JLabel("Дата начала:");
+    startDatePicker = createDatePicker();
+    searchPanel.add(startDateLabel);
+    searchPanel.add(startDatePicker);
+
+    // Дата конца
+    JLabel endDateLabel = new JLabel("Дата конца:");
+    endDatePicker = createDatePicker();
+    searchPanel.add(endDateLabel);
+    searchPanel.add(endDatePicker);
+
+    // Кнопка поиска
+    JButton searchButton = new JButton("Поиск");
+    searchButton.addActionListener(e -> {
+        String selectedType = (String) roomTypeComboBox.getSelectedItem();
+        String minPriceText = minPriceField.getText();
+        String maxPriceText = maxPriceField.getText();
+        LocalDate startDate = getSelectedDate(startDatePicker);
+        LocalDate endDate = getSelectedDate(endDatePicker);
+
+        BigDecimal minPrice = minPriceText.isEmpty() ? BigDecimal.ZERO : new BigDecimal(minPriceText);
+        BigDecimal maxPrice = maxPriceText.isEmpty() ? BigDecimal.valueOf(Double.MAX_VALUE) : new BigDecimal(maxPriceText);
+
+        loadRoomsFromDatabase(selectedType, minPrice, maxPrice, startDate, endDate);
+    });
+    searchPanel.add(new JLabel()); // Empty cell
+    searchPanel.add(searchButton);
+    
+    add(searchPanel, BorderLayout.NORTH);
 
         // Панель сетки номеров
-        roomGridPanel = new JPanel(new GridLayout(1, 3, 10, 10));
+        roomGridPanel = new JPanel(new GridLayout(1, 2, 10, 10));
         JScrollPane scrollPane = new JScrollPane(roomGridPanel);
         JPanel gridPanelContainer = new JPanel(new BorderLayout());
         gridPanelContainer.add(scrollPane, BorderLayout.CENTER);
@@ -62,7 +117,7 @@ public class ClientRoomBookingPanel extends JPanel {
                 updateRoomGrid();
             }
         });
-        pageNumberLabel = new JLabel("Страница 1");
+        pageNumberLabel = new JLabel("Страница 1 из 1");
         paginationPanel.add(prevPageButton);
         paginationPanel.add(pageNumberLabel);
         paginationPanel.add(nextPageButton);
@@ -71,6 +126,43 @@ public class ClientRoomBookingPanel extends JPanel {
         add(gridPanelContainer, BorderLayout.CENTER);
 
         loadRoomsFromDatabase();
+
+        searchButton.addActionListener(e -> {
+            String selectedType = (String) roomTypeComboBox.getSelectedItem();
+            String minPriceText = minPriceField.getText().trim();
+            String maxPriceText = maxPriceField.getText().trim();
+            LocalDate startDate = getSelectedDate(startDatePicker);
+            LocalDate endDate = getSelectedDate(endDatePicker);
+        
+            BigDecimal minPrice = BigDecimal.ZERO;
+            BigDecimal maxPrice = BigDecimal.valueOf(Double.MAX_VALUE);
+        
+            try {
+                if (!minPriceText.isEmpty()) {
+                    minPrice = new BigDecimal(minPriceText);
+                    if (minPrice.compareTo(BigDecimal.ZERO) < 0) {
+                        throw new NumberFormatException("Мин. цена не может быть отрицательной.");
+                    }
+                }
+        
+                if (!maxPriceText.isEmpty()) {
+                    maxPrice = new BigDecimal(maxPriceText);
+                    if (maxPrice.compareTo(minPrice) < 0) {
+                        throw new NumberFormatException("Макс. цена не может быть меньше мин. цены.");
+                    }
+                }
+        
+                if (startDate != null && endDate != null && endDate.isBefore(startDate)) {
+                    throw new IllegalArgumentException("Дата конца не может быть раньше даты начала.");
+                }
+        
+                loadRoomsFromDatabase(selectedType, minPrice, maxPrice, startDate, endDate);
+            } catch (NumberFormatException ex) {
+                JOptionPane.showMessageDialog(this, "Неправильный ввод цены: " + ex.getMessage(), "Ошибка", JOptionPane.ERROR_MESSAGE);
+            } catch (IllegalArgumentException ex) {
+                JOptionPane.showMessageDialog(this, ex.getMessage(), "Ошибка", JOptionPane.ERROR_MESSAGE);
+            }
+        });
     }
 
     private void loadRoomsFromDatabase() {
@@ -82,6 +174,23 @@ public class ClientRoomBookingPanel extends JPanel {
                     roomFrames.add(new RoomFrame(room));
                 }
             }
+            currentPage = 0; // Reset to first page
+            updateRoomGrid();
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this, "Ошибка при загрузке номеров: " + e.getMessage());
+        }
+    }
+
+    private void loadRoomsFromDatabase(String roomType, BigDecimal minPrice, BigDecimal maxPrice, LocalDate startDate, LocalDate endDate) {
+        try {
+            List<RoomDTO> rooms = apiClient.getFilteredRooms(roomType, minPrice, maxPrice, startDate, endDate);
+            roomFrames = new ArrayList<>();
+            if (rooms != null) {
+                for (RoomDTO room : rooms) {
+                    roomFrames.add(new RoomFrame(room));
+                }
+            }
+            currentPage = 0;
             updateRoomGrid();
         } catch (Exception e) {
             JOptionPane.showMessageDialog(this, "Ошибка при загрузке номеров: " + e.getMessage());
@@ -92,6 +201,24 @@ public class ClientRoomBookingPanel extends JPanel {
         loadRoomsFromDatabase();
     }
 
+    private JDatePickerImpl createDatePicker() {
+        UtilDateModel model = new UtilDateModel();
+        Properties p = new Properties();
+        p.put("text.today", "Сегодня");
+        p.put("text.month", "Месяц");
+        p.put("text.year", "Год");
+        JDatePanelImpl datePanel = new JDatePanelImpl(model, p);
+        return new JDatePickerImpl(datePanel, new DateLabelFormatter());
+    }
+
+    private LocalDate getSelectedDate(JDatePickerImpl datePicker) {
+        if (datePicker.getModel().getValue() != null) {
+            java.util.Date selectedDate = (java.util.Date) datePicker.getModel().getValue();
+            return selectedDate.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+        }
+        return null;
+    }
+
     private void updateRoomGrid() {
         roomGridPanel.removeAll();
         int start = currentPage * roomsPerPage;
@@ -99,13 +226,14 @@ public class ClientRoomBookingPanel extends JPanel {
         for (int i = start; i < end; i++) {
             roomGridPanel.add(roomFrames.get(i));
         }
-        
-        // Update page number label
-        int totalPages = (int) Math.ceil((double) roomFrames.size() / roomsPerPage);
-        pageNumberLabel.setText(String.format("Страница %d из %d", currentPage + 1, totalPages));
-        
         roomGridPanel.revalidate();
         roomGridPanel.repaint();
+
+        int totalPages = (int) Math.ceil((double) roomFrames.size() / roomsPerPage);
+        pageNumberLabel.setText("Страница " + (currentPage + 1) + " из " + totalPages);
+
+        prevPageButton.setEnabled(currentPage > 0);
+        nextPageButton.setEnabled(currentPage < totalPages - 1);
     }
 
     public void centerDialog(JDialog dialog) {

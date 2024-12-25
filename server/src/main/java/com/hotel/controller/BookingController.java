@@ -11,12 +11,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.server.ResponseStatusException;
 
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api/bookings")
@@ -54,6 +52,7 @@ public class BookingController {
                     .map(BookingDTO::new)
                     .toList();
                     
+
             return ResponseEntity.ok(bookingDTOs);
         } catch (Exception e) {
             return ResponseEntity.badRequest().build();
@@ -105,7 +104,6 @@ public class BookingController {
             if (booking != null) {
                 // Get room and update availability
                 Room room = booking.getRoom();
-                room.setAvailable(true);
                 roomService.updateRoomByNumber(room.getNumber(), room);
             }
             

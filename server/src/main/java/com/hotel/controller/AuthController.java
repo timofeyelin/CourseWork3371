@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.*;
 import com.hotel.service.UserService;
 import com.hotel.model.User;
 import java.util.Map;
+import java.util.HashMap;
 
 @RestController
 @RequestMapping("/api")
@@ -23,7 +24,10 @@ public class AuthController {
         if (user != null) {
             return ResponseEntity.ok(user);
         }
-        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid credentials");
+        // Возвращаем JSON-объект с сообщением об ошибке
+        Map<String, String> error = new HashMap<>();
+        error.put("error", "Неверные учетные данные");
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(error);
     }
 
     @PostMapping("/register")

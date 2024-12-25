@@ -18,7 +18,7 @@ public class ClientMyBookingsPanel extends JPanel {
     private JButton prevPageButton;
     private JButton nextPageButton;
     private int currentPage = 0;
-    private int roomsPerPage = 3;
+    private int roomsPerPage = 2;
     private List<BookedRoomFrame> roomFrames;
     private HotelApiClient apiClient;
     private JLabel pageNumberLabel;
@@ -28,7 +28,7 @@ public class ClientMyBookingsPanel extends JPanel {
         setLayout(new BorderLayout());
 
         // Панель сетки номеров
-        roomGridPanel = new JPanel(new GridLayout(1, 3, 10, 10));
+        roomGridPanel = new JPanel(new GridLayout(1, 2, 10, 10));
         JScrollPane scrollPane = new JScrollPane(roomGridPanel);
         JPanel gridPanelContainer = new JPanel(new BorderLayout());
         gridPanelContainer.add(scrollPane, BorderLayout.CENTER);
@@ -92,6 +92,10 @@ public class ClientMyBookingsPanel extends JPanel {
     private void loadBookings() {
         try {
             Long userId = HotelApiClient.getCurrentUserId();
+            if (userId == null) {
+                throw new IllegalStateException("User ID is null. Please log in.");
+            }
+
             List<Booking> bookings = apiClient.getUserBookings(userId);
             roomFrames = new ArrayList<>();
             for (Booking booking : bookings) {
@@ -99,7 +103,7 @@ public class ClientMyBookingsPanel extends JPanel {
             }
             updateRoomGrid();
         } catch (Exception e) {
-            JOptionPane.showMessageDialog(this, "Ошибка при загрузке бронирований: " + e.getMessage());
+            JOptionPane.showMessageDialog(this, "Ошибка при загрузке бронирований: " + e.getMessage(), "Ошибка", JOptionPane.ERROR_MESSAGE);
         }
     }
 
