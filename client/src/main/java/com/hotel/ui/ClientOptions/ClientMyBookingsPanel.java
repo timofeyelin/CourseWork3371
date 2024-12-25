@@ -6,7 +6,6 @@ import java.util.List;
 import com.hotel.client.HotelApiClient;
 import com.hotel.model.Booking;
 import com.hotel.utils.DateUtils;
-import com.hotel.ui.ClientOptions.ClientRoomBookingPanel;
 
 import java.util.ArrayList;
 import java.awt.image.BufferedImage;
@@ -16,7 +15,6 @@ import javax.imageio.ImageIO;
 
 public class ClientMyBookingsPanel extends JPanel {
     private JPanel roomGridPanel;
-    private JTextField searchField;
     private JButton prevPageButton;
     private JButton nextPageButton;
     private int currentPage = 0;
@@ -35,13 +33,34 @@ public class ClientMyBookingsPanel extends JPanel {
         JPanel gridPanelContainer = new JPanel(new BorderLayout());
         gridPanelContainer.add(scrollPane, BorderLayout.CENTER);
 
-         // Панель поиска
-         JPanel searchPanel = new JPanel(new BorderLayout());
-         searchField = new JTextField();
-         JButton searchButton = new JButton("Поиск");
-         searchPanel.add(searchField, BorderLayout.CENTER);
-         searchPanel.add(searchButton, BorderLayout.EAST);
-         add(searchPanel, BorderLayout.NORTH);
+        // Панель поиска
+        JPanel searchPanel = new JPanel(new BorderLayout());
+        // Add dropdown for room types
+        JLabel typeLabel = new JLabel("Тип номера:");
+        String[] roomTypes = {"Все", "Одноместный", "Двухместный", "Люкс"};
+        JComboBox<String> typeComboBox = new JComboBox<>(roomTypes);
+        searchPanel.add(typeLabel, BorderLayout.WEST);
+        searchPanel.add(typeComboBox, BorderLayout.CENTER);
+
+        // Add fields for price range
+        JPanel pricePanel = new JPanel(new FlowLayout());
+        pricePanel.add(new JLabel("Цена от:"));
+        JTextField minPriceField = new JTextField(5);
+        pricePanel.add(minPriceField);
+        pricePanel.add(new JLabel("до:"));
+        JTextField maxPriceField = new JTextField(5);
+        pricePanel.add(maxPriceField);
+        searchPanel.add(pricePanel, BorderLayout.SOUTH);
+
+        // Add date selectors for booking dates
+        JPanel datePanel = new JPanel(new FlowLayout());
+        datePanel.add(new JLabel("Дата начала:"));
+        JTextField startDateField = new JTextField(10);
+        datePanel.add(startDateField);
+        datePanel.add(new JLabel("Дата конца:"));
+        JTextField endDateField = new JTextField(10);
+        datePanel.add(endDateField);
+        searchPanel.add(datePanel, BorderLayout.EAST);
 
         // Кнопки для листания страниц
         JPanel paginationPanel = new JPanel(new FlowLayout());
@@ -146,23 +165,28 @@ public class ClientMyBookingsPanel extends JPanel {
 
         public BookedRoomFrame(Booking booking) {
             this.booking = booking;
+            this.photoPaths = booking.getRoom().getPhotos() != null ? booking.getRoom().getPhotos() : new ArrayList<>();
             setLayout(new BorderLayout(5, 5));
             setBorder(BorderFactory.createEtchedBorder());
 
             setupPhotoPanel();
             setupInfoPanel();
-            initializePhotos();
             addPhotoNavigationListeners();
         }
 
         private void setupPhotoPanel() {
             JPanel photoPanel = new JPanel(new BorderLayout());
             photoLabel = new JLabel();
-            photoLabel.setPreferredSize(new Dimension(200, 150));
+            photoLabel.setPreferredSize(new Dimension(400, 300));
             photoLabel.setHorizontalAlignment(SwingConstants.CENTER);
             photoLabel.setBorder(BorderFactory.createEtchedBorder());
+            
+            photoLabel.setMinimumSize(new Dimension(300, 225));
+            
             photoPanel.add(photoLabel, BorderLayout.CENTER);
             add(photoPanel, BorderLayout.CENTER);
+            
+            updatePhoto();
         }
 
         private void setupInfoPanel() {
@@ -199,8 +223,11 @@ public class ClientMyBookingsPanel extends JPanel {
             infoPanel.add(buttonPanel);
             
             add(infoPanel, BorderLayout.SOUTH);
-
+            
             cancelButton.addActionListener(e -> handleCancelBooking());
+
+            photoPaths = booking.getRoom().getPhotos();
+            updatePhoto();
         }
 
         private void handleCancelBooking() {
@@ -214,33 +241,19 @@ public class ClientMyBookingsPanel extends JPanel {
             }
         }
 
-        // Same photo handling methods as in RoomFrame
-        private void initializePhotos() {
-            photoPaths = new ArrayList<>();
-            String basePath = "server\\src\\main\\resources\\images\\";
-            List<String> roomPhotos = booking.getRoom().getPhotos();
-            if (roomPhotos != null && !roomPhotos.isEmpty()) {
-                photoPaths.addAll(roomPhotos);
-            } else {
-                photoPaths.add(basePath + "room1_1.jpg");
-                photoPaths.add(basePath + "room1_2.jpg");
-            }
-            updatePhotoButton();
-        }
-
         private void addPhotoNavigationListeners() {
             prevButton.addActionListener(e -> {
                 currentPhotoIndex = (currentPhotoIndex - 1 + photoPaths.size()) % photoPaths.size();
-                updatePhotoButton();
+                updatePhoto();
             });
 
             nextButton.addActionListener(e -> {
                 currentPhotoIndex = (currentPhotoIndex + 1) % photoPaths.size();
-                updatePhotoButton();
+                updatePhoto();
             });
         }
 
-        private void updatePhotoButton() {
+        private void updatePhoto() {
             if (!photoPaths.isEmpty()) {
                 photoLabel.setIcon(null);
                 photoLabel.setText("Загрузка...");
@@ -253,11 +266,20 @@ public class ClientMyBookingsPanel extends JPanel {
                             if (!imageFile.exists()) {
                                 return null;
                             }
-                            BufferedImage img = ImageIO.read(imageFile);
-                            if (img == null) {
+                            BufferedImage originalImg = ImageIO.read(imageFile);
+                            if (originalImg == null) {
                                 return null;
                             }
-                            Image scaledImg = img.getScaledInstance(200, 150, Image.SCALE_SMOOTH);
+                            
+                            double widthRatio = 400.0 / originalImg.getWidth();
+                            double heightRatio = 300.0 / originalImg.getHeight();
+                            double ratio = Math.min(widthRatio, heightRatio);
+                            
+                            int newWidth = (int) (originalImg.getWidth() * ratio);
+                            int newHeight = (int) (originalImg.getHeight() * ratio);
+                            
+                            // Use better quality scaling
+                            Image scaledImg = originalImg.getScaledInstance(newWidth, newHeight, Image.SCALE_SMOOTH);
                             return new ImageIcon(scaledImg);
                         } catch (IOException e) {
                             return null;
@@ -283,6 +305,9 @@ public class ClientMyBookingsPanel extends JPanel {
                 };
                 
                 worker.execute();
+            } else {
+                photoLabel.setIcon(null);
+                photoLabel.setText("Нет изображений");
             }
         }
     }

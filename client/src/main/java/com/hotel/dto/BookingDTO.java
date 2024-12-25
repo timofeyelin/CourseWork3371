@@ -2,12 +2,28 @@ package com.hotel.dto;
 
 import java.time.LocalDate;
 
+import com.hotel.model.Booking;
+
 public class BookingDTO {
     private Long id;
     private Long userId;
     private String roomNumber;
     private LocalDate startDate;
     private LocalDate endDate;
+
+    public BookingDTO(Booking booking) {
+        if (booking != null) {
+            this.id = booking.getId();
+            if (booking.getUser() != null) {
+                this.userId = booking.getUser().getId();
+            }
+            if (booking.getRoom() != null) {
+                this.roomNumber = booking.getRoom().getNumber();
+            }
+            this.startDate = booking.getStartDate();
+            this.endDate = booking.getEndDate();
+        }
+    }
 
     // Getters and setters
     public Long getId() {
@@ -48,5 +64,11 @@ public class BookingDTO {
 
     public void setEndDate(LocalDate endDate) {
         this.endDate = endDate;
+    }
+
+    @Override
+    public String toString() {
+        return "Бронирование #" + id + " | Комната: " + roomNumber +
+               " | Даты: " + startDate + " - " + endDate;
     }
 }

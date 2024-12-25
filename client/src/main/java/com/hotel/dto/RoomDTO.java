@@ -9,7 +9,6 @@ public class RoomDTO {
     private String type;
     private BigDecimal price;
     private String description;
-    private boolean isAvailable;
     private List<String> photos;
 
     public Long getId() { return id; }
@@ -26,9 +25,6 @@ public class RoomDTO {
 
     public String getDescription() { return description; }
     public void setDescription(String description) { this.description = description; }
-
-    public boolean isAvailable() { return isAvailable; }
-    public void setAvailable(boolean available) { isAvailable = available; }
 
     public List<String> getPhotos() { return photos; }
     public void setPhotos(List<String> photos) { this.photos = photos; }

@@ -8,8 +8,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
+
 @Service
 public class RoomService {
     @Autowired
@@ -25,8 +27,11 @@ public class RoomService {
     public Optional<Room> getRoomByNumber(String number) {
         return roomRepository.findByNumber(number);
     }
+
     public List<Room> getAvailableRooms(String type) {
-         List<Room> rooms;
+        List<Room> rooms;
+        LocalDate today = LocalDate.now();
+        
         if (type != null && !type.isEmpty()) {
             rooms = roomRepository.findByTypeAndIsAvailable(type, true);
         } else {
@@ -35,8 +40,21 @@ public class RoomService {
 
         return rooms.stream()
                 .filter(room -> {
+                    // Получаем все бронирования для номера
                     List<Booking> bookings = bookingRepository.findByRoomId(room.getId());
-                    return bookings.isEmpty() && room.isAvailable();
+                    
+                    // Если нет бронирований, номер доступен
+                    if (bookings.isEmpty()) {
+                        return true;
+                    }
+                    
+                    // Проверяем, есть ли действующие бронирования на текущую дату
+                    return bookings.stream().noneMatch(booking -> 
+                        today.isAfter(booking.getStartDate()) && 
+                        today.isBefore(booking.getEndDate()) || 
+                        today.isEqual(booking.getStartDate()) || 
+                        today.isEqual(booking.getEndDate())
+                    );
                 })
                 .toList();
     }

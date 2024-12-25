@@ -19,7 +19,7 @@ public class BookingService {
     public Booking createBooking(Booking booking) {
         LocalDate today = LocalDate.now();
 
-        if (booking.getStartDate().isBefore(today) || booking.getEndDate().isBefore(today)) {
+        if (booking.getStartDate().isBefore(today)) {
             throw new IllegalArgumentException("Нельзя бронировать на прошедшие даты");
         }
 
@@ -28,7 +28,9 @@ public class BookingService {
         }
 
         List<Booking> overlappingBookings = bookingRepository.findOverlappingBookings(
-                booking.getRoom().getId(), booking.getStartDate(), booking.getEndDate());
+                booking.getRoom().getId(),
+                booking.getStartDate(),
+                booking.getEndDate());
 
         if (!overlappingBookings.isEmpty()) {
             throw new IllegalArgumentException("Номер уже забронирован на выбранные даты");
@@ -50,10 +52,6 @@ public class BookingService {
                 .orElseThrow(() -> new RuntimeException("Бронирование не найдено"));
     }
 
-    public Booking getBookingByRoomNumber(String roomNumber) {
-        return bookingRepository.findByRoomNumber(roomNumber);
-    }
-
     public Booking updateBooking(Long id, LocalDate startDate, LocalDate endDate) {
         Booking booking = bookingRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Бронирование не найдено"));
@@ -66,5 +64,9 @@ public class BookingService {
         booking.setEndDate(endDate);
 
         return bookingRepository.save(booking);
+    }
+
+    public List<Booking> getBookingsByRoomNumber(String roomNumber) {
+        return bookingRepository.findByRoom_Number(roomNumber);
     }
 }

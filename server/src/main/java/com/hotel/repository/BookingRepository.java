@@ -20,6 +20,5 @@ public interface BookingRepository extends JpaRepository<Booking, Long> {
                                           @Param("startDate") LocalDate startDate,
                                           @Param("endDate") LocalDate endDate);
 
-    @Query("SELECT b FROM Booking b WHERE b.room.number = :roomNumber")
-    Booking findByRoomNumber(@Param("roomNumber") String roomNumber);
+    List<Booking> findByRoom_Number(String roomNumber);
 }

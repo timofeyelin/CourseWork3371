@@ -51,7 +51,6 @@ public class ManagerManageRoomsPanel extends JPanel {
             }
             updateRoomGrid();
         } catch (Exception e) {
-            e.printStackTrace();
             JOptionPane.showMessageDialog(this, "Ошибка при загрузке номеров: " + e.getMessage());
         }
     }
@@ -174,19 +173,6 @@ public class ManagerManageRoomsPanel extends JPanel {
         editBookingDialog.setVisible(true);
     }
 
-    private void showDeleteBookingDialog(BookingDTO booking) {
-        int response = JOptionPane.showConfirmDialog(this, "Вы действительно хотите отменить бронирование?", "Отменить бронирование", JOptionPane.YES_NO_OPTION);
-        if (response == JOptionPane.YES_OPTION) {
-            try {
-                apiClient.deleteBooking(booking.getId());
-                JOptionPane.showMessageDialog(this, "Бронирование успешно отменено");
-                loadRoomsFromDatabase();
-            } catch (Exception e) {
-                JOptionPane.showMessageDialog(this, "Ошибка при отмене бронирования: " + e.getMessage());
-            }
-        }
-    }
-
     private class RoomFrame extends JPanel {
         private final RoomDTO room;
         private JLabel photoLabel;
@@ -204,9 +190,13 @@ public class ManagerManageRoomsPanel extends JPanel {
         private void setupPhotoPanel() {
             JPanel photoPanel = new JPanel(new BorderLayout());
             photoLabel = new JLabel();
-            photoLabel.setPreferredSize(new Dimension(200, 150));
+            // Increase dimensions
+            photoLabel.setPreferredSize(new Dimension(400, 300));
             photoLabel.setHorizontalAlignment(SwingConstants.CENTER);
             photoLabel.setBorder(BorderFactory.createEtchedBorder());
+            
+            // Set minimum size
+            photoLabel.setMinimumSize(new Dimension(300, 225));
 
             JPanel navPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
             JButton prevButton = new JButton("<");
@@ -257,22 +247,11 @@ public class ManagerManageRoomsPanel extends JPanel {
             buttonPanel.add(editButton);
             buttonPanel.add(deleteButton);
         
-            // Check if the room is booked
-            try {
-                final BookingDTO booking = apiClient.getBookingByRoomNumber(room.getNumber());
-                if (booking != null) {
-                    JButton editBookingButton = new JButton("Редактировать бронирование");
-                    JButton deleteBookingButton = new JButton("Удалить бронирование");
-        
-                    editBookingButton.addActionListener(e -> showEditBookingDialog(booking));
-                    deleteBookingButton.addActionListener(e -> showDeleteBookingDialog(booking));
-        
-                    buttonPanel.add(editBookingButton);
-                    buttonPanel.add(deleteBookingButton);
-                }
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
+            // Replace multiple booking buttons with a single manage booking button
+            JButton manageBookingButton = new JButton("Управление бронированиями");
+            manageBookingButton.addActionListener(e -> showManageBookingOptions());
+
+            buttonPanel.add(manageBookingButton);
         
             buttonPanel.setAlignmentX(Component.CENTER_ALIGNMENT);
         
@@ -285,23 +264,131 @@ public class ManagerManageRoomsPanel extends JPanel {
             add(infoPanel, BorderLayout.SOUTH);
         }
 
+        private void showManageBookingOptions() {
+            JPopupMenu popupMenu = new JPopupMenu();
+            JMenuItem editBookingItem = new JMenuItem("Редактировать бронирование");
+            JMenuItem deleteBookingItem = new JMenuItem("Удалить бронирование");
+
+            editBookingItem.addActionListener(e -> {
+                // Implement logic to select and edit a booking
+                try {
+                    List<BookingDTO> bookings = apiClient.getAllBookingsByRoomNumber(room.getNumber());
+                    if (bookings == null || bookings.isEmpty()) {
+                        JOptionPane.showMessageDialog(this, "Нет бронирований для редактирования.");
+                        return;
+                    }
+                    BookingDTO booking = (BookingDTO) JOptionPane.showInputDialog(
+                        this,
+                        "Выберите бронирование для редактирования:",
+                        "Редактировать бронирование",
+                        JOptionPane.PLAIN_MESSAGE,
+                        null,
+                        bookings.toArray(),
+                        bookings.get(0)
+                    );
+                    if (booking != null) {
+                        showEditBookingDialog(booking);
+                    }
+                } catch (Exception ex) {
+                    JOptionPane.showMessageDialog(this, "Ошибка при получении бронирований: " + ex.getMessage());
+                }
+            });
+
+            deleteBookingItem.addActionListener(e -> {
+                // Implement logic to select and delete a booking
+                try {
+                    List<BookingDTO> bookings = apiClient.getAllBookingsByRoomNumber(room.getNumber());
+                    if (bookings == null || bookings.isEmpty()) {
+                        JOptionPane.showMessageDialog(this, "Нет бронирований для удаления.");
+                        return;
+                    }
+                    BookingDTO booking = (BookingDTO) JOptionPane.showInputDialog(
+                        this,
+                        "Выберите бронирование для удаления:",
+                        "Удалить бронирование",
+                        JOptionPane.PLAIN_MESSAGE,
+                        null,
+                        bookings.toArray(),
+                        bookings.get(0)
+                    );
+                    if (booking != null) {
+                        int confirm = JOptionPane.showConfirmDialog(this,
+                            "Вы действительно хотите удалить бронирование?",
+                            "Подтверждение удаления",
+                            JOptionPane.YES_NO_OPTION);
+                        if (confirm == JOptionPane.YES_OPTION) {
+                            try {
+                                apiClient.deleteBooking(booking.getId());
+                                JOptionPane.showMessageDialog(this, "Бронирование успешно удалено.");
+                                loadRoomsFromDatabase();
+                            } catch (Exception ex) {
+                                JOptionPane.showMessageDialog(this, "Ошибка при удалении бронирования: " + ex.getMessage());
+                            }
+                        }
+                    }
+                } catch (Exception ex) {
+                    JOptionPane.showMessageDialog(this, "Ошибка при получении бронирований: " + ex.getMessage());
+                }
+            });
+
+            popupMenu.add(editBookingItem);
+            popupMenu.add(deleteBookingItem);
+            popupMenu.show(this, 0, 0);
+        }
+
         private void updatePhoto() {
             if (!room.getPhotos().isEmpty()) {
-                String photoPath = room.getPhotos().get(currentPhotoIndex);
-                try {
-                    BufferedImage img = ImageIO.read(new File(photoPath));
-                    if (img != null) {
-                        Image scaledImg = img.getScaledInstance(200, 150, Image.SCALE_SMOOTH);
-                        photoLabel.setIcon(new ImageIcon(scaledImg));
-                        photoLabel.setText("");
-                    } else {
-                        photoLabel.setIcon(null);
-                        photoLabel.setText("Нет изображения");
+                photoLabel.setIcon(null);
+                photoLabel.setText("Загрузка...");
+                
+                SwingWorker<ImageIcon, Void> worker = new SwingWorker<ImageIcon, Void>() {
+                    @Override
+                    protected ImageIcon doInBackground() {
+                        try {
+                            File imageFile = new File(room.getPhotos().get(currentPhotoIndex));
+                            if (!imageFile.exists()) {
+                                return null;
+                            }
+                            BufferedImage originalImg = ImageIO.read(imageFile);
+                            if (originalImg == null) {
+                                return null;
+                            }
+                            
+                            // Calculate scaling ratio while maintaining aspect ratio
+                            double widthRatio = 400.0 / originalImg.getWidth();
+                            double heightRatio = 300.0 / originalImg.getHeight();
+                            double ratio = Math.min(widthRatio, heightRatio);
+                            
+                            int newWidth = (int) (originalImg.getWidth() * ratio);
+                            int newHeight = (int) (originalImg.getHeight() * ratio);
+                            
+                            // Use better quality scaling
+                            Image scaledImg = originalImg.getScaledInstance(newWidth, newHeight, Image.SCALE_SMOOTH);
+                            return new ImageIcon(scaledImg);
+                        } catch (IOException e) {
+                            return null;
+                        }
                     }
-                } catch (IOException e) {
-                    photoLabel.setIcon(null);
-                    photoLabel.setText("Ошибка загрузки");
-                }
+        
+                    @Override
+                    protected void done() {
+                        try {
+                            ImageIcon icon = get();
+                            if (icon != null) {
+                                photoLabel.setIcon(icon);
+                                photoLabel.setText("");
+                            } else {
+                                photoLabel.setIcon(null);
+                                photoLabel.setText("Номер " + room.getNumber());
+                            }
+                        } catch (Exception e) {
+                            photoLabel.setIcon(null);
+                            photoLabel.setText("Номер " + room.getNumber());
+                        }
+                    }
+                };
+                
+                worker.execute();
             } else {
                 photoLabel.setIcon(null);
                 photoLabel.setText("Нет изображений");

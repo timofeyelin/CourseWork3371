@@ -3,6 +3,7 @@ package com.hotel.controller;
 import com.hotel.model.Booking;
 import com.hotel.model.Room;
 import com.hotel.model.User;
+import com.hotel.repository.BookingRepository;
 import com.hotel.service.BookingService;
 import com.hotel.service.RoomService;
 import com.hotel.service.UserService;
@@ -15,6 +16,7 @@ import org.springframework.web.server.ResponseStatusException;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api/bookings")
@@ -28,6 +30,9 @@ public class BookingController {
     @Autowired
     private UserService userService;
 
+    @Autowired
+    private BookingRepository bookingRepository;
+
     @GetMapping
     public List<Booking> getAllBookings() {
         return bookingService.getAllBookings();
@@ -38,13 +43,21 @@ public class BookingController {
         return bookingService.getUserBookings(userId);
     }
 
-    @GetMapping("/room/{roomNumber}")
-    public BookingDTO getBookingByRoomNumber(@PathVariable String roomNumber) {
-        Booking booking = bookingService.getBookingByRoomNumber(roomNumber);
-        if (booking == null) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Бронирование не найдено");
+    @GetMapping("/room/{roomNumber}/all")
+    public ResponseEntity<List<BookingDTO>> getAllBookingsByRoomNumber(@PathVariable String roomNumber) {
+        try {
+            Room room = roomService.getRoomByNumber(roomNumber)
+                    .orElseThrow(() -> new IllegalArgumentException("Номер не найден"));
+                    
+            List<Booking> bookings = bookingRepository.findByRoomId(room.getId());
+            List<BookingDTO> bookingDTOs = bookings.stream()
+                    .map(BookingDTO::new)
+                    .toList();
+                    
+            return ResponseEntity.ok(bookingDTOs);
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().build();
         }
-        return new BookingDTO(booking);
     }
 
     @PutMapping("/{id}")
@@ -75,9 +88,6 @@ public class BookingController {
         User user = userService.getUserById(userId)
                 .orElseThrow(() -> new IllegalArgumentException("Пользователь не найден"));
 
-        room.setAvailable(false);
-        roomService.updateRoomByNumber(roomNumber, room);
-
         Booking booking = new Booking();
         booking.setRoom(room);
         booking.setUser(user);
@@ -104,6 +114,32 @@ public class BookingController {
             return ResponseEntity.ok().build();
         } catch (Exception e) {
             return ResponseEntity.badRequest().body(e.getMessage());
+        }
+    }
+
+    @GetMapping("/check-availability")
+    public ResponseEntity<Boolean> checkRoomAvailability(
+        @RequestParam String roomNumber,
+        @RequestParam String startDate,
+        @RequestParam String endDate) {
+        try {
+            Room room = roomService.getRoomByNumber(roomNumber)
+                    .orElseThrow(() -> new IllegalArgumentException("Номер не найден"));
+            
+            LocalDate start = LocalDate.parse(startDate);
+            LocalDate end = LocalDate.parse(endDate);
+            
+            // Получаем все бронирования для номера
+            List<Booking> bookings = bookingRepository.findByRoomId(room.getId());
+            
+            // Проверяем пересечение с существующими бронированиями
+            boolean isAvailable = bookings.stream().noneMatch(booking ->
+                !(end.isBefore(booking.getStartDate()) || start.isAfter(booking.getEndDate()))
+            );
+            
+            return ResponseEntity.ok(isAvailable);
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().build();
         }
     }
 }

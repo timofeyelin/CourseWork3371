@@ -4,6 +4,7 @@ import javax.imageio.ImageIO;
 import javax.swing.*;
 
 import com.hotel.client.HotelApiClient;
+import com.hotel.dto.BookingDTO;
 import com.hotel.dto.RoomDTO;
 import com.hotel.utils.DateUtils;
 
@@ -13,6 +14,8 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.awt.image.BufferedImage;
+import java.time.LocalDate;
+import java.time.temporal.ChronoUnit;
 
 public class ClientRoomBookingPanel extends JPanel {
     private JPanel roomGridPanel;
@@ -72,7 +75,7 @@ public class ClientRoomBookingPanel extends JPanel {
 
     private void loadRoomsFromDatabase() {
         try {
-            List<RoomDTO> rooms = apiClient.getAvailableRooms();
+            List<RoomDTO> rooms = apiClient.getAllRooms();
             roomFrames = new ArrayList<>();
             if (rooms != null) {
                 for (RoomDTO room : rooms) {
@@ -81,7 +84,6 @@ public class ClientRoomBookingPanel extends JPanel {
             }
             updateRoomGrid();
         } catch (Exception e) {
-            e.printStackTrace(); // Add stack trace for debugging
             JOptionPane.showMessageDialog(this, "Ошибка при загрузке номеров: " + e.getMessage());
         }
     }
@@ -133,29 +135,37 @@ public class ClientRoomBookingPanel extends JPanel {
         private JLabel roomNumberLabel;
         private JLabel roomTypeLabel;
         private JLabel roomPriceLabel;
-        private JLabel roomDescriptionLabel; // Add new field
+        private JLabel roomDescriptionLabel;
+        private JButton bookingInfoLabel; // New label
 
         public RoomFrame(RoomDTO room) {
             this.room = room;
             this.apiClient = ClientRoomBookingPanel.this.apiClient;
             this.roomNumber = room.getNumber();
+            this.photoPaths = room.getPhotos() != null ? room.getPhotos() : new ArrayList<>();
+            
             setLayout(new BorderLayout(5, 5));
             setBorder(BorderFactory.createEtchedBorder());
 
             setupPhotoPanel();
             setupInfoPanel();
-            initializePhotos();
             addPhotoNavigationListeners();
+            updateBookingInfoLabel();
         }
 
         private void setupPhotoPanel() {
             JPanel photoPanel = new JPanel(new BorderLayout());
             photoLabel = new JLabel();
-            photoLabel.setPreferredSize(new Dimension(200, 150));
+            photoLabel.setPreferredSize(new Dimension(400, 300));
             photoLabel.setHorizontalAlignment(SwingConstants.CENTER);
             photoLabel.setBorder(BorderFactory.createEtchedBorder());
+            
+            photoLabel.setMinimumSize(new Dimension(300, 225));
+            
             photoPanel.add(photoLabel, BorderLayout.CENTER);
             add(photoPanel, BorderLayout.CENTER);
+            
+            updatePhoto();
         }
 
         private void setupInfoPanel() {
@@ -189,7 +199,17 @@ public class ClientRoomBookingPanel extends JPanel {
             infoPanel.add(roomPriceLabel);
             infoPanel.add(roomDescriptionLabel);
             infoPanel.add(buttonPanel);
+            bookingInfoLabel = new JButton("Информация о бронированиях");
+            bookingInfoLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
+            bookingInfoLabel.setCursor(new Cursor(Cursor.HAND_CURSOR));
+            bookingInfoLabel.addMouseListener(new java.awt.event.MouseAdapter() {
+                public void mouseClicked(java.awt.event.MouseEvent evt) {
+                    showBookingInfoDialog();
+                }
+            });
+            infoPanel.add(bookingInfoLabel);
             
+
             add(infoPanel, BorderLayout.SOUTH);
 
             bookButton.addActionListener(e -> handleBooking());
@@ -239,6 +259,17 @@ public class ClientRoomBookingPanel extends JPanel {
                         String startDate = DateUtils.convertDateToServer(startDateField.getText());
                         String endDate = DateUtils.convertDateToServer(endDateField.getText());
                         
+                        // Проверяем доступность номера на выбранные даты
+                        boolean isAvailable = apiClient.checkRoomAvailability(
+                            room.getNumber(), startDate, endDate);
+                            
+                        if (!isAvailable) {
+                            JOptionPane.showMessageDialog(bookingDialog, 
+                                "Номер уже забронирован на выбранные даты",
+                                "Ошибка", JOptionPane.ERROR_MESSAGE);
+                            return;
+                        }
+                        
                         apiClient.createBooking(room.getNumber(), userId, startDate, endDate);
                         JOptionPane.showMessageDialog(bookingDialog, "Номер успешно забронирован");
                         bookingDialog.dispose();
@@ -246,7 +277,7 @@ public class ClientRoomBookingPanel extends JPanel {
                     }
                 } catch (Exception ex) {
                     JOptionPane.showMessageDialog(bookingDialog, 
-                        "Ошибка при бронировании: Проверьте формат даты (ДД.ММ.ГГГГ)");
+                        "Ошибка при бронировании: " + ex.getMessage());
                 }
             });
 
@@ -256,34 +287,26 @@ public class ClientRoomBookingPanel extends JPanel {
             bookingDialog.setVisible(true);
         }
 
-        private void initializePhotos() {
-            photoPaths = new ArrayList<>();
-            String basePath = "server\\src\\main\\resources\\images\\";
-            // Get photos from room data or use defaults
-            List<String> roomPhotos = room.getPhotos();
-            if (roomPhotos != null && !roomPhotos.isEmpty()) {
-                photoPaths.addAll(roomPhotos);
-            } else {
-                photoPaths.add(basePath + "room1_1.jpg");
-                photoPaths.add(basePath + "room1_2.jpg");
-            }
-            updatePhoto();
-        }
+       
 
         private void addPhotoNavigationListeners() {
             prevButton.addActionListener(e -> {
-                currentPhotoIndex = (currentPhotoIndex - 1 + photoPaths.size()) % photoPaths.size();
-                updatePhoto();
+                if (photoPaths != null && !photoPaths.isEmpty()) {
+                    currentPhotoIndex = (currentPhotoIndex - 1 + photoPaths.size()) % photoPaths.size();
+                    updatePhoto();
+                }
             });
 
             nextButton.addActionListener(e -> {
-                currentPhotoIndex = (currentPhotoIndex + 1) % photoPaths.size();
-                updatePhoto();
+                if (photoPaths != null && !photoPaths.isEmpty()) {
+                    currentPhotoIndex = (currentPhotoIndex + 1) % photoPaths.size();
+                    updatePhoto();
+                }
             });
         }
 
         private void updatePhoto() {
-            if (!photoPaths.isEmpty()) {
+            if (photoPaths != null && !photoPaths.isEmpty()) {
                 photoLabel.setIcon(null);
                 photoLabel.setText("Загрузка...");
                 
@@ -295,11 +318,19 @@ public class ClientRoomBookingPanel extends JPanel {
                             if (!imageFile.exists()) {
                                 return null;
                             }
-                            BufferedImage img = ImageIO.read(imageFile);
-                            if (img == null) {
+                            BufferedImage originalImg = ImageIO.read(imageFile);
+                            if (originalImg == null) {
                                 return null;
                             }
-                            Image scaledImg = img.getScaledInstance(200, 150, Image.SCALE_SMOOTH);
+                            
+                            double widthRatio = 400.0 / originalImg.getWidth();
+                            double heightRatio = 300.0 / originalImg.getHeight();
+                            double ratio = Math.min(widthRatio, heightRatio);
+                            
+                            int newWidth = (int) (originalImg.getWidth() * ratio);
+                            int newHeight = (int) (originalImg.getHeight() * ratio);
+                            
+                            Image scaledImg = originalImg.getScaledInstance(newWidth, newHeight, Image.SCALE_SMOOTH);
                             return new ImageIcon(scaledImg);
                         } catch (IOException e) {
                             return null;
@@ -325,7 +356,125 @@ public class ClientRoomBookingPanel extends JPanel {
                 };
                 
                 worker.execute();
+            } else {
+                photoLabel.setIcon(null);
+                photoLabel.setText("Нет изображений");
             }
+        }
+
+        private void showBookingInfoDialog() {
+            JDialog infoDialog = new JDialog();
+            infoDialog.setTitle("Информация о бронированиях");
+            infoDialog.setLayout(new BorderLayout(10, 10));
+            infoDialog.setModal(true);
+        
+            JPanel infoPanel = new JPanel();
+            infoPanel.setLayout(new BoxLayout(infoPanel, BoxLayout.Y_AXIS));
+            infoPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
+        
+            try {
+                List<BookingDTO> bookings = apiClient.getAllBookingsByRoomNumber(roomNumber);
+                
+                if (bookings != null && !bookings.isEmpty()) {
+                    JLabel headerLabel = new JLabel("<html><b>Список бронирований:</b></html>");
+                    headerLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
+                    infoPanel.add(headerLabel);
+                    infoPanel.add(Box.createVerticalStrut(10));
+        
+                    // Sort bookings by start date
+                    bookings.sort((b1, b2) -> b1.getStartDate().compareTo(b2.getStartDate()));
+        
+                    LocalDate now = LocalDate.now();
+                    boolean hasCurrentBookings = false;
+        
+                    for (BookingDTO booking : bookings) {
+                        if (booking.getEndDate().isBefore(now)) {
+                            continue; // Skip past bookings
+                        }
+        
+                        hasCurrentBookings = true;
+                        long daysUntilAvailable = ChronoUnit.DAYS.between(now, booking.getEndDate());
+                        
+                        JLabel bookingLabel = new JLabel(String.format(
+                            "<html>&#8226; Период: с %s по %s<br>" +
+                            "&nbsp;&nbsp;&nbsp;До освобождения: %d дней<br>" +
+                            "&nbsp;&nbsp;&nbsp;Доступен с: %s</html>",
+                            DateUtils.convertDateToUI(booking.getStartDate()),
+                            DateUtils.convertDateToUI(booking.getEndDate()),
+                            daysUntilAvailable,
+                            DateUtils.convertDateToUI(booking.getEndDate().plusDays(1))
+                        ));
+                        bookingLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
+                        infoPanel.add(bookingLabel);
+                        infoPanel.add(Box.createVerticalStrut(10));
+                    }
+        
+                    if (!hasCurrentBookings) {
+                        JLabel availableLabel = new JLabel(
+                            "<html><b>Номер свободен для бронирования</b><br>" +
+                            "Вы можете забронировать этот номер прямо сейчас</html>"
+                        );
+                        availableLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
+                        infoPanel.add(availableLabel);
+                    }
+                } else {
+                    JLabel availableLabel = new JLabel(
+                        "<html><b>Номер свободен для бронирования</b><br>" +
+                        "Вы можете забронировать этот номер прямо сейчас</html>"
+                    );
+                    availableLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
+                    infoPanel.add(availableLabel);
+                }
+        
+                // Center align text
+                for (Component comp : infoPanel.getComponents()) {
+                    if (comp instanceof JLabel) {
+                        ((JLabel)comp).setHorizontalAlignment(SwingConstants.CENTER);
+                    }
+                }
+        
+            } catch (Exception e) {
+                JLabel errorLabel = new JLabel("Ошибка при загрузке информации");
+                errorLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
+                infoPanel.add(errorLabel);
+            }
+        
+            JScrollPane scrollPane = new JScrollPane(infoPanel);
+            scrollPane.setPreferredSize(new Dimension(400, 300));
+            infoDialog.add(scrollPane, BorderLayout.CENTER);
+            
+            infoDialog.pack();
+            centerDialog(infoDialog);
+            infoDialog.setVisible(true);
+        }
+
+        private void updateBookingInfoLabel() {
+            SwingWorker<Boolean, Void> worker = new SwingWorker<Boolean, Void>() {
+                @Override
+                protected Boolean doInBackground() {
+                    try {
+                        List<BookingDTO> bookings = apiClient.getAllBookingsByRoomNumber(roomNumber);
+                        return bookings != null && !bookings.isEmpty();
+                    } catch (Exception e) {
+                        return false;
+                    }
+                }
+    
+                @Override
+                protected void done() {
+                    try {
+                        boolean hasBookings = get();
+                        if (hasBookings) {
+                            bookingInfoLabel.setText("Информация о бронированиях (Есть бронирования)");
+                        } else {
+                            bookingInfoLabel.setText("Информация о бронированиях (Нет бронирований)");
+                        }
+                    } catch (Exception e) {
+                        bookingInfoLabel.setText("Информация о бронированиях (Нет бронирований)");
+                    }
+                }
+            };
+            worker.execute();
         }
     }
 }

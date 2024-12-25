@@ -61,7 +61,6 @@ public class LoginRegisterPanel extends JPanel {
                     "Успех",
                     JOptionPane.INFORMATION_MESSAGE);
 
-            // Получаем роль из ответа и переключаем view
             String role;
             if (response.contains("ADMIN")) {
                 role = "ADMIN";

@@ -18,14 +18,20 @@ bin/
 
 ### NetBeans ###
 /nbproject/private/
-/nbbuild/
-/dist/
-/nbdist/
-/.nb-gradle/
+ /nbbuild/
+ /dist/
+ /nbdist/
+ /.nb-gradle/
 
 ### VS Code ###
 .vscode/
 
 ### Mac OS ###
-.DS_Store!/client/target/
+.DS_Store
 
+# Target directories
+/client/target/
+/server/target/
+
+# Libraries
+/client/libs/

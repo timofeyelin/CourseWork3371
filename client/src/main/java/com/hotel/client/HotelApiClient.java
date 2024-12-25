@@ -41,7 +41,7 @@ public class HotelApiClient {
             })
             .create();
     }
-
+    
     public void setCurrentUserId(Long userId) {
         currentUserId = userId;
     }
@@ -177,6 +177,24 @@ public class HotelApiClient {
         return gson.fromJson(response.body(), new TypeToken<List<RoomDTO>>(){}.getType());
     }
 
+    public boolean checkRoomAvailability(String roomNumber, String startDate, String endDate) throws Exception {
+        HttpRequest request = HttpRequest.newBuilder()
+                .uri(URI.create(String.format(
+                    "http://localhost:8080/api/bookings/check-availability?roomNumber=%s&startDate=%s&endDate=%s",
+                    roomNumber, startDate, endDate)))
+                .GET()
+                .build();
+    
+        HttpResponse<String> response = httpClient.send(request, 
+                HttpResponse.BodyHandlers.ofString());
+    
+        if (response.statusCode() != 200) {
+            throw new RuntimeException("Ошибка при проверке доступности номера");
+        }
+    
+        return Boolean.parseBoolean(response.body());
+    }
+
     public List<RoomDTO> getAllRooms() throws Exception {
         HttpRequest request = HttpRequest.newBuilder()
                 .uri(URI.create("http://localhost:8080/api/rooms"))
@@ -245,23 +263,20 @@ public class HotelApiClient {
         }
     }
 
-    // New methods for managing bookings
-    public BookingDTO getBookingByRoomNumber(String roomNumber) throws Exception {
+    public List<BookingDTO> getBookingByRoomNumber(String roomNumber) throws Exception {
         HttpRequest request = HttpRequest.newBuilder()
                 .uri(URI.create("http://localhost:8080/api/bookings/room/" + roomNumber))
                 .GET()
                 .build();
     
         HttpResponse<String> response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
-        
-        if (response.statusCode() == 404) {
-            return null;
-        }
+    
         if (response.statusCode() != 200) {
-            throw new RuntimeException("Ошибка при получении бронирования: " + response.body());
+            throw new RuntimeException("Ошибка при получении бронирований");
         }
     
-        return gson.fromJson(response.body(), BookingDTO.class);
+        Type listType = new TypeToken<List<BookingDTO>>(){}.getType();
+        return gson.fromJson(response.body(), listType);
     }
 
     public void updateBooking(Long bookingId, String startDate, String endDate) throws Exception {
@@ -296,5 +311,22 @@ public class HotelApiClient {
         if (response.statusCode() != 200) {
             throw new RuntimeException("Ошибка при удалении бронирования: " + response.body());
         }
+    }
+
+    public List<BookingDTO> getAllBookingsByRoomNumber(String roomNumber) throws Exception {
+        HttpRequest request = HttpRequest.newBuilder()
+                .uri(URI.create("http://localhost:8080/api/bookings/room/" + roomNumber + "/all"))
+                .GET()
+                .build();
+
+        HttpResponse<String> response = httpClient.send(request, 
+                HttpResponse.BodyHandlers.ofString());
+
+        if (response.statusCode() != 200) {
+            throw new RuntimeException("Ошибка при получении бронирований");
+        }
+
+        Type listType = new TypeToken<List<BookingDTO>>(){}.getType();
+        return gson.fromJson(response.body(), listType);
     }
 }

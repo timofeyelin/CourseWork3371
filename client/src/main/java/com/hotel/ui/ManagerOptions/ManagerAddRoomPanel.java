@@ -13,7 +13,6 @@ import java.io.File;
 import java.io.IOException;
 
 import com.hotel.client.HotelApiClient;
-import com.hotel.dto.RoomDTO;
 
 public class ManagerAddRoomPanel extends JPanel {
     private final JTextField numberField;
@@ -95,6 +94,7 @@ public class ManagerAddRoomPanel extends JPanel {
         JButton addPhotoButton = new JButton("Добавить фото");
         JButton removePhotoButton = new JButton("Удалить фото");
 
+        // Modify the addPhotoButton ActionListener to display only filenames
         addPhotoButton.addActionListener(e -> {
             JFileChooser fileChooser = new JFileChooser();
             fileChooser.setMultiSelectionEnabled(true);
@@ -105,7 +105,7 @@ public class ManagerAddRoomPanel extends JPanel {
                 for (File file : files) {
                     String targetPath = "server/src/main/resources/images/" + file.getName();
                     selectedPhotoPaths.add(targetPath);
-                    photoListModel.addElement(targetPath);
+                    photoListModel.addElement(file.getName()); // Display only filename
                     try {
                         File targetFile = new File(targetPath);
                         targetFile.getParentFile().mkdirs();
@@ -132,6 +132,16 @@ public class ManagerAddRoomPanel extends JPanel {
 
         photoPanel.add(new JScrollPane(photoList), BorderLayout.CENTER);
         photoPanel.add(buttonPanel, BorderLayout.SOUTH);
+
+        // Add tooltips to display full paths
+        photoList.addMouseMotionListener(new java.awt.event.MouseMotionAdapter() {
+            public void mouseMoved(java.awt.event.MouseEvent evt) {
+                int index = photoList.locationToIndex(evt.getPoint());
+                if (index != -1) {
+                    photoList.setToolTipText(selectedPhotoPaths.get(index));
+                }
+            }
+        });
 
         // Панель для отображения фотографий
         JPanel displayPhotoPanel = new JPanel(new BorderLayout());
