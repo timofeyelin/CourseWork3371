@@ -115,11 +115,15 @@ public class RoomService {
     public void deleteRoomByNumber(String roomNumber) {
         Room room = roomRepository.findByNumber(roomNumber)
                 .orElseThrow(() -> new IllegalArgumentException("Номер не найден"));
-        if (bookingRepository.findByRoomId(room.getId()).isEmpty()) {
-            roomRepository.delete(room);
-        } else {
-            throw new IllegalStateException("Нельзя удалить номер с существующими бронированиями");
+                
+        // Сначала удаляем все бронирования
+        List<Booking> bookings = bookingRepository.findByRoomId(room.getId());
+        for(Booking booking : bookings) {
+            bookingRepository.delete(booking);
         }
+        
+        // Затем удаляем сам номер
+        roomRepository.delete(room);
     }
     
 

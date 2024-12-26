@@ -9,6 +9,7 @@ import java.net.http.HttpResponse;
 import com.google.gson.*;
 import com.google.gson.reflect.TypeToken;
 import com.hotel.dto.RoomDTO;
+import com.hotel.dto.UserDTO;
 import com.hotel.dto.BookingDTO;
 import com.hotel.model.Booking;
 import com.hotel.model.User;
@@ -98,6 +99,36 @@ public class HotelApiClient {
         setCurrentUserId(user.getId());
     
         return user;
+    }
+
+        public List<UserDTO> getAllUsers() throws Exception {
+        HttpRequest request = HttpRequest.newBuilder()
+                .uri(URI.create(BASE_URL + "/users"))
+                .GET()
+                .build();
+
+        HttpResponse<String> response = sendRequest(request);
+
+        if (response.statusCode() != 200) {
+            throw new RuntimeException("Ошибка при получении пользователей: " + response.body());
+        }
+
+        return gson.fromJson(response.body(), new TypeToken<List<UserDTO>>(){}.getType());
+    }
+
+    public List<BookingDTO> getBookingsByUserId(Long userId) throws Exception {
+        HttpRequest request = HttpRequest.newBuilder()
+                .uri(URI.create(BASE_URL + "/bookings/user/" + userId + "/details"))
+                .GET()
+                .build();
+
+        HttpResponse<String> response = sendRequest(request);
+
+        if (response.statusCode() != 200) {
+            throw new RuntimeException("Ошибка при получении бронирований: " + response.body());
+        }
+
+        return gson.fromJson(response.body(), new TypeToken<List<BookingDTO>>(){}.getType());
     }
 
     // Общий метод для отправки запросов

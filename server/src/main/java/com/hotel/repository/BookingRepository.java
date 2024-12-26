@@ -14,11 +14,11 @@ import java.util.List;
 public interface BookingRepository extends JpaRepository<Booking, Long> {
     List<Booking> findByUserId(Long userId);
     List<Booking> findByRoomId(Long roomId);
+    List<Booking> findByRoom_Number(String roomNumber);
 
     @Query("SELECT b FROM Booking b WHERE b.room.id = :roomId AND b.startDate <= :endDate AND b.endDate >= :startDate")
     List<Booking> findOverlappingBookings(@Param("roomId") Long roomId,
                                           @Param("startDate") LocalDate startDate,
                                           @Param("endDate") LocalDate endDate);
 
-    List<Booking> findByRoom_Number(String roomNumber);
 }

@@ -9,6 +9,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 
 import javax.annotation.PostConstruct;
 import java.util.Optional;
+import java.util.List;
 
 @Service
 public class UserService {
@@ -44,6 +45,10 @@ public class UserService {
     }
     public Optional<User> getUserById(Long id) {
         return userRepository.findById(id);
+    }
+
+    public List<User> getAllUsers() {
+        return userRepository.findAll();
     }
     
 }

@@ -266,15 +266,41 @@ public class ManagerManageRoomsPanel extends JPanel {
     }
 
     private void showDeleteRoomDialog(RoomDTO room) {
-        int response = JOptionPane.showConfirmDialog(this, "Вы действительно хотите удалить номер?", "Удалить номер", JOptionPane.YES_NO_OPTION);
-        if (response == JOptionPane.YES_OPTION) {
-            try {
+        try {
+            // Проверяем наличие бронирований
+            List<BookingDTO> bookings = apiClient.getAllBookingsByRoomNumber(room.getNumber());
+            
+            String message = "Вы действительно хотите удалить номер?";
+            if (bookings != null && !bookings.isEmpty()) {
+                message = "Внимание! У этого номера есть активные бронирования.\n" +
+                         "При удалении номера все бронирования будут отменены.\n" +
+                         "Вы действительно хотите удалить номер?";
+            }
+    
+            Object[] options = {"Да", "Нет"};
+            int response = JOptionPane.showOptionDialog(
+                this,
+                message,
+                "Удалить номер",
+                JOptionPane.YES_NO_OPTION,
+                JOptionPane.WARNING_MESSAGE,
+                null,
+                options,
+                options[1] // Default button is "Нет"
+            );
+    
+            if (response == JOptionPane.YES_OPTION) {
                 apiClient.deleteRoomByNumber(room.getNumber());
                 JOptionPane.showMessageDialog(this, "Номер успешно удален");
                 loadRoomsFromDatabase();
-            } catch (Exception e) {
-                JOptionPane.showMessageDialog(this, "Ошибка при удалении номера: " + e.getMessage());
             }
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(
+                this,
+                "Ошибка при удалении номера: " + e.getMessage(),
+                "Ошибка",
+                JOptionPane.ERROR_MESSAGE
+            );
         }
     }
 

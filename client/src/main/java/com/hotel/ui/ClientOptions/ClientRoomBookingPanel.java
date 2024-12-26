@@ -18,7 +18,6 @@ import java.awt.image.BufferedImage;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.ZoneId;
-import java.time.temporal.ChronoUnit;
 import org.jdatepicker.impl.JDatePanelImpl;
 import org.jdatepicker.impl.JDatePickerImpl;
 import org.jdatepicker.impl.UtilDateModel;
@@ -502,7 +501,7 @@ public class ClientRoomBookingPanel extends JPanel {
         
             try {
                 List<BookingDTO> bookings = apiClient.getAllBookingsByRoomNumber(roomNumber);
-                
+        
                 if (bookings != null && !bookings.isEmpty()) {
                     JLabel headerLabel = new JLabel("<html><b>Список бронирований:</b></html>");
                     headerLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
@@ -521,15 +520,12 @@ public class ClientRoomBookingPanel extends JPanel {
                         }
         
                         hasCurrentBookings = true;
-                        long daysUntilAvailable = ChronoUnit.DAYS.between(now, booking.getEndDate());
-                        
+        
                         JLabel bookingLabel = new JLabel(String.format(
                             "<html>&#8226; Период: с %s по %s<br>" +
-                            "&nbsp;&nbsp;&nbsp;До освобождения: %d дней<br>" +
                             "&nbsp;&nbsp;&nbsp;Доступен с: %s</html>",
                             DateUtils.convertDateToUI(booking.getStartDate()),
                             DateUtils.convertDateToUI(booking.getEndDate()),
-                            daysUntilAvailable,
                             DateUtils.convertDateToUI(booking.getEndDate().plusDays(1))
                         ));
                         bookingLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
@@ -553,14 +549,6 @@ public class ClientRoomBookingPanel extends JPanel {
                     availableLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
                     infoPanel.add(availableLabel);
                 }
-        
-                // Center align text
-                for (Component comp : infoPanel.getComponents()) {
-                    if (comp instanceof JLabel) {
-                        ((JLabel)comp).setHorizontalAlignment(SwingConstants.CENTER);
-                    }
-                }
-        
             } catch (Exception e) {
                 JLabel errorLabel = new JLabel("Ошибка при загрузке информации");
                 errorLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
@@ -570,7 +558,7 @@ public class ClientRoomBookingPanel extends JPanel {
             JScrollPane scrollPane = new JScrollPane(infoPanel);
             scrollPane.setPreferredSize(new Dimension(400, 300));
             infoDialog.add(scrollPane, BorderLayout.CENTER);
-            
+        
             infoDialog.pack();
             centerDialog(infoDialog);
             infoDialog.setVisible(true);

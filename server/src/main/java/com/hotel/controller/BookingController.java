@@ -1,5 +1,6 @@
 package com.hotel.controller;
 
+import com.hotel.controller.dto.BookingDTO;
 import com.hotel.model.Booking;
 import com.hotel.model.Room;
 import com.hotel.model.User;
@@ -40,6 +41,13 @@ public class BookingController {
     public List<Booking> getUserBookings(@PathVariable Long userId) {
         return bookingService.getUserBookings(userId);
     }
+
+    @GetMapping("/user/{userId}/details")
+    public List<BookingDTO> getBookingsByUserId(@PathVariable Long userId) {
+        List<Booking> bookings = bookingService.getUserBookings(userId);
+        return bookings.stream().map(BookingDTO::new).toList();
+    }
+
 
     @GetMapping("/room/{roomNumber}/all")
     public ResponseEntity<List<BookingDTO>> getAllBookingsByRoomNumber(@PathVariable String roomNumber) {

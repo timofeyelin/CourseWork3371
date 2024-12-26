@@ -1,4 +1,4 @@
-package com.hotel.controller;
+package com.hotel.controller.dto;
 
 import com.hotel.model.Booking;
 import java.time.LocalDate;
