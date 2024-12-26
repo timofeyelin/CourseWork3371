@@ -5,24 +5,8 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="4e743a9c-2186-4672-8b53-7f7b8f71cf75" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/dataSources.local.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dataSources.local.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/client/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/client/pom.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/client/target/classes/com/hotel/dto/BookingDTO.class" beforeDir="false" afterPath="$PROJECT_DIR$/client/target/classes/com/hotel/dto/BookingDTO.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/client/target/classes/com/hotel/ui/ClientOptions/ClientMyBookingsPanel$BookedRoomFrame$1.class" beforeDir="false" afterPath="$PROJECT_DIR$/client/target/classes/com/hotel/ui/ClientOptions/ClientMyBookingsPanel$BookedRoomFrame$1.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/client/target/classes/com/hotel/ui/ClientOptions/ClientMyBookingsPanel$BookedRoomFrame.class" beforeDir="false" afterPath="$PROJECT_DIR$/client/target/classes/com/hotel/ui/ClientOptions/ClientMyBookingsPanel$BookedRoomFrame.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/client/target/classes/com/hotel/ui/ClientOptions/ClientMyBookingsPanel.class" beforeDir="false" afterPath="$PROJECT_DIR$/client/target/classes/com/hotel/ui/ClientOptions/ClientMyBookingsPanel.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/client/target/classes/com/hotel/ui/MainFrame.class" beforeDir="false" afterPath="$PROJECT_DIR$/client/target/classes/com/hotel/ui/MainFrame.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/client/target/classes/com/hotel/ui/ManagerOptions/ManagerAddRoomPanel.class" beforeDir="false" afterPath="$PROJECT_DIR$/client/target/classes/com/hotel/ui/ManagerOptions/ManagerAddRoomPanel.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/client/target/classes/com/hotel/ui/ManagerOptions/ManagerDeleteRoomPanel.class" beforeDir="false" afterPath="$PROJECT_DIR$/client/target/classes/com/hotel/ui/ManagerOptions/ManagerDeleteRoomPanel.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/client/target/classes/com/hotel/ui/ManagerOptions/ManagerEditRoomPanel.class" beforeDir="false" afterPath="$PROJECT_DIR$/client/target/classes/com/hotel/ui/ManagerOptions/ManagerEditRoomPanel.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/client/target/classes/com/hotel/ui/ManagerOptions/RoomsPanel.class" beforeDir="false" afterPath="$PROJECT_DIR$/client/target/classes/com/hotel/ui/ManagerOptions/RoomsPanel.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/client/target/classes/com/hotel/ui/Panels/AdminPanel.class" beforeDir="false" afterPath="$PROJECT_DIR$/client/target/classes/com/hotel/ui/Panels/AdminPanel.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/client/target/classes/com/hotel/ui/Panels/LoginRegisterPanel.class" beforeDir="false" afterPath="$PROJECT_DIR$/client/target/classes/com/hotel/ui/Panels/LoginRegisterPanel.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/server/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/server/pom.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/server/target/classes/com/hotel/controller/AuthController.class" beforeDir="false" afterPath="$PROJECT_DIR$/server/target/classes/com/hotel/controller/AuthController.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/server/target/classes/com/hotel/repository/BookingRepository.class" beforeDir="false" afterPath="$PROJECT_DIR$/server/target/classes/com/hotel/repository/BookingRepository.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/server/target/classes/com/hotel/service/BookingService.class" beforeDir="false" afterPath="$PROJECT_DIR$/server/target/classes/com/hotel/service/BookingService.class" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -182,7 +166,7 @@
       <workItem from="1735146629577" duration="6420000" />
       <workItem from="1735155192504" duration="15940000" />
       <workItem from="1735208099864" duration="145000" />
-      <workItem from="1735231084833" duration="988000" />
+      <workItem from="1735231084833" duration="1730000" />
     </task>
     <task id="LOCAL-00001" summary="Реструктуризация">
       <option name="closed" value="true" />
