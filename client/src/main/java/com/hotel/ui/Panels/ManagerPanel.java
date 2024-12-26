@@ -15,7 +15,6 @@ public class ManagerPanel extends JPanel {
         tabbedPane.addTab("Управление номерами", new RoomsPanel());
         tabbedPane.addTab("Информация о клиентах", clientInfoPanel);
 
-        // Добавляем вкладку "Выйти"
         tabbedPane.addTab("Выйти", new JPanel());
 
         tabbedPane.addChangeListener(e -> {

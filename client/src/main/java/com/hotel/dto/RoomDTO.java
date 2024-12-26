@@ -14,10 +14,8 @@ public class RoomDTO {
     private String description;
     private List<String> photos;
 
-    // Default Constructor
     public RoomDTO() {}
 
-    // Parameterized Constructor
     public RoomDTO(Long id, String number, String type, BigDecimal price, String description, List<String> photos) {
         this.id = id;
         this.number = number;
@@ -27,7 +25,6 @@ public class RoomDTO {
         this.photos = photos;
     }
 
-    // Getters and Setters
     public Long getId() {
         return id;
     }

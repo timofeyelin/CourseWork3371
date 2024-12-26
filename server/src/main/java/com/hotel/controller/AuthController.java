@@ -24,7 +24,6 @@ public class AuthController {
         if (user != null) {
             return ResponseEntity.ok(user);
         }
-        // Возвращаем JSON-объект с сообщением об ошибке
         Map<String, String> error = new HashMap<>();
         error.put("error", "Неверные учетные данные");
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(error);

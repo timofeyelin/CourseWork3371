@@ -25,7 +25,6 @@ public class BookingDTO {
         }
     }
 
-    // Getters and setters
     public Long getId() {
         return id;
     }

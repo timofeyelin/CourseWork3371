@@ -42,40 +42,33 @@ public class ClientRoomBookingPanel extends JPanel {
         apiClient = new HotelApiClient();
         setLayout(new BorderLayout());
 
-        // Панель поиска
     JPanel searchPanel = new JPanel(new GridLayout(2, 5, 10, 10));
 
-    // Тип номера
     JLabel typeLabel = new JLabel("Тип номера:");
     roomTypeComboBox = new JComboBox<>(new String[]{"Все", "Одноместный", "Двухместный", "Люкс"});
     searchPanel.add(typeLabel);
     searchPanel.add(roomTypeComboBox);
 
-    // Цена от
     JLabel minPriceLabel = new JLabel("Мин. цена:");
     minPriceField = new JTextField();
     searchPanel.add(minPriceLabel);
     searchPanel.add(minPriceField);
 
-    // Цена до
     JLabel maxPriceLabel = new JLabel("Макс. цена:");
     maxPriceField = new JTextField();
     searchPanel.add(maxPriceLabel);
     searchPanel.add(maxPriceField);
 
-    // Дата начала
     JLabel startDateLabel = new JLabel("Дата начала:");
     startDatePicker = createDatePicker();
     searchPanel.add(startDateLabel);
     searchPanel.add(startDatePicker);
 
-    // Дата конца
     JLabel endDateLabel = new JLabel("Дата конца:");
     endDatePicker = createDatePicker();
     searchPanel.add(endDateLabel);
     searchPanel.add(endDatePicker);
 
-    // Кнопка поиска
     JButton searchButton = new JButton("Поиск");
     searchButton.addActionListener(e -> {
         String selectedType = (String) roomTypeComboBox.getSelectedItem();
@@ -89,18 +82,16 @@ public class ClientRoomBookingPanel extends JPanel {
 
         loadRoomsFromDatabase(selectedType, minPrice, maxPrice, startDate, endDate);
     });
-    searchPanel.add(new JLabel()); // Empty cell
+    searchPanel.add(new JLabel());
     searchPanel.add(searchButton);
     
     add(searchPanel, BorderLayout.NORTH);
 
-        // Панель сетки номеров
         roomGridPanel = new JPanel(new GridLayout(1, 2, 10, 10));
         JScrollPane scrollPane = new JScrollPane(roomGridPanel);
         JPanel gridPanelContainer = new JPanel(new BorderLayout());
         gridPanelContainer.add(scrollPane, BorderLayout.CENTER);
 
-        // Кнопки для листания страниц
         JPanel paginationPanel = new JPanel(new FlowLayout());
         prevPageButton = new JButton("Предыдущая");
         nextPageButton = new JButton("Следующая");
@@ -173,7 +164,7 @@ public class ClientRoomBookingPanel extends JPanel {
                     roomFrames.add(new RoomFrame(room));
                 }
             }
-            currentPage = 0; // Reset to first page
+            currentPage = 0;
             updateRoomGrid();
         } catch (Exception e) {
             JOptionPane.showMessageDialog(this, "Ошибка при загрузке номеров: " + e.getMessage());
@@ -236,15 +227,12 @@ public class ClientRoomBookingPanel extends JPanel {
     }
 
     public void centerDialog(JDialog dialog) {
-        // Get parent window
         Window parentWindow = SwingUtilities.getWindowAncestor(this);
         if (parentWindow != null) {
-            // Center relative to parent window
             int x = parentWindow.getX() + (parentWindow.getWidth() - dialog.getWidth()) / 2;
             int y = parentWindow.getY() + (parentWindow.getHeight() - dialog.getHeight()) / 2;
             dialog.setLocation(x, y);
         } else {
-            // If no parent, center on screen
             dialog.setLocationRelativeTo(null);
         }
     }
@@ -263,7 +251,7 @@ public class ClientRoomBookingPanel extends JPanel {
         private JLabel roomTypeLabel;
         private JLabel roomPriceLabel;
         private JLabel roomDescriptionLabel;
-        private JButton bookingInfoLabel; // New label
+        private JButton bookingInfoLabel;
 
         public RoomFrame(RoomDTO room) {
             this.room = room;
@@ -304,13 +292,11 @@ public class ClientRoomBookingPanel extends JPanel {
             roomPriceLabel = new JLabel("Цена: " + room.getPrice() + " руб.", SwingConstants.CENTER);
             roomDescriptionLabel = new JLabel("Описание: " + room.getDescription(), SwingConstants.CENTER);
             
-            // Center text alignment
             roomNumberLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
             roomTypeLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
             roomPriceLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
             roomDescriptionLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
             
-            // Add navigation and book buttons
             JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
             prevButton = new JButton("<<");
             bookButton = new JButton("Забронировать");
@@ -353,7 +339,6 @@ public class ClientRoomBookingPanel extends JPanel {
             gbc.insets = new Insets(5,5,5,5);
             gbc.anchor = GridBagConstraints.WEST;
 
-            // Start date
             gbc.gridx = 0;
             gbc.gridy = 0;
             bookingForm.add(new JLabel("Дата начала (ДД.ММ.ГГГГ):"), gbc);
@@ -362,7 +347,6 @@ public class ClientRoomBookingPanel extends JPanel {
             JTextField startDateField = new JTextField(15);
             bookingForm.add(startDateField, gbc);
 
-            // End date
             gbc.gridx = 0;
             gbc.gridy = 1;
             bookingForm.add(new JLabel("Дата конца (ДД.ММ.ГГГГ):"), gbc);
@@ -371,7 +355,6 @@ public class ClientRoomBookingPanel extends JPanel {
             JTextField endDateField = new JTextField(15);
             bookingForm.add(endDateField, gbc);
 
-            // Confirm button
             gbc.gridx = 0;
             gbc.gridy = 2;
             gbc.gridwidth = 2;
@@ -386,7 +369,6 @@ public class ClientRoomBookingPanel extends JPanel {
                         String startDate = DateUtils.convertDateToServer(startDateField.getText());
                         String endDate = DateUtils.convertDateToServer(endDateField.getText());
                         
-                        // Проверяем доступность номера на выбранные даты
                         boolean isAvailable = apiClient.checkRoomAvailability(
                             room.getNumber(), startDate, endDate);
                             
@@ -508,7 +490,6 @@ public class ClientRoomBookingPanel extends JPanel {
                     infoPanel.add(headerLabel);
                     infoPanel.add(Box.createVerticalStrut(10));
         
-                    // Sort bookings by start date
                     bookings.sort((b1, b2) -> b1.getStartDate().compareTo(b2.getStartDate()));
         
                     LocalDate now = LocalDate.now();
@@ -516,7 +497,7 @@ public class ClientRoomBookingPanel extends JPanel {
         
                     for (BookingDTO booking : bookings) {
                         if (booking.getEndDate().isBefore(now)) {
-                            continue; // Skip past bookings
+                            continue;
                         }
         
                         hasCurrentBookings = true;

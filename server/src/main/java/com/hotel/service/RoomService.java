@@ -102,7 +102,6 @@ public class RoomService {
         if (roomDetails.getDescription() != null) {
             room.setDescription(roomDetails.getDescription());
         }
-        // Обработка пустого или отсутствующего списка фотографий
         if (roomDetails.getPhotos() != null) {
             room.setPhotos(roomDetails.getPhotos());
         } else {
@@ -116,13 +115,11 @@ public class RoomService {
         Room room = roomRepository.findByNumber(roomNumber)
                 .orElseThrow(() -> new IllegalArgumentException("Номер не найден"));
                 
-        // Сначала удаляем все бронирования
         List<Booking> bookings = bookingRepository.findByRoomId(room.getId());
         for(Booking booking : bookings) {
             bookingRepository.delete(booking);
         }
         
-        // Затем удаляем сам номер
         roomRepository.delete(room);
     }
     

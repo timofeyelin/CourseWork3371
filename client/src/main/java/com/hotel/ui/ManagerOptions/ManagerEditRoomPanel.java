@@ -95,14 +95,12 @@ public class ManagerEditRoomPanel extends JPanel {
 
         add(editRoomForm, BorderLayout.CENTER);
 
-        // Панель для управления фотографиями
         JPanel photoPanel = new JPanel(new BorderLayout());
         photoPanel.setBorder(BorderFactory.createTitledBorder("Фотографии"));
 
         photoListModel = new DefaultListModel<>();
-        // Modify initial photo list population to show only filenames
         for (String photoPath : room.getPhotos()) {
-            photoListModel.addElement(new File(photoPath).getName()); // Display only filename
+            photoListModel.addElement(new File(photoPath).getName());
         }
         photoList = new JList<>(photoListModel);
         photoList.setPreferredSize(new Dimension(200, 150));
@@ -111,7 +109,6 @@ public class ManagerEditRoomPanel extends JPanel {
         JButton addPhotoButton = new JButton("Добавить фото");
         JButton removePhotoButton = new JButton("Удалить фото");
 
-        // Modify the addPhotoButton ActionListener to display only filenames
         addPhotoButton.addActionListener(e -> {
             JFileChooser fileChooser = new JFileChooser();
             fileChooser.setMultiSelectionEnabled(true);
@@ -122,7 +119,7 @@ public class ManagerEditRoomPanel extends JPanel {
                 for (File file : files) {
                     String targetPath = "server/src/main/resources/images/" + file.getName();
                     selectedPhotoPaths.add(targetPath);
-                    photoListModel.addElement(file.getName()); // Display only filename
+                    photoListModel.addElement(file.getName());
                     try {
                         File targetFile = new File(targetPath);
                         targetFile.getParentFile().mkdirs();
@@ -131,7 +128,7 @@ public class ManagerEditRoomPanel extends JPanel {
                         JOptionPane.showMessageDialog(this, "Ошибка при копировании файла: " + ex.getMessage());
                     }
                 }
-                handleEditRoom(); // Обновить номер после добавления фото
+                handleEditRoom();
             }
         });
 
@@ -140,7 +137,7 @@ public class ManagerEditRoomPanel extends JPanel {
             if (selectedIndex != -1) {
                 selectedPhotoPaths.remove(selectedIndex);
                 photoListModel.remove(selectedIndex);
-                handleEditRoom(); // Обновить номер после удаления фото
+                handleEditRoom();
             }
         });
 
@@ -150,7 +147,6 @@ public class ManagerEditRoomPanel extends JPanel {
         photoPanel.add(new JScrollPane(photoList), BorderLayout.CENTER);
         photoPanel.add(buttonPanel, BorderLayout.SOUTH);
 
-        // Add tooltips to display full paths
         photoList.addMouseMotionListener(new java.awt.event.MouseMotionAdapter() {
             public void mouseMoved(java.awt.event.MouseEvent evt) {
                 int index = photoList.locationToIndex(evt.getPoint());
@@ -160,7 +156,6 @@ public class ManagerEditRoomPanel extends JPanel {
             }
         });
 
-        // Панель для отображения фотографий
         JPanel displayPhotoPanel = new JPanel(new BorderLayout());
         photoLabel = new JLabel();
         photoLabel.setPreferredSize(new Dimension(200, 150));

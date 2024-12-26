@@ -31,7 +31,6 @@ public class ManagerManageRoomsPanel extends JPanel {
     private JDatePickerImpl filterStartDatePicker;
     private JDatePickerImpl filterEndDatePicker;
 
-    // Pagination controls
     private JButton prevPageButton;
     private JButton nextPageButton;
     private JLabel pageNumberLabel;
@@ -42,46 +41,38 @@ public class ManagerManageRoomsPanel extends JPanel {
         apiClient = new HotelApiClient();
         setLayout(new BorderLayout());
 
-        // Панель сетки номеров
         roomGridPanel = new JPanel(new GridLayout(1, roomsPerPage, 10, 10));
         JScrollPane scrollPane = new JScrollPane(roomGridPanel);
         JPanel gridPanelContainer = new JPanel(new BorderLayout());
         gridPanelContainer.add(scrollPane, BorderLayout.CENTER);
 
-        // Панель фильтрации
         JPanel filterPanel = new JPanel(new GridLayout(2, 5, 10, 10));
 
-        // Тип номера
         JLabel typeLabel = new JLabel("Тип номера:");
         roomTypeFilterComboBox = new JComboBox<>(new String[]{"Все", "Одноместный", "Двухместный", "Люкс"});
         filterPanel.add(typeLabel);
         filterPanel.add(roomTypeFilterComboBox);
 
-        // Цена от
         JLabel minPriceLabel = new JLabel("Мин. цена:");
         minPriceFilterField = new JTextField();
         filterPanel.add(minPriceLabel);
         filterPanel.add(minPriceFilterField);
 
-        // Цена до
         JLabel maxPriceLabel = new JLabel("Макс. цена:");
         maxPriceFilterField = new JTextField();
         filterPanel.add(maxPriceLabel);
         filterPanel.add(maxPriceFilterField);
 
-        // Дата начала
         JLabel startDateLabel = new JLabel("Дата начала:");
         filterStartDatePicker = createDatePicker();
         filterPanel.add(startDateLabel);
         filterPanel.add(filterStartDatePicker);
 
-        // Дата конца
         JLabel endDateLabel = new JLabel("Дата конца:");
         filterEndDatePicker = createDatePicker();
         filterPanel.add(endDateLabel);
         filterPanel.add(filterEndDatePicker);
 
-        // Кнопка фильтрации
         JButton filterButton = new JButton("Поиск");
         filterButton.addActionListener(e -> {
             String selectedType = (String) roomTypeFilterComboBox.getSelectedItem();
@@ -119,12 +110,11 @@ public class ManagerManageRoomsPanel extends JPanel {
                 JOptionPane.showMessageDialog(this, ex.getMessage(), "Ошибка", JOptionPane.ERROR_MESSAGE);
             }
         });
-        filterPanel.add(new JLabel()); // Empty cell
+        filterPanel.add(new JLabel());
         filterPanel.add(filterButton);
 
         gridPanelContainer.add(filterPanel, BorderLayout.NORTH);
 
-        // Кнопка для добавления номера
         JButton addRoomButton = new JButton("Добавить номер");
         addRoomButton.addActionListener(e -> showAddRoomDialog());
         JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
@@ -133,7 +123,6 @@ public class ManagerManageRoomsPanel extends JPanel {
 
         add(gridPanelContainer, BorderLayout.CENTER);
 
-        // Добавление панели пагинации
         JPanel paginationPanel = new JPanel(new FlowLayout());
         prevPageButton = new JButton("Предыдущая");
         nextPageButton = new JButton("Следующая");
@@ -193,7 +182,7 @@ public class ManagerManageRoomsPanel extends JPanel {
                     roomFrames.add(new RoomFrame(room));
                 }
             }
-            currentPage = 0; // Reset to first page
+            currentPage = 0;
             updateRoomGrid();
         } catch (Exception e) {
             JOptionPane.showMessageDialog(this, "Ошибка при загрузке номеров: " + e.getMessage());
@@ -209,7 +198,7 @@ public class ManagerManageRoomsPanel extends JPanel {
                     roomFrames.add(new RoomFrame(room));
                 }
             }
-            currentPage = 0; // Reset to first page
+            currentPage = 0;
             updateRoomGrid();
         } catch (Exception e) {
             JOptionPane.showMessageDialog(this, "Ошибка при загрузке номеров: " + e.getMessage());
@@ -227,7 +216,7 @@ public class ManagerManageRoomsPanel extends JPanel {
         roomGridPanel.repaint();
 
         int totalPages = (int) Math.ceil((double) roomFrames.size() / roomsPerPage);
-        if (totalPages == 0) totalPages = 1; // At least one page
+        if (totalPages == 0) totalPages = 1;
 
         pageNumberLabel.setText("Страница " + (currentPage + 1) + " из " + totalPages);
 
@@ -242,7 +231,7 @@ public class ManagerManageRoomsPanel extends JPanel {
         addRoomDialog.setLayout(new BorderLayout());
 
         ManagerAddRoomPanel addRoomPanel = new ManagerAddRoomPanel();
-        addRoomPanel.setUpdateCallback(this::loadRoomsFromDatabase); // Добавляем callback для обновления таблицы
+        addRoomPanel.setUpdateCallback(this::loadRoomsFromDatabase);
         addRoomDialog.add(addRoomPanel, BorderLayout.CENTER);
 
         addRoomDialog.pack();
@@ -257,7 +246,7 @@ public class ManagerManageRoomsPanel extends JPanel {
         editRoomDialog.setLayout(new BorderLayout());
 
         ManagerEditRoomPanel editRoomPanel = new ManagerEditRoomPanel(room);
-        editRoomPanel.setUpdateCallback(this::loadRoomsFromDatabase); // Добавляем callback для обновления таблицы
+        editRoomPanel.setUpdateCallback(this::loadRoomsFromDatabase);
         editRoomDialog.add(editRoomPanel, BorderLayout.CENTER);
 
         editRoomDialog.pack();
@@ -286,7 +275,7 @@ public class ManagerManageRoomsPanel extends JPanel {
                 JOptionPane.WARNING_MESSAGE,
                 null,
                 options,
-                options[1] // Default button is "Нет"
+                options[1]
             );
     
             if (response == JOptionPane.YES_OPTION) {
@@ -315,7 +304,6 @@ public class ManagerManageRoomsPanel extends JPanel {
         gbc.insets = new Insets(5, 5, 5, 5);
         gbc.anchor = GridBagConstraints.WEST;
 
-        // Start date
         gbc.gridx = 0;
         gbc.gridy = 0;
         bookingForm.add(new JLabel("Дата начала (ДД.ММ.ГГГГ):"), gbc);
@@ -325,7 +313,6 @@ public class ManagerManageRoomsPanel extends JPanel {
         startDateField.setText(DateUtils.convertDateToUI(booking.getStartDate()));
         bookingForm.add(startDateField, gbc);
 
-        // End date
         gbc.gridx = 0;
         gbc.gridy = 1;
         bookingForm.add(new JLabel("Дата конца (ДД.ММ.ГГГГ):"), gbc);
@@ -335,7 +322,6 @@ public class ManagerManageRoomsPanel extends JPanel {
         endDateField.setText(DateUtils.convertDateToUI(booking.getEndDate()));
         bookingForm.add(endDateField, gbc);
 
-        // Confirm button
         gbc.gridx = 0;
         gbc.gridy = 2;
         gbc.gridwidth = 2;
@@ -388,12 +374,10 @@ public class ManagerManageRoomsPanel extends JPanel {
         private void setupPhotoPanel() {
             JPanel photoPanel = new JPanel(new BorderLayout());
             photoLabel = new JLabel();
-            // Increase dimensions
             photoLabel.setPreferredSize(new Dimension(400, 300));
             photoLabel.setHorizontalAlignment(SwingConstants.CENTER);
             photoLabel.setBorder(BorderFactory.createEtchedBorder());
             
-            // Set minimum size
             photoLabel.setMinimumSize(new Dimension(300, 225));
 
             JPanel navPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
@@ -449,7 +433,6 @@ public class ManagerManageRoomsPanel extends JPanel {
             buttonPanel.add(editButton);
             buttonPanel.add(deleteButton);
         
-            // Replace multiple booking buttons with a single manage booking button
             manageBookingButton = new JButton("Управление бронированиями");
             manageBookingButton.addActionListener(e -> showManageBookingOptions());
 
@@ -550,7 +533,6 @@ public class ManagerManageRoomsPanel extends JPanel {
 
             @Override
             public String toString() {
-                // Отображаем даты в формате ДД.ММ.ГГГГ
                 return "С " + DateUtils.convertDateToUI(booking.getStartDate())
                     + " по " + DateUtils.convertDateToUI(booking.getEndDate());
             }
@@ -578,7 +560,6 @@ public class ManagerManageRoomsPanel extends JPanel {
                                 return null;
                             }
                             
-                            // Calculate scaling ratio while maintaining aspect ratio
                             double widthRatio = 400.0 / originalImg.getWidth();
                             double heightRatio = 300.0 / originalImg.getHeight();
                             double ratio = Math.min(widthRatio, heightRatio);
@@ -586,7 +567,6 @@ public class ManagerManageRoomsPanel extends JPanel {
                             int newWidth = (int) (originalImg.getWidth() * ratio);
                             int newHeight = (int) (originalImg.getHeight() * ratio);
                             
-                            // Use better quality scaling
                             Image scaledImg = originalImg.getScaledInstance(newWidth, newHeight, Image.SCALE_SMOOTH);
                             return new ImageIcon(scaledImg);
                         } catch (IOException e) {

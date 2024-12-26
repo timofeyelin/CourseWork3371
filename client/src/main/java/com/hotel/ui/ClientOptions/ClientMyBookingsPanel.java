@@ -27,22 +27,18 @@ public class ClientMyBookingsPanel extends JPanel {
         apiClient = new HotelApiClient();
         setLayout(new BorderLayout());
 
-        // Панель сетки номеров
         roomGridPanel = new JPanel(new GridLayout(1, 2, 10, 10));
         JScrollPane scrollPane = new JScrollPane(roomGridPanel);
         JPanel gridPanelContainer = new JPanel(new BorderLayout());
         gridPanelContainer.add(scrollPane, BorderLayout.CENTER);
 
-        // Панель поиска
         JPanel searchPanel = new JPanel(new BorderLayout());
-        // Add dropdown for room types
         JLabel typeLabel = new JLabel("Тип номера:");
         String[] roomTypes = {"Все", "Одноместный", "Двухместный", "Люкс"};
         JComboBox<String> typeComboBox = new JComboBox<>(roomTypes);
         searchPanel.add(typeLabel, BorderLayout.WEST);
         searchPanel.add(typeComboBox, BorderLayout.CENTER);
 
-        // Add fields for price range
         JPanel pricePanel = new JPanel(new FlowLayout());
         pricePanel.add(new JLabel("Цена от:"));
         JTextField minPriceField = new JTextField(5);
@@ -52,7 +48,6 @@ public class ClientMyBookingsPanel extends JPanel {
         pricePanel.add(maxPriceField);
         searchPanel.add(pricePanel, BorderLayout.SOUTH);
 
-        // Add date selectors for booking dates
         JPanel datePanel = new JPanel(new FlowLayout());
         datePanel.add(new JLabel("Дата начала:"));
         JTextField startDateField = new JTextField(10);
@@ -62,7 +57,6 @@ public class ClientMyBookingsPanel extends JPanel {
         datePanel.add(endDateField);
         searchPanel.add(datePanel, BorderLayout.EAST);
 
-        // Кнопки для листания страниц
         JPanel paginationPanel = new JPanel(new FlowLayout());
         prevPageButton = new JButton("Предыдущая");
         nextPageButton = new JButton("Следующая");
@@ -119,7 +113,6 @@ public class ClientMyBookingsPanel extends JPanel {
             roomGridPanel.add(roomFrames.get(i));
         }
 
-        // Update page number label 
         int totalPages = (int) Math.ceil((double) roomFrames.size() / roomsPerPage);
         pageNumberLabel.setText(String.format("Страница %d из %d", currentPage + 1, totalPages));
 
@@ -238,7 +231,7 @@ public class ClientMyBookingsPanel extends JPanel {
             try {
                 apiClient.cancelBooking(booking.getId());
                 showCenteredMessage("Бронирование успешно отменено", "Уведомление", JOptionPane.INFORMATION_MESSAGE);
-                loadBookings(); // Reload the bookings after cancellation
+                loadBookings();
             } catch (Exception ex) {
                 showCenteredMessage("Ошибка при отмене бронирования: " + ex.getMessage(), 
                 "Ошибка", JOptionPane.ERROR_MESSAGE);
@@ -282,7 +275,6 @@ public class ClientMyBookingsPanel extends JPanel {
                             int newWidth = (int) (originalImg.getWidth() * ratio);
                             int newHeight = (int) (originalImg.getHeight() * ratio);
                             
-                            // Use better quality scaling
                             Image scaledImg = originalImg.getScaledInstance(newWidth, newHeight, Image.SCALE_SMOOTH);
                             return new ImageIcon(scaledImg);
                         } catch (IOException e) {

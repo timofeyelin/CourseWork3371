@@ -75,7 +75,7 @@ public class LoginRegisterPanel extends JPanel {
     private void handleRegistration() {
         String username = usernameField.getText();
         String password = new String(passwordField.getPassword());
-        String role = "CLIENT"; // Устанавливаем роль по умолчанию
+        String role = "CLIENT";
 
         if (username.isEmpty() || password.isEmpty()) {
             JOptionPane.showMessageDialog(this,

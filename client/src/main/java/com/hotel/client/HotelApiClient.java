@@ -87,14 +87,12 @@ public class HotelApiClient {
         HttpResponse<String> response = sendRequest(request);
     
         if (response.statusCode() != 200) {
-            // Парсинг сообщения об ошибке
             Type mapType = new TypeToken<Map<String, String>>(){}.getType();
             Map<String, String> error = gson.fromJson(response.body(), mapType);
             String errorMessage = error.getOrDefault("error", "Неизвестная ошибка");
             throw new RuntimeException("Ошибка при входе: " + errorMessage);
         }
     
-        // Парсинг объекта User из успешного ответа
         User user = gson.fromJson(response.body(), User.class);
         setCurrentUserId(user.getId());
     
@@ -131,7 +129,6 @@ public class HotelApiClient {
         return gson.fromJson(response.body(), new TypeToken<List<BookingDTO>>(){}.getType());
     }
 
-    // Общий метод для отправки запросов
     private HttpResponse<String> sendRequest(HttpRequest request) throws IOException, InterruptedException {
         return httpClient.send(request, HttpResponse.BodyHandlers.ofString());
     }

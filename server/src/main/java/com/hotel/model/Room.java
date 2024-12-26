@@ -20,7 +20,6 @@ public class Room {
     @Column(name = "photo_url")
     private List<String> photos;
 
-    // Геттеры и сеттеры
     public Long getId() { return id; }
     public void setId(Long id) { this.id = id; }
 

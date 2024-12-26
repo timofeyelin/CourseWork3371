@@ -51,7 +51,7 @@ public class AdminPanel extends JPanel {
     private void handleAddManager() {
         String username = usernameField.getText();
         String password = new String(passwordField.getPassword());
-        String role = "MANAGER"; // Устанавливаем роль менеджера
+        String role = "MANAGER";
 
         if (username.isEmpty() || password.isEmpty()) {
             JOptionPane.showMessageDialog(this,

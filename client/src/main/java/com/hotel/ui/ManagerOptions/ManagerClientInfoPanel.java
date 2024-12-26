@@ -41,24 +41,19 @@ public class ManagerClientInfoPanel extends JPanel {
             }
         });
 
-        // Создаем модель таблицы с двумя столбцами
         tableModel = new NonEditableTableModel(new Object[]{"Логин", "Бронирования"}, 0);
         clientTable = new JTable(tableModel);
         clientTable.setPreferredScrollableViewportSize(new Dimension(500, 300));
         clientTable.setFillsViewportHeight(true);
 
-        // Устанавливаем кастомный рендерер для всех столбцов
         CustomTableCellRenderer renderer = new CustomTableCellRenderer();
         clientTable.setDefaultRenderer(Object.class, renderer);
 
-        // Добавляем таблицу в JScrollPane для прокрутки
         JScrollPane scrollPane = new JScrollPane(clientTable);
 
-        // Добавляем компоненты на панель
         add(searchField, BorderLayout.NORTH);
         add(scrollPane, BorderLayout.CENTER);
 
-        // Загружаем данные в таблицу
         loadClientData();
     }
 
@@ -108,7 +103,6 @@ public class ManagerClientInfoPanel extends JPanel {
         return sb.toString();
     }
 
-    // Класс для создания не редактируемой модели таблицы
     private static class NonEditableTableModel extends DefaultTableModel {
         public NonEditableTableModel(Object[] columnNames, int rowCount) {
             super(columnNames, rowCount);
@@ -116,11 +110,10 @@ public class ManagerClientInfoPanel extends JPanel {
 
         @Override
         public boolean isCellEditable(int row, int column) {
-            return false; // Все ячейки не редактируемые
+            return false;
         }
     }
 
-    // Класс для рендеринга ячеек с многострочным текстом
     private static class CustomTableCellRenderer extends JLabel implements TableCellRenderer {
         public CustomTableCellRenderer() {
             setVerticalAlignment(TOP);

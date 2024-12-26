@@ -21,11 +21,11 @@ public class ClientPanel extends JPanel {
         
         tabbedPane.addChangeListener(e -> {
             int selectedIndex = tabbedPane.getSelectedIndex();
-            if (selectedIndex == 1) { // "Забронировать номер" tab
+            if (selectedIndex == 1) {
                 roomBookingPanel.refreshRoomGrid();
-            } else if (selectedIndex == 0) { // "Мои бронирования" tab
+            } else if (selectedIndex == 0) {
                 myBookingsPanel.refreshRoomGrid();
-            } else if (selectedIndex == tabbedPane.getTabCount() - 1) { // "Выйти" tab
+            } else if (selectedIndex == tabbedPane.getTabCount() - 1) {
                 mainFrame.switchToLoginRegisterPanel();
             }
         });

@@ -2,13 +2,11 @@ package com.hotel.dto;
 
 public class UserDTO {
     private Long id;
-    private String username; // Изменено с login на username
+    private String username;
     private String role;
 
-    // Конструктор по умолчанию
     public UserDTO() {}
 
-    // Параметризованный конструктор
     public UserDTO(Long id, String username, String role) {
         this.id = id;
         this.username = username;
@@ -24,11 +22,11 @@ public class UserDTO {
         this.id = id;
     }
 
-    public String getUsername() { // Изменено с getLogin на getUsername
+    public String getUsername() {
         return username;
     }
 
-    public void setUsername(String username) { // Изменено с setLogin на setUsername
+    public void setUsername(String username) {
         this.username = username;
     }
 

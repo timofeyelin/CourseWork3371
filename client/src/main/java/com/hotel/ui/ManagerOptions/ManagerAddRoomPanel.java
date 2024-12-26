@@ -82,7 +82,6 @@ public class ManagerAddRoomPanel extends JPanel {
 
         add(addRoomForm, BorderLayout.CENTER);
 
-        // Панель для управления фотографиями
         JPanel photoPanel = new JPanel(new BorderLayout());
         photoPanel.setBorder(BorderFactory.createTitledBorder("Фотографии"));
 
@@ -94,7 +93,6 @@ public class ManagerAddRoomPanel extends JPanel {
         JButton addPhotoButton = new JButton("Добавить фото");
         JButton removePhotoButton = new JButton("Удалить фото");
 
-        // Modify the addPhotoButton ActionListener to display only filenames
         addPhotoButton.addActionListener(e -> {
             JFileChooser fileChooser = new JFileChooser();
             fileChooser.setMultiSelectionEnabled(true);
@@ -105,7 +103,7 @@ public class ManagerAddRoomPanel extends JPanel {
                 for (File file : files) {
                     String targetPath = "server/src/main/resources/images/" + file.getName();
                     selectedPhotoPaths.add(targetPath);
-                    photoListModel.addElement(file.getName()); // Display only filename
+                    photoListModel.addElement(file.getName());
                     try {
                         File targetFile = new File(targetPath);
                         targetFile.getParentFile().mkdirs();
@@ -114,7 +112,7 @@ public class ManagerAddRoomPanel extends JPanel {
                         JOptionPane.showMessageDialog(this, "Ошибка при копировании файла: " + ex.getMessage());
                     }
                 }
-                updatePhoto(); // Обновить фото после добавления
+                updatePhoto();
             }
         });
 
@@ -123,7 +121,7 @@ public class ManagerAddRoomPanel extends JPanel {
             if (selectedIndex != -1) {
                 selectedPhotoPaths.remove(selectedIndex);
                 photoListModel.remove(selectedIndex);
-                updatePhoto(); // Обновить фото после удаления
+                updatePhoto();
             }
         });
 
@@ -133,7 +131,6 @@ public class ManagerAddRoomPanel extends JPanel {
         photoPanel.add(new JScrollPane(photoList), BorderLayout.CENTER);
         photoPanel.add(buttonPanel, BorderLayout.SOUTH);
 
-        // Add tooltips to display full paths
         photoList.addMouseMotionListener(new java.awt.event.MouseMotionAdapter() {
             public void mouseMoved(java.awt.event.MouseEvent evt) {
                 int index = photoList.locationToIndex(evt.getPoint());
@@ -143,7 +140,6 @@ public class ManagerAddRoomPanel extends JPanel {
             }
         });
 
-        // Панель для отображения фотографий
         JPanel displayPhotoPanel = new JPanel(new BorderLayout());
         photoLabel = new JLabel();
         photoLabel.setPreferredSize(new Dimension(200, 150));

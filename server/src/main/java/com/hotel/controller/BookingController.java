@@ -107,15 +107,12 @@ public class BookingController {
     @DeleteMapping("/{id}")
     public ResponseEntity<?> cancelBooking(@PathVariable Long id) {
         try {
-            // Get booking before deletion to access room info
             Booking booking = bookingService.getBookingById(id);
             if (booking != null) {
-                // Get room and update availability
                 Room room = booking.getRoom();
                 roomService.updateRoomByNumber(room.getNumber(), room);
             }
             
-            // Cancel booking
             bookingService.cancelBooking(id);
             return ResponseEntity.ok().build();
         } catch (Exception e) {
@@ -135,10 +132,8 @@ public class BookingController {
             LocalDate start = LocalDate.parse(startDate);
             LocalDate end = LocalDate.parse(endDate);
             
-            // Получаем все бронирования для номера
             List<Booking> bookings = bookingRepository.findByRoomId(room.getId());
             
-            // Проверяем пересечение с существующими бронированиями
             boolean isAvailable = bookings.stream().noneMatch(booking ->
                 !(end.isBefore(booking.getStartDate()) || start.isAfter(booking.getEndDate()))
             );
